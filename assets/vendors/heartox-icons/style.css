@@ -1,0 +1,141 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon5274.html?5s98m0');
+  src:  url('fonts/icomoon5274.html?5s98m0#iefix') format('embedded-opentype'),
+    url('fonts/icomoon5274-2.html?5s98m0') format('truetype'),
+    url('fonts/icomoon5274-3.html?5s98m0') format('woff'),
+    url('fonts/icomoon5274-4.html?5s98m0#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-mail-1:before {
+  content: "\e924";
+}
+.icon-phone-call:before {
+  content: "\e925";
+}
+.icon-location-pin-1:before {
+  content: "\e922";
+}
+.icon-calenda2:before {
+  content: "\e923";
+}
+.icon-left-arrow:before {
+  content: "\e921";
+}
+.icon-right-arrow-2:before {
+  content: "\e920";
+}
+.icon-love2:before {
+  content: "\e91e";
+}
+.icon-charity-3:before {
+  content: "\e91f";
+}
+.icon-healthcare-1:before {
+  content: "\e91d";
+}
+.icon-email-1:before {
+  content: "\e91a";
+}
+.icon-gift:before {
+  content: "\e91b";
+}
+.icon-teamwork-1:before {
+  content: "\e91c";
+}
+.icon-check-1:before {
+  content: "\e919";
+}
+.icon-arrow-routet:before {
+  content: "\e918";
+}
+.icon-bullseye:before {
+  content: "\e914";
+}
+.icon-charity:before {
+  content: "\e915";
+}
+.icon-photo-camera:before {
+  content: "\e916";
+}
+.icon-video-camera:before {
+  content: "\e917";
+}
+.icon-arrow-left:before {
+  content: "\e912";
+}
+.icon-bubble-chat-2:before {
+  content: "\e913";
+}
+.icon-paper-plane-solid:before {
+  content: "\e910";
+}
+.icon-searce:before {
+  content: "\e911";
+}
+.icon-apple-2:before {
+  content: "\e900";
+}
+.icon-collaboration-1:before {
+  content: "\e901";
+}
+.icon-customer-service-1:before {
+  content: "\e902";
+}
+.icon-education-1:before {
+  content: "\e903";
+}
+.icon-Glove:before {
+  content: "\e904";
+}
+.icon-healthcare-11:before {
+  content: "\e905";
+}
+.icon-humanitarian-1:before {
+  content: "\e906";
+}
+.icon-Icon:before {
+  content: "\e907";
+}
+.icon-medical-2:before {
+  content: "\e908";
+}
+.icon-photo-camera-1:before {
+  content: "\e909";
+}
+.icon-Pin:before {
+  content: "\e90a";
+}
+.icon-pure-water-drop-1:before {
+  content: "\e90b";
+}
+.icon-reading-book-1:before {
+  content: "\e90c";
+}
+.icon-telephone-call-1:before {
+  content: "\e90d";
+}
+.icon-trolley-cart_4175270:before {
+  content: "\e90e";
+}
+.icon-video-camera-1-1:before {
+  content: "\e90f";
+}
