@@ -16942,3 +16942,78 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 /*# sourceMappingURL=heartox.css.map */
+
+/* Hosmed AI header and logo contrast */
+.main-header,
+.main-header--one,
+.main-header--two,
+.main-header--three,
+.main-header--four {
+  background-color: var(--heartox-white, #fff);
+}
+
+.main-header .topbar-one__info__item,
+.main-header .topbar-one__text {
+  color: var(--heartox-base, #102A43);
+}
+
+.main-header .topbar-one__social a {
+  color: var(--heartox-white, #fff);
+  background-color: var(--heartox-base, #102A43);
+}
+
+.main-header__logo {
+  width: 190px;
+  min-width: 190px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--heartox-white, #fff);
+}
+
+.main-header__logo img {
+  width: 180px !important;
+  height: 100px !important;
+  object-fit: cover;
+  object-position: center 43%;
+}
+
+.main-header__inner__right a {
+  color: var(--heartox-base, #102A43);
+}
+
+.main-header__inner__right a:hover {
+  color: var(--heartox-secondary, #E9AD45);
+}
+
+.footer-widget__logo,
+.mobile-nav__content .logo-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--heartox-white, #fff);
+  border-radius: 8px;
+}
+
+.footer-widget__logo img,
+.mobile-nav__content .logo-box img {
+  width: 175px !important;
+  height: 96px !important;
+  object-fit: cover;
+  object-position: center 43%;
+}
+
+@media (max-width: 1199px) {
+  .main-header__logo {
+    width: 170px;
+    min-width: 170px;
+    height: 82px;
+  }
+
+  .main-header__logo img {
+    width: 165px !important;
+    height: 88px !important;
+  }
+}
