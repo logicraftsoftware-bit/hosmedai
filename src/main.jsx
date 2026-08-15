@@ -42,9 +42,18 @@ function loadScript(src) {
 
 function App() {
   const page = useMemo(() => {
-    const requested = location.pathname.split('/').pop() || 'index.html';
+    const route = location.pathname.split('/').filter(Boolean).pop() || 'index';
+    const requested = route.endsWith('.html') ? route : `${route}.html`;
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, []);
+
+  const markup = useMemo(() => page.html.replace(
+    /href=(["'])([a-z0-9-]+)\.html(#[^"']*)?\1/gi,
+    (_, quote, name, hash = '') => {
+      const path = name === 'index' ? '/' : `/${name}`;
+      return `href=${quote}${path}${hash}${quote}`;
+    }
+  ), [page]);
 
   useEffect(() => {
     document.title = page.title || 'Hosmed AI';
@@ -67,7 +76,7 @@ function App() {
     return () => { active = false; };
   }, [page]);
 
-  return <div dangerouslySetInnerHTML={{ __html: page.html }} />;
+  return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
 
 createRoot(document.getElementById('root')).render(<App />);
