@@ -58,6 +58,42 @@ function App() {
         .replace('assets/images/shapes/image-logo.png', 'assets/images/shapes/image-logo-blue.png')
         .replace('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.png')
         .replace('assets/images/resources/donation-2-1.jpg', 'assets/images/resources/contact-us.png')
+        .replace('Our Core Solutions', 'Our 3 Core Solutions')
+        .replace(
+          'From hospital planning to digital healthcare, HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance and technology together.',
+          'From Hospital Planning to Digital Healthcare — We Do It All. HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance, accreditation and technology together through one integrated platform.'
+        )
+        .replace(
+          'Feasibility, master planning, clinical planning, architecture, equipment planning, workflows and project management.',
+          'From concept to commissioning. Hospital feasibility • Master planning • Clinical planning • Architectural design • Department planning • Equipment planning • Workflow design • Project management'
+        )
+        .replace(
+          'Quality systems, SOP development, documentation, training, audits and accreditation readiness.',
+          'Build systems that meet standards. NABH consultancy • NABL consultancy • SOP development • Quality systems • Documentation • Accreditation readiness • Training • Audit preparation'
+        )
+        .replace(
+          'Connect ERP, HIS, EMR, billing, pharmacy, laboratory, radiology, inventory, HR, finance, analytics and AI-powered workflows.',
+          'Turn your hospital into a connected digital ecosystem. Hospital ERP • HIS • EMR • Billing • Pharmacy • Laboratory • Radiology • Inventory • HR • Finance • Analytics • AI-powered workflows'
+        )
+        .replace(
+          'ERP, HIS, EMR, billing, diagnostics, inventory, finance, analytics and AI-powered workflows.',
+          'Turn your hospital into a connected digital ecosystem. Hospital ERP • HIS • EMR • Billing • Pharmacy • Laboratory • Radiology • Inventory • HR • Finance • Analytics • AI-powered workflows'
+        )
+        .replace('>Hospital Planning & Design</a>', '>01 — Hospital Planning & Design</a>')
+        .replace('>NABH / NABL & Healthcare Compliance</a>', '>02 — NABH / NABL & Healthcare Compliance</a>')
+        .replace('>Hospital Software & AI</a>', '>03 — Hospital Software & AI</a>')
+        .replace(
+          /<div class="item">\s*<div class="donation-one__item[\s\S]*?End-to-End Hospital Operations[\s\S]*?<\/div><!-- \/.item -->/,
+          ''
+        )
+        .replace(
+          'Support for eating funds <br> for hungry people',
+          'From an Idea on Paper to a <br> Fully Operational Hospital.'
+        )
+        .replace(
+          'HosmedAI stays with you throughout the complete hospital journey.',
+          'Concept → Feasibility → Planning → Design → Construction Support → Equipment → Compliance → Accreditation → Software → Operations. HosmedAI stays with you throughout the journey.'
+        )
         .replace('Get Inspire Hospital Planning Consultation <br> Change a Life', 'Discuss Your Hospital Project With Our Experts')
         .replace(
           /<div class="donate-now__funfact">[\s\S]*?<\/div>\s*<\/div><!-- \/.donate-now__left -->/,

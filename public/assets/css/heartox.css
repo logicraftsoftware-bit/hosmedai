@@ -5356,7 +5356,7 @@ body.megamenu-popup-active .mobile-nav__content {
   position: relative;
 }
 .donation-one__item__text {
-  margin-top: -67px;
+  margin-top: 0;
   margin-bottom: 20px;
   transition: all 0.4s ease-in-out;
   color: var(--heartox-gray, #CBD4DE);
