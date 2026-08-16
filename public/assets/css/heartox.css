@@ -16030,11 +16030,17 @@ body.megamenu-popup-active .mobile-nav__content {
   position: absolute;
   bottom: -46px;
   left: 0;
+  width: 100%;
+}
+.about-one__thumb__bottom__shape img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 @media (max-width: 1199px) {
   .about-one__thumb__bottom .about-one__thumb__bottom__shape img {
-    object-fit: cover;
-    width: 108%;
+    object-fit: contain;
+    width: 100%;
   }
 }
 .about-one__thumb__funfact {
