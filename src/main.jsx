@@ -53,7 +53,8 @@ function App() {
     if (page === pages['index.html']) {
       html = html
         .replace('assets/images/backgrounds/slider-1-2.jpg', 'assets/images/backgrounds/slider-2.png')
-        .replace('assets/images/backgrounds/slider-1-3.jpg', 'assets/images/backgrounds/slider-3.png');
+        .replace('assets/images/backgrounds/slider-1-3.jpg', 'assets/images/backgrounds/slider-3.png')
+        .replace('assets/images/about/about-1-1.jpg', 'assets/images/about/about-001.png');
     }
 
     return html.replace(
