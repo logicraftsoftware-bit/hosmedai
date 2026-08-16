@@ -57,6 +57,7 @@ function App() {
         .replace('assets/images/about/about-1-1.jpg', 'assets/images/about/about-001.png')
         .replace('assets/images/shapes/image-logo.png', 'assets/images/shapes/image-logo-blue.png')
         .replace('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.png')
+        .replace('assets/images/resources/donation-2-1.jpg', 'assets/images/resources/contact-us.png')
         .replace('Get Inspire Hospital Planning Consultation <br> Change a Life', 'Discuss Your Hospital Project With Our Experts')
         .replace(
           /<div class="donate-now__funfact">[\s\S]*?<\/div>\s*<\/div><!-- \/.donate-now__left -->/,
