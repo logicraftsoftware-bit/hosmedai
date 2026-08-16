@@ -16091,8 +16091,25 @@ body.megamenu-popup-active .mobile-nav__content {
   mask-size: auto;
 }
 .about-one__thumb__item__icon img {
-  width: auto;
-  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Keep the complete HosmedAI mark visible instead of clipping it to the theme mask. */
+.about-one__thumb__item__icon {
+  top: -35px;
+  right: -20px;
+  overflow: hidden;
+  border-radius: 50%;
+  -webkit-mask: none;
+  mask: none;
+}
+
+.about-one__thumb__item__icon a {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .about-two {
