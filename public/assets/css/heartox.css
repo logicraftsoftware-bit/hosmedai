@@ -5672,6 +5672,14 @@ body.megamenu-popup-active .mobile-nav__content {
 .donate-now__left {
   position: relative;
   background-color: var(--heartox-primary, #1B3F63);
+  width: 100%;
+  height: 100%;
+}
+.donate-now__inner > .row {
+  align-items: stretch;
+}
+.donate-now__inner > .row > .col-lg-5 {
+  display: flex;
 }
 @media (min-width: 1200px) {
   .donate-now__left {
