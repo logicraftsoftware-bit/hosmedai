@@ -5760,6 +5760,59 @@ body.megamenu-popup-active .mobile-nav__content {
 }
 
 /**** Donation Form ****/
+.consultation-now__intro {
+  padding: 28px 35px 32px;
+  color: var(--heartox-white, #fff);
+}
+.consultation-now__intro h3 {
+  color: inherit;
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+.consultation-now__intro p {
+  color: var(--heartox-gray, #CBD4DE);
+  margin: 0;
+}
+.consultation-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+  margin-bottom: 22px;
+}
+.consultation-form__control--full {
+  grid-column: 1 / -1;
+}
+.consultation-form input,
+.consultation-form textarea {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  border-radius: 30px;
+  padding: 0 30px;
+  color: var(--heartox-white, #fff);
+  background-color: rgba(var(--heartox-white-rgb, 255, 255, 255), 0.3);
+}
+.consultation-form input {
+  height: 60px;
+}
+.consultation-form textarea {
+  min-height: 96px;
+  padding-top: 18px;
+  resize: vertical;
+}
+.consultation-form input::placeholder,
+.consultation-form textarea::placeholder {
+  color: var(--heartox-white, #fff);
+  opacity: 1;
+}
+@media (max-width: 575px) {
+  .consultation-form__grid {
+    grid-template-columns: 1fr;
+  }
+  .consultation-form__control--full {
+    grid-column: auto;
+  }
+}
 .donate-now-form .form-one__group {
   grid-gap: 20px;
 }

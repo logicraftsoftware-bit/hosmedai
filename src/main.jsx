@@ -56,7 +56,39 @@ function App() {
         .replace('assets/images/backgrounds/slider-1-3.jpg', 'assets/images/backgrounds/slider-3.png')
         .replace('assets/images/about/about-1-1.jpg', 'assets/images/about/about-001.png')
         .replace('assets/images/shapes/image-logo.png', 'assets/images/shapes/image-logo-blue.png')
-        .replace('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.png');
+        .replace('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.png')
+        .replace('Get Inspire Hospital Planning Consultation <br> Change a Life', 'Discuss Your Hospital Project With Our Experts')
+        .replace(
+          /<div class="donate-now__funfact">[\s\S]*?<\/div>\s*<\/div><!-- \/.donate-now__left -->/,
+          `<div class="consultation-now__intro">
+            <h3>Plan Your Hospital With Confidence</h3>
+            <p>Share your requirements and our healthcare planning team will contact you.</p>
+          </div>
+          </div><!-- /.donate-now__left -->`
+        )
+        .replace(
+          /<form action="#" class="donate-now-form[\s\S]*?<\/form><!-- \/.donate-form -->/,
+          `<form action="#" class="donate-now-form consultation-form wow fadeInUp" data-wow-duration="1500ms">
+            <div class="consultation-form__grid">
+              <div class="consultation-form__control">
+                <input type="text" name="contact_name" id="contact_name" placeholder="Contact Person Name" autocomplete="name" required>
+              </div>
+              <div class="consultation-form__control">
+                <input type="text" name="hospital_name" id="hospital_name" placeholder="Hospital Name" autocomplete="organization" required>
+              </div>
+              <div class="consultation-form__control">
+                <input type="tel" name="phone" id="phone" placeholder="Phone Number" autocomplete="tel" required>
+              </div>
+              <div class="consultation-form__control">
+                <input type="email" name="email" id="consultation_email" placeholder="Email Address" autocomplete="email" required>
+              </div>
+              <div class="consultation-form__control consultation-form__control--full">
+                <textarea name="address" id="address" placeholder="Address" autocomplete="street-address" rows="3" required></textarea>
+              </div>
+            </div>
+            <button type="submit" class="heartox-btn heartox-btn--base">Contact Us</button>
+          </form><!-- /.consultation-form -->`
+        );
     }
 
     return html.replace(
