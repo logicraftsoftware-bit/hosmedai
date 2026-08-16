@@ -47,13 +47,23 @@ function App() {
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, []);
 
-  const markup = useMemo(() => page.html.replace(
-    /href=(["'])([a-z0-9-]+)\.html(#[^"']*)?\1/gi,
-    (_, quote, name, hash = '') => {
-      const path = name === 'index' ? '/' : `/${name}`;
-      return `href=${quote}${path}${hash}${quote}`;
+  const markup = useMemo(() => {
+    let html = page.html;
+
+    if (page === pages['index.html']) {
+      html = html
+        .replace('assets/images/backgrounds/slider-1-2.jpg', 'assets/images/backgrounds/slider-2.png')
+        .replace('assets/images/backgrounds/slider-1-3.jpg', 'assets/images/backgrounds/slider-3.png');
     }
-  ), [page]);
+
+    return html.replace(
+      /href=(["'])([a-z0-9-]+)\.html(#[^"']*)?\1/gi,
+      (_, quote, name, hash = '') => {
+        const path = name === 'index' ? '/' : `/${name}`;
+        return `href=${quote}${path}${hash}${quote}`;
+      }
+    );
+  }, [page]);
 
   useEffect(() => {
     document.title = page.title || 'Hosmed AI';
