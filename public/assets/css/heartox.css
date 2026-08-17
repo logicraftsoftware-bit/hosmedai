@@ -3876,7 +3876,7 @@ p {
 /* HosmedAI primary navigation */
 @media (min-width: 1200px) {
   .main-header--one:not(.sticky-header--cloned) .main-header__bottom {
-    width: calc(100% + 80px);
+    width: calc(100% + 190px);
   }
 
   .main-header--one .main-header__bottom::after {
@@ -3899,6 +3899,34 @@ p {
 
   .main-header--one .main-header__bottom {
     padding-left: 35px;
+  }
+}
+
+@media (min-width: 1601px) {
+  .main-header--one:not(.sticky-header--cloned) .main-header__inner__right {
+    position: absolute;
+    top: 9px;
+    right: 18px;
+    z-index: 5;
+    margin-left: 0;
+  }
+
+  .main-header--one:not(.sticky-header--cloned) .main-header__inner__right a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--heartox-base, #102a43);
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .main-header--one:not(.sticky-header--cloned) .main-header__inner__right a::before {
+    content: "\f073";
+    color: var(--heartox-secondary, #e9ad45);
+    font-family: "Font Awesome 5 Free";
+    font-size: 13px;
+    font-weight: 900;
+    text-decoration: none;
   }
 }
 
