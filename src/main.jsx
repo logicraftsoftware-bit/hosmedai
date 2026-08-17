@@ -188,6 +188,81 @@ function App() {
         );
     }
 
+    if (page === pages['about.html']) {
+      const aboutPage = `<main class="hosmed-about">
+        <section class="hosmed-about__hero">
+          <div class="container">
+            <p class="hosmed-about__eyebrow">About Us</p>
+            <h1>We Understand Hospitals Because We Understand Healthcare.</h1>
+            <p>HosmedAI brings hospital planning, design, compliance, accreditation, technology and operations together through one integrated healthcare platform.</p>
+          </div>
+        </section>
+
+        <section class="hosmed-about__story section-space">
+          <div class="container">
+            <div class="row align-items-center gutter-y-30">
+              <div class="col-lg-6">
+                <div class="hosmed-about__image">
+                  <img src="/assets/images/about/about-001.png" alt="Healthcare professional working in a modern hospital">
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="hosmed-about__copy">
+                  <p class="hosmed-about__eyebrow">Our Vision</p>
+                  <h2>HosmedAI was created with a simple vision:</h2>
+                  <blockquote>Make Hospital Development Simpler, Smarter &amp; More Integrated.</blockquote>
+                  <p>Healthcare organisations often work with multiple consultants for planning, architecture, compliance, accreditation, technology and operations.</p>
+                  <p><strong>HosmedAI brings these capabilities together.</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-about__integration section-space">
+          <div class="container">
+            <div class="hosmed-about__heading">
+              <p class="hosmed-about__eyebrow">One Integrated Healthcare Partner</p>
+              <h2>Everything Required to Plan, Build and Run Better Hospitals.</h2>
+              <p>One coordinated team connects every stage of hospital development, reducing complexity and helping healthcare organisations make better decisions.</p>
+            </div>
+            <div class="hosmed-about__capabilities">
+              <article><i class="fas fa-drafting-compass"></i><h3>Hospital Planning</h3><p>Feasibility, clinical planning, architecture, infrastructure and equipment planning.</p></article>
+              <article><i class="fas fa-award"></i><h3>Quality &amp; Accreditation</h3><p>NABH, NABL, quality systems, SOPs, documentation, training and audit readiness.</p></article>
+              <article><i class="fas fa-laptop-medical"></i><h3>Hospital Technology</h3><p>ERP, HIS, EMR, analytics, connected workflows and purposeful healthcare AI.</p></article>
+              <article><i class="fas fa-hospital-user"></i><h3>Hospital Operations</h3><p>Operational planning, process design, performance improvement and ongoing support.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-about__philosophy section-space">
+          <div class="container">
+            <div class="hosmed-about__philosophy-card">
+              <div>
+                <p class="hosmed-about__eyebrow">Our Philosophy</p>
+                <h2>Healthcare First. Technology With Purpose. Quality By Design.</h2>
+              </div>
+              <p>We believe the best hospitals are created when clinical expertise, engineering, management, compliance and technology work together.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-about__cta">
+          <div class="container">
+            <div class="hosmed-about__cta-inner">
+              <div><p class="hosmed-about__eyebrow">Build With Confidence</p><h2>Planning a New Hospital or Transforming an Existing One?</h2></div>
+              <a href="/contact" class="heartox-btn heartox-btn--secondary">Talk to Our Healthcare Experts</a>
+            </div>
+          </div>
+        </section>
+      </main>`;
+
+      html = html.replace(
+        /<section class="page-header[\s\S]*?(?=<footer class=)/,
+        aboutPage
+      );
+    }
+
     html = html.replace(/\$/g, '₹');
 
     return html.replace(
@@ -200,7 +275,9 @@ function App() {
   }, [page]);
 
   useEffect(() => {
-    document.title = page.title || 'Hosmed AI';
+    document.title = page === pages['about.html']
+      ? 'About HosmedAI | Integrated Hospital Development'
+      : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
     (async () => {
