@@ -231,7 +231,7 @@ function App() {
         <section class="hosmed-about__integration section-space">
           <div class="container">
             <div class="hosmed-about__heading">
-              <p class="hosmed-about__eyebrow">One Integrated Healthcare Partner</p>
+              <p class="hosmed-about__eyebrow">What We Do</p>
               <h2>Everything Required to Plan, Build and Run Better Hospitals.</h2>
               <p>One coordinated team connects every stage of hospital development, reducing complexity and helping healthcare organisations make better decisions.</p>
             </div>
@@ -240,6 +240,8 @@ function App() {
               <article><i class="fas fa-award"></i><h3>Quality &amp; Accreditation</h3><p>NABH, NABL, quality systems, SOPs, documentation, training and audit readiness.</p></article>
               <article><i class="fas fa-laptop-medical"></i><h3>Hospital Technology</h3><p>ERP, HIS, EMR, analytics, connected workflows and purposeful healthcare AI.</p></article>
               <article><i class="fas fa-hospital-user"></i><h3>Hospital Operations</h3><p>Operational planning, process design, performance improvement and ongoing support.</p></article>
+              <article><i class="fas fa-shield-alt"></i><h3>Compliance &amp; Legal</h3><p>Regulatory approvals, policies, legal compliance and risk management.</p></article>
+              <article><i class="fas fa-headset"></i><h3>Training &amp; Support</h3><p>Staff training, change management and continuous operational support.</p></article>
             </div>
           </div>
         </section>
@@ -259,8 +261,8 @@ function App() {
         <section class="hosmed-about__cta">
           <div class="container">
             <div class="hosmed-about__cta-inner">
-              <div><p class="hosmed-about__eyebrow">Build With Confidence</p><h2>Planning a New Hospital or Transforming an Existing One?</h2></div>
-              <a href="/contact" class="heartox-btn heartox-btn--secondary">Talk to Our Healthcare Experts</a>
+              <div><h2>Planning a New Hospital or Transforming an Existing One?</h2><p>Talk to our healthcare experts and move forward with confidence.</p></div>
+              <a href="/contact" class="heartox-btn heartox-btn--secondary">Talk to Our Experts <i class="fas fa-arrow-right"></i></a>
             </div>
           </div>
         </section>
