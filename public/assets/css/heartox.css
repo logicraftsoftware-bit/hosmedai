@@ -17584,11 +17584,11 @@ body.boxed-wrapper .funfact-one__single {
   }
 
   .hospital-journey__inner::after {
-    left: -115px;
+    left: -78px;
     bottom: auto;
-    top: 360px;
-    width: 185px;
-    height: 300px;
+    top: 610px;
+    width: 115px;
+    height: 220px;
   }
 
   .hospital-journey__intro {
@@ -17724,6 +17724,58 @@ body.boxed-wrapper .funfact-one__single {
 
   .hospital-journey__figures span {
     font-size: 13px;
+  }
+
+  /* Use a consistent, compact rhythm between mobile sections. */
+  .section-space,
+  .section-space-two {
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+  }
+
+  .section-space-top {
+    padding-top: 36px !important;
+  }
+
+  .section-space-bottom {
+    padding-bottom: 36px !important;
+  }
+
+  .gutter-y-30,
+  .gutter-y-40,
+  .gutter-y-60 {
+    --bs-gutter-y: 16px;
+  }
+
+  .sec-title {
+    padding-bottom: 24px;
+  }
+
+  .heartox-owl__carousel--basic-nav.owl-carousel .owl-dots,
+  .heartox-owl__carousel--basic-nav.owl-carousel .owl-nav.disabled + .owl-dots {
+    margin-top: 20px;
+  }
+
+  .testimonials-one__right {
+    padding: 28px 18px;
+  }
+
+  .cta-one__content {
+    padding: 24px 16px;
+  }
+
+  .cta-one__top {
+    gap: 10px;
+    margin-bottom: 14px;
+    padding: 12px 18px;
+  }
+
+  .cta-one-footer__inner {
+    padding: 25px 22px;
+  }
+
+  .blog-one__top {
+    margin-bottom: 20px;
   }
 }
 
