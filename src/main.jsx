@@ -52,6 +52,7 @@ function App() {
     if (routeName === 'projects' || routeName === 'portfolio') return pages['about.html'];
     if (routeName === 'services') return pages['about.html'];
     if (routeName === 'why-hosmedai') return pages['about.html'];
+    if (routeName === 'ai-healthcare') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -451,6 +452,27 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, whyPage);
     }
 
+    if (routeName === 'ai-healthcare') {
+      const aiCapabilities = [
+        ['fas fa-tachometer-alt', 'Management Dashboards', 'Real-time overview of key hospital metrics in one intelligent dashboard.'],
+        ['fas fa-chart-pie', 'Operational Analytics', 'Deep insights into daily operations to improve efficiency and outcomes.'],
+        ['fas fa-chart-line', 'Predictive Insights', 'AI models predict trends and help you stay ahead of challenges.'],
+        ['fas fa-file-medical-alt', 'Automated Reporting', 'Reduce manual work with smart, automated and accurate reports.'],
+        ['fas fa-project-diagram', 'Workflow Optimisation', 'Identify bottlenecks and optimise processes across departments.'],
+        ['fas fa-rupee-sign', 'Revenue Intelligence', 'Track performance, detect opportunities and improve financial outcomes.'],
+        ['fas fa-users-cog', 'Resource Utilisation', 'Optimise the use of beds, staff, OT, equipment and other resources.'],
+        ['fas fa-procedures', 'Patient-Flow Analytics', 'Monitor patient journeys and improve flow from admission to discharge.'],
+        ['fas fa-shield-alt', 'Quality Monitoring', 'Track quality indicators and ensure compliance with standards.'],
+        ['fas fa-brain', 'Decision-Support Tools', 'AI-driven recommendations to support smarter clinical and operational decisions.']
+      ].map(([icon, title, copy], index) => `<article class="hosmed-ai__card wow fadeInUp" data-wow-delay="${index * 60}ms"><span><i class="${icon}"></i></span><h3>${title}</h3><p>${copy}</p></article>`).join('');
+      const aiPage = `<main class="hosmed-ai">
+        <section class="hosmed-ai__hero"><div class="container"><div class="hosmed-ai__hero-copy"><p class="wow fadeInDown">AI FOR HEALTHCARE</p><h1 class="wow fadeInUp">Intelligence Behind<br>Every Hospital Decision.</h1><h2 class="wow fadeInUp" data-wow-delay="80ms">The Future of Hospital Management Is Intelligent.</h2><p class="wow fadeInUp" data-wow-delay="140ms">HosmedAI combines hospital data, workflows and artificial intelligence to help healthcare organisations operate more efficiently.</p><a href="#ai-possibilities" class="heartox-btn wow fadeInUp" data-wow-delay="220ms">Explore HosmedAI <i class="fas fa-arrow-right"></i></a></div></div></section>
+        <section class="hosmed-ai__possibilities section-space" id="ai-possibilities"><div class="container"><div class="hosmed-ai__heading wow fadeInUp"><h2><span>AI</span>-Powered Possibilities</h2><i></i></div><div class="hosmed-ai__grid">${aiCapabilities}</div></div></section>
+        <section class="hosmed-ai__decisions"><div class="container"><div class="hosmed-ai__decisions-inner wow fadeInUp"><div class="hosmed-ai__decisions-copy"><h2>From <span>Data</span> to Decisions.</h2><p>Your hospital generates thousands of data points every day.</p><i></i><p>HosmedAI helps transform that data into meaningful intelligence.</p><a href="/contact" class="heartox-btn">Explore HosmedAI <i class="fas fa-arrow-right"></i></a></div><div class="hosmed-ai__visual" aria-label="AI healthcare intelligence visual"><span class="hosmed-ai__chip"><i class="fas fa-microchip"></i><b>AI</b></span><div><p><strong>1,248</strong> Patients</p><p><strong>87%</strong> Occupancy</p><p><strong>2.45M</strong> Revenue</p><p><strong>4.6 Days</strong> Avg. LOS</p></div></div></div></div></section>
+      </main>`;
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, aiPage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -522,6 +544,8 @@ function App() {
             ? 'Healthcare Solutions | HosmedAI'
             : routeName === 'why-hosmedai'
               ? 'Why HosmedAI | Integrated Healthcare Expertise'
+              : routeName === 'ai-healthcare'
+                ? 'AI for Healthcare | HosmedAI'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
