@@ -194,7 +194,16 @@ function App() {
           <div class="container">
             <p class="hosmed-about__eyebrow">About Us</p>
             <h1>We Understand Hospitals Because We Understand Healthcare.</h1>
+            <span class="hosmed-about__hero-accent"></span>
             <p>HosmedAI brings hospital planning, design, compliance, accreditation, technology and operations together through one integrated healthcare platform.</p>
+          </div>
+          <div class="container hosmed-about__stats-wrap">
+            <div class="hosmed-about__stats">
+              <div class="hosmed-about__stat"><i class="fas fa-hospital"></i><p><strong>200+</strong><span>Hospitals Supported</span></p></div>
+              <div class="hosmed-about__stat"><i class="fas fa-users"></i><p><strong>50+</strong><span>Healthcare Experts</span></p></div>
+              <div class="hosmed-about__stat"><i class="fas fa-award"></i><p><strong>100%</strong><span>Quality &amp; Compliance</span></p></div>
+              <div class="hosmed-about__stat"><i class="fas fa-handshake"></i><p><strong>End-to-End</strong><span>Integrated Solutions</span></p></div>
+            </div>
           </div>
         </section>
 

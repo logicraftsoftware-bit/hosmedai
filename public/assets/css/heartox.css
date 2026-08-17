@@ -18024,7 +18024,9 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__hero {
-  padding: 130px 0;
+  min-height: 610px;
+  padding: 110px 0 150px;
+  margin-bottom: 90px;
   position: relative;
   overflow: hidden;
   color: #fff;
@@ -18044,6 +18046,17 @@ body.boxed-wrapper .funfact-one__single {
   border-radius: 50%;
 }
 
+.hosmed-about__hero::before {
+  content: "";
+  width: 240px;
+  height: 240px;
+  position: absolute;
+  left: 44%;
+  bottom: -70px;
+  border-radius: 50%;
+  background: rgba(233, 173, 69, 0.7);
+}
+
 .hosmed-about__hero .container {
   position: relative;
   z-index: 1;
@@ -18059,19 +18072,90 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__hero h1 {
-  max-width: 900px;
-  margin: 0 0 24px;
+  max-width: 610px;
+  margin: 0 0 18px;
   color: #fff;
   font-size: clamp(46px, 5vw, 74px);
   line-height: 1.08;
 }
 
+.hosmed-about__hero-accent {
+  width: 58px;
+  height: 2px;
+  display: block;
+  margin: 0 0 18px;
+  background: var(--heartox-secondary, #e9ad45);
+}
+
 .hosmed-about__hero > .container > p:last-child {
-  max-width: 760px;
+  max-width: 570px;
   margin: 0;
   color: rgba(255, 255, 255, 0.86);
   font-size: 19px;
   line-height: 1.7;
+}
+
+.hosmed-about__stats-wrap {
+  position: absolute !important;
+  right: 0;
+  bottom: -68px;
+  left: 0;
+  z-index: 3 !important;
+}
+
+.hosmed-about__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 28px 34px;
+  border: 1px solid rgba(16, 42, 67, 0.08);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(16, 42, 67, 0.14);
+}
+
+.hosmed-about__stat {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 28px;
+}
+
+.hosmed-about__stat + .hosmed-about__stat {
+  border-left: 1px solid #dfe5ea;
+}
+
+.hosmed-about__stat i {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--heartox-secondary, #e9ad45);
+  background: var(--heartox-base, #102a43);
+  font-size: 23px;
+}
+
+.hosmed-about__stat p,
+.hosmed-about__stat span {
+  display: block;
+  margin: 0;
+}
+
+.hosmed-about__stat strong {
+  display: block;
+  color: var(--heartox-base, #102a43);
+  font-size: 27px;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.hosmed-about__stat span {
+  margin-top: 6px;
+  color: var(--heartox-text, #66788a);
+  font-size: 13px;
+  line-height: 1.25;
 }
 
 .hosmed-about__image {
@@ -18219,6 +18303,19 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 @media (max-width: 991px) {
+  .hosmed-about__hero {
+    margin-bottom: 150px;
+  }
+
+  .hosmed-about__stats {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 24px;
+  }
+
+  .hosmed-about__stat:nth-child(3) {
+    border-left: 0;
+  }
+
   .hosmed-about__copy {
     padding-left: 0;
   }
@@ -18246,16 +18343,63 @@ body.boxed-wrapper .funfact-one__single {
 
 @media (max-width: 767px) {
   .hosmed-about__hero {
-    padding: 75px 8px;
+    min-height: 0;
+    padding: 68px 8px 170px;
+    margin-bottom: 155px;
+    background:
+      linear-gradient(90deg, rgba(8, 39, 67, 0.98), rgba(8, 48, 84, 0.68)),
+      url("../images/backgrounds/slider-2.png") 62% center / cover no-repeat;
   }
 
   .hosmed-about__hero h1 {
-    font-size: 39px;
+    max-width: 350px;
+    font-size: 36px;
   }
 
   .hosmed-about__hero > .container > p:last-child {
+    max-width: 340px;
     font-size: 16px;
     line-height: 1.6;
+  }
+
+  .hosmed-about__hero::before {
+    width: 130px;
+    height: 130px;
+    left: 55%;
+    bottom: 20px;
+  }
+
+  .hosmed-about__stats-wrap {
+    bottom: -135px;
+    padding: 0 18px;
+  }
+
+  .hosmed-about__stats {
+    gap: 0;
+    row-gap: 18px;
+    padding: 20px 8px;
+    border-radius: 20px;
+  }
+
+  .hosmed-about__stat {
+    gap: 9px;
+    padding: 0 10px;
+  }
+
+  .hosmed-about__stat i {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+    font-size: 17px;
+  }
+
+  .hosmed-about__stat strong {
+    font-size: 19px;
+  }
+
+  .hosmed-about__stat span {
+    margin-top: 3px;
+    font-size: 10px;
   }
 
   .hosmed-about__eyebrow {
