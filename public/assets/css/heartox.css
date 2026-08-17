@@ -965,15 +965,18 @@ p {
 .hosmed-ai__decisions-copy > i { display: block; width: 48px; height: 2px; margin: 17px 0; background: #e9ad45; }
 .hosmed-ai__decisions .heartox-btn { margin-top: 22px; padding: 13px 20px; color: #fff; background: #0aa59e; font-size: 11px; }
 .hosmed-ai__visual { position: relative; min-height: 315px; display: grid; place-items: center; background-image: linear-gradient(rgba(15,184,174,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(15,184,174,.08) 1px, transparent 1px); background-size: 34px 34px; perspective: 700px; }
+.hosmed-ai__visual > img { position: relative; z-index: 1; width: min(72%, 560px); height: auto; object-fit: contain; filter: drop-shadow(0 12px 25px rgba(0, 207, 255, .22)); animation: hosmedAiImageFloat 3.5s ease-in-out infinite; }
 .hosmed-ai__chip { width: 150px; height: 150px; display: grid; place-items: center; position: relative; border: 2px solid #0dc1b7; border-radius: 24px; color: #17d7cc; background: rgba(4,50,72,.85); box-shadow: 0 0 30px rgba(12,193,183,.35), inset 0 0 25px rgba(12,193,183,.18); transform: rotateX(55deg) rotateZ(45deg); animation: hosmedAiFloat 3.2s ease-in-out infinite; }
 .hosmed-ai__chip i, .hosmed-ai__chip b { position: absolute; transform: rotateZ(-45deg); }
 .hosmed-ai__chip i { font-size: 55px; opacity: .32; }
 .hosmed-ai__chip b { color: #fff; font-size: 38px; }
 .hosmed-ai__visual > div { position: absolute; inset: 20px; }
-.hosmed-ai__visual > div p { position: absolute; min-width: 105px; margin: 0; padding: 9px 12px; border: 1px solid rgba(20,201,190,.35); border-radius: 6px; color: #9edbd7; background: rgba(5,39,61,.78); font-size: 9px; }
+.hosmed-ai__visual > div { z-index: 2; pointer-events: none; }
+.hosmed-ai__visual > div p { position: absolute; min-width: 105px; margin: 0; padding: 9px 12px; border: 1px solid rgba(20,201,190,.35); border-radius: 6px; color: #9edbd7; background: rgba(5,39,61,.88); box-shadow: 0 7px 18px rgba(0,0,0,.16); font-size: 9px; }
 .hosmed-ai__visual > div p strong { display: block; color: #fff; font-size: 17px; }
 .hosmed-ai__visual > div p:nth-child(1) { top: 8%; left: 8%; }.hosmed-ai__visual > div p:nth-child(2) { top: 8%; right: 7%; }.hosmed-ai__visual > div p:nth-child(3) { bottom: 8%; left: 4%; }.hosmed-ai__visual > div p:nth-child(4) { right: 5%; bottom: 8%; }
 @keyframes hosmedAiFloat { 0%,100% { transform: rotateX(55deg) rotateZ(45deg) translateZ(0); } 50% { transform: rotateX(55deg) rotateZ(45deg) translateZ(18px); } }
+@keyframes hosmedAiImageFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
 @media (max-width: 991px) {
   .hosmed-ai__hero { min-height: 470px; background-position: 62% center; }
