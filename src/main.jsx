@@ -370,6 +370,7 @@ function App() {
     }
 
     html = html.replace(/\$/g, '₹');
+    html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
 
     return html.replace(
       /href=(["'])([a-z0-9-]+)\.html(#[^"']*)?\1/gi,
