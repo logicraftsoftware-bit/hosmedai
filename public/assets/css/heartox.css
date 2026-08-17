@@ -3902,6 +3902,39 @@ p {
     font-size: 12px;
   }
 }
+
+/* Clearly identify the page currently being viewed. */
+@media (min-width: 1200px) {
+  .main-header--one:not(.sticky-header--cloned) .main-menu .hosmed-navigation > li.current > a {
+    padding: 8px 11px;
+    border-radius: 7px;
+    color: #fff;
+    background: var(--heartox-base, #102a43);
+    box-shadow: 0 5px 13px rgba(16, 42, 67, .16);
+  }
+
+  .main-header--one.sticky-header--cloned .main-menu .hosmed-navigation > li.current > a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -7px;
+    left: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--heartox-secondary, #e9ad45);
+  }
+}
+
+.mobile-nav__content .hosmed-navigation li.current > a {
+  margin: 5px 0;
+  padding: 0 12px;
+  height: 40px;
+  border-radius: 6px;
+  color: var(--heartox-base, #102a43);
+  background: var(--heartox-secondary, #e9ad45);
+  font-weight: 800;
+}
+
 @media (max-width: 991px) {
   .main-footer__middle__inner {
     flex-direction: column;

@@ -57,17 +57,21 @@ function App() {
   const markup = useMemo(() => {
     let html = page.html;
 
+    const navItem = (name, href, label, aliases = []) => {
+      const active = [name, ...aliases].includes(routeName);
+      return `<li${active ? ' class="current"' : ''}><a href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a></li>`;
+    };
     const primaryNavigation = `<ul class="main-menu__list hosmed-navigation">
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/hospital-planning">Hospital Planning</a></li>
-      <li><a href="/nabh-nabl">NABH / NABL</a></li>
-      <li><a href="/hospital-software">Hospital Software</a></li>
-      <li><a href="/ai-healthcare">AI Healthcare</a></li>
-      <li><a href="/services">Solutions</a></li>
-      <li><a href="/who-we-serve">Who We Serve</a></li>
-      <li><a href="/projects">Projects</a></li>
-      <li><a href="/contact">Contact</a></li>
+      ${navItem('index', '/', 'Home')}
+      ${navItem('about', '/about', 'About')}
+      ${navItem('hospital-planning', '/hospital-planning', 'Hospital Planning')}
+      ${navItem('nabh-nabl', '/nabh-nabl', 'NABH / NABL')}
+      ${navItem('hospital-software', '/hospital-software', 'Hospital Software')}
+      ${navItem('ai-healthcare', '/ai-healthcare', 'AI Healthcare')}
+      ${navItem('services', '/services', 'Solutions')}
+      ${navItem('who-we-serve', '/who-we-serve', 'Who We Serve')}
+      ${navItem('projects', '/projects', 'Projects', ['portfolio'])}
+      ${navItem('contact', '/contact', 'Contact')}
     </ul>`;
 
     html = html.replace(
