@@ -18024,14 +18024,14 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__hero {
-  min-height: 610px;
-  padding: 110px 0 150px;
-  margin-bottom: 90px;
+  min-height: 475px;
+  padding: 70px 0 125px;
+  margin-bottom: 105px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   color: #fff;
   background:
-    linear-gradient(90deg, rgba(8, 39, 67, 0.98), rgba(8, 48, 84, 0.78)),
+    linear-gradient(90deg, rgba(8, 39, 67, 0.99) 0%, rgba(8, 45, 78, 0.93) 42%, rgba(8, 48, 84, 0.2) 76%, rgba(8, 48, 84, 0.08) 100%),
     url("../images/backgrounds/slider-2.png") center / cover no-repeat;
 }
 
@@ -18044,6 +18044,7 @@ body.boxed-wrapper .funfact-one__single {
   bottom: -240px;
   border: 70px solid rgba(233, 173, 69, 0.2);
   border-radius: 50%;
+  pointer-events: none;
 }
 
 .hosmed-about__hero::before {
@@ -18072,11 +18073,12 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__hero h1 {
-  max-width: 610px;
+  max-width: 570px;
   margin: 0 0 18px;
   color: #fff;
-  font-size: clamp(46px, 5vw, 74px);
-  line-height: 1.08;
+  font-size: clamp(42px, 3.6vw, 52px);
+  line-height: 1.18;
+  letter-spacing: -0.7px;
 }
 
 .hosmed-about__hero-accent {
@@ -18092,13 +18094,14 @@ body.boxed-wrapper .funfact-one__single {
   margin: 0;
   color: rgba(255, 255, 255, 0.86);
   font-size: 19px;
+  font-weight: 400;
   line-height: 1.7;
 }
 
 .hosmed-about__stats-wrap {
   position: absolute !important;
   right: 0;
-  bottom: -68px;
+  bottom: -78px;
   left: 0;
   z-index: 3 !important;
 }
@@ -18106,7 +18109,8 @@ body.boxed-wrapper .funfact-one__single {
 .hosmed-about__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  padding: 28px 34px;
+  min-height: 130px;
+  padding: 25px 28px;
   border: 1px solid rgba(16, 42, 67, 0.08);
   border-radius: 26px;
   background: #fff;
@@ -18118,7 +18122,7 @@ body.boxed-wrapper .funfact-one__single {
   display: flex;
   align-items: center;
   gap: 18px;
-  padding: 0 28px;
+  padding: 0 22px;
 }
 
 .hosmed-about__stat + .hosmed-about__stat {
