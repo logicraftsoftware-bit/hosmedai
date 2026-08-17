@@ -278,6 +278,27 @@ function App() {
       );
     }
 
+    if (page === pages['index.html'] || page === pages['about.html']) {
+      const faqSection = `<section class="hosmed-faq section-space">
+        <div class="container">
+          <div class="hosmed-faq__inner wow fadeInUp" data-wow-duration="1200ms">
+            <div class="hosmed-faq__heading">
+              <p>Frequently Asked Question</p>
+              <h2>How does HosmedAI support a hospital from planning to operations?</h2>
+            </div>
+            <details class="hosmed-faq__item">
+              <summary><span>View Answer</span><i class="fas fa-plus"></i></summary>
+              <div class="hosmed-faq__answer">
+                <p>HosmedAI works as one integrated healthcare partner across the complete hospital journey—from feasibility, clinical planning, architecture and equipment planning to NABH/NABL readiness, hospital software, AI-enabled workflows and operational support. This coordinated approach reduces complexity, improves decision-making and keeps every stage aligned with quality healthcare outcomes.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>`;
+
+      html = html.replace(/(?=<footer class=)/, faqSection);
+    }
+
     html = html.replace(/\$/g, '₹');
 
     return html.replace(
