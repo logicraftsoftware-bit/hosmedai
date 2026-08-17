@@ -53,6 +53,7 @@ function App() {
     if (routeName === 'services') return pages['about.html'];
     if (routeName === 'why-hosmedai') return pages['about.html'];
     if (routeName === 'ai-healthcare') return pages['about.html'];
+    if (routeName === 'hospital-software') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -473,6 +474,24 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, aiPage);
     }
 
+    if (routeName === 'hospital-software') {
+      const softwareModules = [
+        ['fas fa-user-injured', 'Patient Management', ['Registration', 'Appointment', 'OPD', 'IPD', 'Emergency', 'Discharge']],
+        ['fas fa-stethoscope', 'Clinical', ['EMR', 'Doctor Dashboard', 'Nursing', 'OT Management', 'ICU', 'Clinical Documentation']],
+        ['fas fa-flask', 'Diagnostics', ['Laboratory', 'Radiology', 'PACS Integration', 'Pathology', 'Reporting']],
+        ['fas fa-cogs', 'Hospital Operations', ['Pharmacy', 'Inventory', 'Purchase', 'Stores', 'Biomedical Equipment', 'Housekeeping']],
+        ['fas fa-chart-bar', 'Business', ['Billing', 'Insurance', 'TPA', 'Finance', 'HR & Payroll', 'MIS']]
+      ].map(([icon, title, items], index) => `<article class="hosmed-software__module wow fadeInUp" data-wow-delay="${index * 80}ms"><span><i class="${icon}"></i></span><h3>${title}</h3><i></i><ul>${items.map(item => `<li>${item}</li>`).join('')}</ul></article>`).join('');
+      const softwarePage = `<main class="hosmed-software">
+        <section class="hosmed-software__hero"><div class="container"><div class="hosmed-software__hero-copy"><p class="wow fadeInDown">HOSPITAL SOFTWARE</p><h1 class="wow fadeInUp">Your Hospital.<br>One Intelligent <span>Digital Ecosystem.</span></h1><h2 class="wow fadeInUp" data-wow-delay="80ms">Replace Fragmented Systems With One Connected Platform.</h2><i></i><p class="wow fadeInUp" data-wow-delay="150ms">HosmedAI Hospital Software is designed to connect the critical functions of a modern hospital through a single digital ecosystem.</p><a href="#software-demo" class="heartox-btn wow fadeInUp" data-wow-delay="220ms">Request a Software Demo <i class="fas fa-arrow-right"></i></a></div><div class="hosmed-software__dashboard wow fadeInRight" data-wow-duration="1300ms"><div class="hosmed-software__screen"><div><b>Hosmed<span>AI</span></b><small>Hospital Command Centre</small></div><section><p><span>Patients</span><strong>1,248</strong></p><p><span>Occupancy</span><strong>87%</strong></p><p><span>Revenue</span><strong>2.45M</strong></p></section><i class="fas fa-chart-line"></i></div><div class="hosmed-software__phone"><i class="fas fa-heartbeat"></i><b>HosmedAI</b><span>Connected Care</span></div></div></div></section>
+        <section class="hosmed-software__modules section-space"><div class="container"><div class="hosmed-software__heading wow fadeInUp"><h2>Core <span>Modules</span></h2><i></i></div><div class="hosmed-software__module-grid">${softwareModules}</div></div></section>
+        <section class="hosmed-software__ai"><div class="container"><div class="hosmed-software__ai-inner wow fadeInUp"><div><p>And Then Comes</p><h2>AI<span>.</span></h2><i></i><p>HosmedAI is designed to bring Artificial Intelligence into hospital operations, helping organisations turn healthcare data into actionable intelligence.</p><div class="hosmed-software__flow"><span><i class="fas fa-database"></i>Data</span><b>→</b><span><i class="fas fa-brain"></i>Intelligence</span><b>→</b><span><i class="fas fa-bullseye"></i>Better Decisions</span></div></div><img src="/assets/images/ai-bg.png" alt="Artificial intelligence connecting hospital operations"></div></div></section>
+        <section class="hosmed-software__truth"><div class="container"><div class="hosmed-software__truth-inner wow fadeInUp"><div><i class="fas fa-hospital-alt"></i><h2>One Hospital.<br>One Platform.<br><span>One Source of Truth.</span></h2></div><div><span><i class="fas fa-link"></i><b>Integrated Data</b></span><span><i class="fas fa-eye"></i><b>Real-time Visibility</b></span><span><i class="fas fa-check-circle"></i><b>Better Outcomes</b></span><span><i class="fas fa-cogs"></i><b>Smarter Operations</b></span></div></div></div></section>
+        <section class="hosmed-software__cta" id="software-demo"><div class="container"><div class="hosmed-software__cta-inner wow fadeInUp"><i class="fas fa-headset"></i><div><h2>Ready to Transform Your Hospital?</h2><p>See how HosmedAI Hospital Software can streamline operations, improve efficiency and deliver better patient care.</p></div><a href="/contact" class="heartox-btn">Request a Software Demo <i class="fas fa-arrow-right"></i></a></div></div></section>
+      </main>`;
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, softwarePage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -546,6 +565,8 @@ function App() {
               ? 'Why HosmedAI | Integrated Healthcare Expertise'
               : routeName === 'ai-healthcare'
                 ? 'AI for Healthcare | HosmedAI'
+                : routeName === 'hospital-software'
+                  ? 'Hospital Software & HIS | HosmedAI'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
