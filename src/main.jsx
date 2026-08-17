@@ -149,8 +149,46 @@ function App() {
             </div>
             <button type="submit" class="heartox-btn heartox-btn--base">Contact Us</button>
           </form><!-- /.consultation-form -->`
+        )
+        .replace(
+          /<div class="charity-cause-donate wow[\s\S]*?<\/div><!-- \/.charity-cause-donate -->/,
+          `<section class="hospital-journey wow fadeInUp" data-wow-duration="1500ms">
+            <div class="hospital-journey__inner">
+              <div class="hospital-journey__intro">
+                <p class="hospital-journey__eyebrow"><i class="fas fa-shield-alt"></i> One Partner. Every Hospital Need.</p>
+                <h2>From an Idea<br>on Paper to a<br>Fully<br>Operational<br>Hospital<span>.</span></h2>
+                <span class="hospital-journey__accent"></span>
+              </div>
+              <div class="hospital-journey__process">
+                <div class="hospital-journey__steps">
+                  <div class="hospital-journey__step"><span><i class="fas fa-lightbulb"></i></span><strong>Concept</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-clipboard-check"></i></span><strong>Feasibility</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-map-marked-alt"></i></span><strong>Planning</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-pencil-ruler"></i></span><strong>Design</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-hard-hat"></i></span><strong>Construction<br>Support</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-laptop-medical"></i></span><strong>Equipment</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-award"></i></span><strong>Compliance<br>&amp; Accreditation</strong></div>
+                  <div class="hospital-journey__step"><span><i class="fas fa-desktop"></i></span><strong>Software &amp;<br>Operations</strong></div>
+                </div>
+                <p class="hospital-journey__promise">HosmedAI stays with you throughout the journey.</p>
+              </div>
+              <div class="hospital-journey__action">
+                <a href="/services" class="heartox-btn heartox-btn--secondary">Explore Solutions</a>
+                <p>End-to-End <i class="fas fa-arrow-right"></i></p>
+              </div>
+              <div class="hospital-journey__progress">
+                <div class="hospital-journey__bar"><span></span><b>35.66%</b></div>
+                <div class="hospital-journey__figures">
+                  <div><i class="fas fa-hospital-alt"></i><p><strong>3,912</strong><span>Integrated</span></p></div>
+                  <div><i class="fas fa-bullseye"></i><p><strong>4,343</strong><span>Goal</span></p></div>
+                </div>
+              </div>
+            </div>
+          </section>`
         );
     }
+
+    html = html.replace(/\$/g, '₹');
 
     return html.replace(
       /href=(["'])([a-z0-9-]+)\.html(#[^"']*)?\1/gi,
