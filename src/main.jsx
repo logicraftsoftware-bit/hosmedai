@@ -54,6 +54,7 @@ function App() {
     if (routeName === 'why-hosmedai') return pages['about.html'];
     if (routeName === 'ai-healthcare') return pages['about.html'];
     if (routeName === 'hospital-software') return pages['about.html'];
+    if (routeName === 'nabh-nabl') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -492,6 +493,21 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, softwarePage);
     }
 
+    if (routeName === 'nabh-nabl') {
+      const nabhJourney = [['fas fa-clipboard-check','Assessment'],['fas fa-file-alt','Documentation'],['fas fa-cogs','Implementation'],['fas fa-chalkboard-teacher','Training'],['fas fa-tasks','Internal Audit'],['fas fa-shield-alt','Readiness'],['fas fa-award','Accreditation']].map(([icon, label], index) => `<div class="wow fadeInUp" data-wow-delay="${index * 70}ms"><span><i class="${icon}"></i></span><b>${label}</b>${index < 6 ? '<em>→</em>' : ''}</div>`).join('');
+      const nablItems = [['fas fa-shield-alt','Quality management systems'],['fas fa-file-alt','Documentation'],['fas fa-book-open','SOPs'],['fas fa-cogs','Process standardisation'],['fas fa-chart-line','Quality indicators'],['fas fa-search','Internal audits'],['fas fa-users','Staff training'],['fas fa-vials','Laboratory workflow'],['fas fa-medal','Accreditation readiness']].map(([icon,label], index) => `<div class="wow fadeInUp" data-wow-delay="${index * 50}ms"><i class="${icon}"></i><span>${label}</span></div>`).join('');
+      const ecosystem = [['N','NABH'],['fas fa-certificate','NABL'],['fas fa-shield-alt','Quality'],['fas fa-users-cog','Patient Safety'],['fas fa-hand-sparkles','Infection Control'],['fas fa-book-open','SOPs'],['fas fa-file-alt','Documentation'],['fas fa-chalkboard-teacher','Training'],['fas fa-search','Audit']].map(([icon,label]) => `<div><span>${icon.length === 1 ? icon : `<i class="${icon}"></i>`}</span><b>${label}</b></div>`).join('');
+      const accreditationPage = `<main class="hosmed-accreditation">
+        <section class="hosmed-accreditation__hero"><div class="container"><div class="hosmed-accreditation__hero-copy"><p class="wow fadeInDown">NABH / NABL &amp; COMPLIANCE</p><h1 class="wow fadeInUp">Accreditation Is More<br>Than a Certificate.</h1><h2 class="wow fadeInUp" data-wow-delay="80ms">It’s a Culture of Quality.</h2><i></i><p class="wow fadeInUp" data-wow-delay="150ms">HosmedAI helps hospitals and diagnostic laboratories build systems that are quality-driven, patient-centric and accreditation-ready.</p></div></div></section>
+        <section class="hosmed-accreditation__content"><div class="container"><article class="hosmed-accreditation__panel hosmed-accreditation__nabh wow fadeInUp"><div class="hosmed-accreditation__panel-icon"><i class="fas fa-hospital-alt"></i></div><div class="hosmed-accreditation__panel-content"><h2><span>NABH</span> CONSULTANCY</h2><p>We support hospitals through the journey of:</p><div class="hosmed-accreditation__journey">${nabhJourney}</div></div></article>
+          <article class="hosmed-accreditation__panel hosmed-accreditation__nabl wow fadeInUp"><div class="hosmed-accreditation__panel-icon"><i class="fas fa-microscope"></i></div><div class="hosmed-accreditation__panel-content"><h2><span>NABL</span> CONSULTANCY</h2><p>For diagnostic laboratories, we help establish robust systems covering:</p><div class="hosmed-accreditation__nabl-grid">${nablItems}</div></div></article>
+          <section class="hosmed-accreditation__ecosystem wow fadeInUp"><h2>Our Compliance <span>Ecosystem</span></h2><div>${ecosystem}</div></section>
+          <section class="hosmed-accreditation__cta wow fadeInUp"><div><h2>Don’t Prepare for Accreditation<br>at the Last Minute.</h2><p>Build Accreditation Into Your Hospital<br>From Day One.</p><i></i></div><a href="/contact" class="heartox-btn">Talk to Our Accreditation Team <i class="fas fa-arrow-right"></i></a></section>
+        </div></section>
+      </main>`;
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, accreditationPage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -567,6 +583,8 @@ function App() {
                 ? 'AI for Healthcare | HosmedAI'
                 : routeName === 'hospital-software'
                   ? 'Hospital Software & HIS | HosmedAI'
+                  : routeName === 'nabh-nabl'
+                    ? 'NABH / NABL Accreditation Consultancy | HosmedAI'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
