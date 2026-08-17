@@ -67,6 +67,9 @@ function App() {
       /<ul class="main-menu__list">[\s\S]*?<\/ul>\s*<\/nav>/,
       `${primaryNavigation}</nav>`
     )
+      .replace(/needhelp@company\.com/g, 'hello@hosmedai.com')
+      .replace(/Visit Our Social Pages:/g, 'Connect with HosmedAI:')
+      .replace(/Become a Volunteer/g, 'Book a Consultation')
       .replace(
         /<a[^>]*class="[^"]*main-header__info__item[^"]*"[^>]*>\s*<i class="icon-trolley-cart_4175270"><\/i>\s*<\/a>/g,
         ''

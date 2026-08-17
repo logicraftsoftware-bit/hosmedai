@@ -18034,6 +18034,17 @@ body.boxed-wrapper .funfact-one__single {
   font-family: var(--heartox-heading-font, "Nunito", sans-serif);
 }
 
+.hosmed-about h1,
+.hosmed-about h2 {
+  font-weight: 700;
+}
+
+.hosmed-about h3,
+.hosmed-about strong,
+.hosmed-about .heartox-btn {
+  font-weight: 700;
+}
+
 .hosmed-about p,
 .hosmed-about blockquote,
 .hosmed-about span {
@@ -18111,6 +18122,7 @@ body.boxed-wrapper .funfact-one__single {
   font-size: clamp(42px, 3.6vw, 52px);
   line-height: 1.18;
   letter-spacing: -0.7px;
+  font-weight: 700;
 }
 
 .hosmed-about__hero-accent {
@@ -18126,7 +18138,7 @@ body.boxed-wrapper .funfact-one__single {
   margin: 0;
   color: rgba(255, 255, 255, 0.86);
   font-size: 19px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.7;
 }
 
