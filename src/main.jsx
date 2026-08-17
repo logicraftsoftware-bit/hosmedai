@@ -51,6 +51,7 @@ function App() {
     if (routeName === 'contact' && !pages[requested]) return pages['about.html'];
     if (routeName === 'projects' || routeName === 'portfolio') return pages['about.html'];
     if (routeName === 'services') return pages['about.html'];
+    if (routeName === 'why-hosmedai') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -63,6 +64,7 @@ function App() {
     };
     const primaryNavigation = `<ul class="main-menu__list hosmed-navigation">
       ${navItem('index', '/', 'Home', 'fas fa-home')}
+      ${navItem('why-hosmedai', '/why-hosmedai', 'Why HosmedAI', 'fas fa-shield-alt')}
       ${navItem('about', '/about', 'About', 'fas fa-hospital-user')}
       ${navItem('hospital-planning', '/hospital-planning', 'Hospital Planning', 'fas fa-drafting-compass')}
       ${navItem('nabh-nabl', '/nabh-nabl', 'NABH / NABL', 'fas fa-award')}
@@ -431,6 +433,24 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, solutionsPage);
     }
 
+    if (routeName === 'why-hosmedai') {
+      const reasons = [
+        ['01', 'fas fa-route', 'End-to-End Expertise', 'From hospital concept to digital operations.'],
+        ['02', 'fas fa-heartbeat', 'Healthcare-Focused', 'Solutions designed specifically around healthcare workflows.'],
+        ['03', 'fas fa-puzzle-piece', 'Integrated Approach', 'Planning, compliance and technology designed to work together.'],
+        ['04', 'fas fa-microchip', 'Technology Driven', 'Modern hospital management powered by cloud technology and AI.'],
+        ['05', 'fas fa-chart-line', 'Scalable', 'Designed for clinics, nursing homes, diagnostic centres and multi-specialty hospitals.'],
+        ['06', 'fas fa-handshake', 'Long-Term Partnership', 'We do not disappear after implementation. We help you build and evolve.']
+      ].map(([number, icon, title, copy], index) => `<article class="hosmed-why__reason hosmed-why__reason--${index % 2 ? 'right' : 'left'} wow fadeIn${index % 2 ? 'Right' : 'Left'}" data-wow-delay="${index * 70}ms"><b>${number}</b><div class="hosmed-why__reason-icon"><i class="${icon}"></i></div><div><h3>${title}</h3><span></span><p>${copy}</p></div></article>`).join('');
+      const whyPage = `<main class="hosmed-why">
+        <section class="hosmed-why__hero"><div class="container"><div class="hosmed-why__hero-copy"><p class="wow fadeInDown">WHY HOSMEDAI</p><h1 class="wow fadeInUp">Why Choose HosmedAI?</h1><h2 class="wow fadeInUp" data-wow-delay="80ms">One Ecosystem. Multiple Capabilities.</h2><p class="wow fadeInUp" data-wow-delay="150ms">We bring together healthcare expertise, management consulting and technology to deliver better hospitals and better outcomes.</p></div></div></section>
+        <section class="hosmed-why__reasons section-space"><div class="container"><div class="hosmed-why__reasons-grid">${reasons}<span class="hosmed-why__timeline" aria-hidden="true"></span></div></div></section>
+        <section class="hosmed-why__advantage"><div class="container"><div class="hosmed-why__advantage-inner wow fadeInUp"><h2>The Hosmed<span>AI</span> Advantage</h2><div class="hosmed-why__advantage-grid"><div><i class="fas fa-users-cog"></i><h3>Healthcare Experts</h3><p>Deep domain knowledge that drives better decisions.</p></div><div><i class="fas fa-lightbulb"></i><h3>Innovative Solutions</h3><p>Using the latest technology to create future-ready hospitals.</p></div><div><i class="fas fa-shield-alt"></i><h3>Trusted Partner</h3><p>Transparency, commitment and reliability in everything we do.</p></div><div><i class="fas fa-bullseye"></i><h3>Better Outcomes</h3><p>Efficient operations and better patient care.</p></div></div></div></div></section>
+        <section class="hosmed-why__cta"><div class="container"><div class="hosmed-why__cta-inner wow fadeInUp"><div><h2>Ready to Build a Smarter Hospital?</h2><p>Let's work together to design, build and manage hospitals that make a real difference.</p></div><a href="/contact" class="heartox-btn">Talk to Our Experts <i class="fas fa-arrow-right"></i></a></div></div></section>
+      </main>`;
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, whyPage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -464,7 +484,7 @@ function App() {
             <p>We partner with healthcare organisations to design, build and operate smarter hospitals through integrated solutions.</p>
             <div class="hosmed-footer__social"><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a></div>
           </div>
-          <nav class="hosmed-footer__column" aria-label="Footer links"><h3>Links</h3><ul><li><a href="/">Home</a></li><li><a href="/about">About Us</a></li><li><a href="/hospital-planning">Hospital Planning</a></li><li><a href="/nabh-nabl">NABH / NABL</a></li><li><a href="/hospital-software">Hospital Software</a></li><li><a href="/ai-healthcare">AI Healthcare</a></li><li><a href="/services">Solutions</a></li><li><a href="/who-we-serve">Who We Serve</a></li><li><a href="/projects">Projects</a></li><li><a href="/contact">Contact</a></li></ul></nav>
+          <nav class="hosmed-footer__column" aria-label="Footer links"><h3>Links</h3><ul><li><a href="/">Home</a></li><li><a href="/why-hosmedai">Why HosmedAI</a></li><li><a href="/about">About Us</a></li><li><a href="/hospital-planning">Hospital Planning</a></li><li><a href="/nabh-nabl">NABH / NABL</a></li><li><a href="/hospital-software">Hospital Software</a></li><li><a href="/ai-healthcare">AI Healthcare</a></li><li><a href="/services">Solutions</a></li><li><a href="/who-we-serve">Who We Serve</a></li><li><a href="/projects">Projects</a></li><li><a href="/contact">Contact</a></li></ul></nav>
           <nav class="hosmed-footer__column" aria-label="Explore"><h3>Explore</h3><ul><li><a href="/hospital-planning">Planning &amp; Design</a></li><li><a href="/nabh-nabl">Quality &amp; Accreditation</a></li><li><a href="/hospital-software">Hospital Technology</a></li><li><a href="/ai-healthcare">Healthcare AI</a></li><li><a href="/projects">Our Projects</a></li><li><a href="/contact">Book a Consultation</a></li></ul></nav>
           <div class="hosmed-footer__contact"><h3>Contact</h3><div><i class="fas fa-phone-alt"></i><p><a href="tel:+9138008060">+91 3800 8060</a><a href="tel:+9195550114">+91 9555 0114</a></p></div><div><i class="fas fa-envelope"></i><p><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a><a href="https://hosmedai.vercel.app">hosmedai.vercel.app</a></p></div><div><i class="fas fa-map-marker-alt"></i><p><span>Healthcare Solutions</span><span>India</span></p></div></div>
         </div>
@@ -500,6 +520,8 @@ function App() {
           ? 'Projects & Case Studies | HosmedAI'
           : routeName === 'services'
             ? 'Healthcare Solutions | HosmedAI'
+            : routeName === 'why-hosmedai'
+              ? 'Why HosmedAI | Integrated Healthcare Expertise'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;

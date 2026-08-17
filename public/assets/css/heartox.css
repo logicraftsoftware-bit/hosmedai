@@ -931,6 +931,72 @@ p {
   }
 }
 
+/* Why HosmedAI page */
+.hosmed-why { overflow: hidden; color: #66788a; background: #fff; font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif); }
+.hosmed-why h1, .hosmed-why h2, .hosmed-why h3 { font-family: var(--heartox-heading-font, "Nunito", sans-serif); }
+.hosmed-why__hero { position: relative; padding: 70px 0 88px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98), rgba(5,42,71,.86) 55%, rgba(5,38,66,.28)), url("../images/backgrounds/slider-1-1.jpg") center 48%/cover; }
+.hosmed-why__hero::after { content: ""; position: absolute; right: -3%; bottom: -1px; width: 53%; height: 70px; background: #fff; clip-path: ellipse(67% 38% at 70% 100%); }
+.hosmed-why__hero-copy { position: relative; z-index: 1; max-width: 700px; }
+.hosmed-why__hero-copy > p:first-child { display: flex; align-items: center; gap: 12px; margin: 0 0 13px; color: #f2af35; font-size: 13px; font-weight: 800; }
+.hosmed-why__hero-copy > p:first-child::after { content: ""; width: 45px; height: 2px; background: #f2af35; }
+.hosmed-why__hero h1 { margin: 0 0 5px; color: #fff; font-size: clamp(38px, 3.4vw, 58px); line-height: 1.08; }
+.hosmed-why__hero h2 { margin: 0 0 16px; color: #19b6ae; font-size: clamp(25px, 2.3vw, 38px); }
+.hosmed-why__hero-copy > p:last-child { max-width: 610px; margin: 0; color: #d5e0e9; font-size: 14px; line-height: 1.75; }
+.hosmed-why__reasons { padding: 38px 0 45px; background-image: radial-gradient(rgba(14,79,116,.1) 1px, transparent 1px); background-size: 18px 18px; }
+.hosmed-why__reasons-grid { position: relative; max-width: 1040px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px 105px; margin: 0 auto; }
+.hosmed-why__timeline { position: absolute; top: 30px; bottom: 30px; left: 50%; width: 2px; background: linear-gradient(#0ba49e, #e9a525); transform: translateX(-50%); }
+.hosmed-why__reason { position: relative; min-height: 145px; display: grid; grid-template-columns: 94px 1fr; align-items: center; padding: 20px 24px 20px 55px; border-radius: 12px; background: #fff; box-shadow: 0 13px 35px rgba(9,48,80,.12); transition: transform .35s ease, box-shadow .35s ease; }
+.hosmed-why__reason:hover { transform: translateY(-7px); box-shadow: 0 20px 44px rgba(9,48,80,.18); }
+.hosmed-why__reason--right { margin-top: 58px; }
+.hosmed-why__reason b { position: absolute; top: 0; left: 0; width: 66px; height: 54px; display: grid; place-items: center; color: #fff; border-radius: 12px 0 28px; background: linear-gradient(135deg, #18aea7, #058782); font-size: 24px; }
+.hosmed-why__reason--right b { background: linear-gradient(135deg, #f7b536, #ed8f00); }
+.hosmed-why__reason-icon { width: 76px; height: 76px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(135deg, #16aea7, #057c78); font-size: 30px; box-shadow: 0 8px 18px rgba(5,126,121,.22); }
+.hosmed-why__reason--right .hosmed-why__reason-icon { background: linear-gradient(135deg, #f7b536, #ed8f00); box-shadow: 0 8px 18px rgba(237,143,0,.22); }
+.hosmed-why__reason h3 { margin: 0; color: #088f89; font-size: 19px; font-weight: 800; }
+.hosmed-why__reason--right h3 { color: #ee9307; }
+.hosmed-why__reason h3 + span { display: block; width: 33px; height: 2px; margin: 8px 0; background: #0aa39d; }
+.hosmed-why__reason--right h3 + span { background: #ee9307; }
+.hosmed-why__reason p { margin: 0; font-size: 12px; line-height: 1.6; }
+.hosmed-why__advantage { padding: 0 0 25px; }
+.hosmed-why__advantage-inner { padding: 22px 30px 28px; color: #d5e0e9; border-radius: 12px; background: linear-gradient(120deg, #082b49, #0d3d64); }
+.hosmed-why__advantage h2 { margin: 0 0 19px; color: #fff; text-align: center; font-size: 23px; font-weight: 500; }
+.hosmed-why__advantage h2 span { color: #f2af35; }
+.hosmed-why__advantage-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.hosmed-why__advantage-grid > div { padding: 0 24px; border-left: 1px solid rgba(255,255,255,.18); }
+.hosmed-why__advantage-grid > div:first-child { border-left: 0; }
+.hosmed-why__advantage-grid i { width: 42px; height: 42px; display: grid; place-items: center; float: left; margin: 0 11px 9px 0; border-radius: 50%; color: #fff; background: #0eaaa3; }
+.hosmed-why__advantage-grid > div:nth-child(even) i { background: #f1a626; }
+.hosmed-why__advantage-grid h3 { margin: 3px 0 10px; color: #fff; font-size: 14px; }
+.hosmed-why__advantage-grid p { clear: both; margin: 0; font-size: 10px; line-height: 1.55; }
+.hosmed-why__cta { padding: 0 0 42px; }
+.hosmed-why__cta-inner { min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 24px 38px; color: #fff; border-radius: 12px; background: linear-gradient(100deg, rgba(5,145,139,.97), rgba(6,63,91,.88)), url("../images/about/about-001.png") right 35%/cover; }
+.hosmed-why__cta h2 { margin: 0 0 4px; color: #fff; font-size: 23px; }
+.hosmed-why__cta p { max-width: 580px; margin: 0; color: #e3eef3; font-size: 11px; }
+.hosmed-why__cta .heartox-btn { padding: 14px 24px; color: #0b3559; background: #fff; font-size: 12px; }
+
+@media (max-width: 991px) {
+  .hosmed-why__reasons-grid { gap: 25px 35px; }
+  .hosmed-why__timeline { display: none; }
+  .hosmed-why__reason--right { margin-top: 30px; }
+  .hosmed-why__advantage-grid { grid-template-columns: repeat(2, 1fr); gap: 25px 0; }
+  .hosmed-why__advantage-grid > div:nth-child(3) { border-left: 0; }
+}
+
+@media (max-width: 575px) {
+  .hosmed-why__hero { padding: 42px 0 60px; }
+  .hosmed-why__hero h1 { font-size: 33px; }
+  .hosmed-why__hero h2 { font-size: 24px; }
+  .hosmed-why__reasons { padding: 30px 0; }
+  .hosmed-why__reasons-grid { grid-template-columns: 1fr; gap: 17px; }
+  .hosmed-why__reason--right { margin-top: 0; }
+  .hosmed-why__reason { grid-template-columns: 78px 1fr; min-height: 130px; padding: 18px 18px 18px 45px; }
+  .hosmed-why__reason-icon { width: 65px; height: 65px; font-size: 25px; }
+  .hosmed-why__reason h3 { font-size: 17px; }
+  .hosmed-why__advantage-grid { grid-template-columns: 1fr 1fr; }
+  .hosmed-why__advantage-grid > div { padding: 0 12px; }
+  .hosmed-why__cta-inner { align-items: flex-start; flex-direction: column; padding: 22px; }
+}
+
 /* HosmedAI Solutions page */
 .hosmed-solutions { overflow: hidden; color: #68798b; background: #fff; font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif); }
 .hosmed-solutions h1, .hosmed-solutions h2, .hosmed-solutions h3 { font-family: var(--heartox-heading-font, "Nunito", sans-serif); }
@@ -3876,7 +3942,7 @@ p {
 /* HosmedAI primary navigation */
 @media (min-width: 1200px) {
   .main-header--one:not(.sticky-header--cloned) .main-header__bottom {
-    width: calc(100% + 190px);
+    width: calc(100% + 270px);
   }
 
   .main-header--one .main-header__bottom::after {
@@ -3884,11 +3950,11 @@ p {
   }
 
   .main-menu .hosmed-navigation > li + li {
-    margin-left: 8px;
+    margin-left: 5px;
   }
 
   .main-menu .hosmed-navigation > li > a {
-    font-size: 13px;
+    font-size: 12px;
     white-space: nowrap;
   }
 
@@ -3898,7 +3964,7 @@ p {
   }
 
   .main-header--one .main-header__bottom {
-    padding-left: 35px;
+    padding-left: 15px;
   }
 }
 
