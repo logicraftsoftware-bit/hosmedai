@@ -278,6 +278,74 @@ function App() {
       );
     }
 
+    if (page === pages['contact.html']) {
+      const contactPage = `<main class="hosmed-contact">
+        <section class="hosmed-contact__hero">
+          <div class="container">
+            <div class="hosmed-contact__hero-copy">
+              <p class="hosmed-contact__eyebrow wow fadeInDown" data-wow-duration="1000ms">Contact</p>
+              <h1 class="wow fadeInUp" data-wow-duration="1200ms">Let’s Build the Future of Healthcare.</h1>
+              <span class="hosmed-contact__accent"></span>
+              <p class="wow fadeInUp" data-wow-delay="150ms">Whether you are planning, expanding, accrediting or digitising a hospital, our healthcare experts are ready to help you move forward with clarity.</p>
+              <a href="#consultation" class="heartox-btn heartox-btn--secondary wow fadeInUp" data-wow-delay="250ms">Book a Consultation <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-contact__needs section-space">
+          <div class="container">
+            <div class="hosmed-contact__heading wow fadeInUp">
+              <p class="hosmed-contact__eyebrow">How Can We Help?</p>
+              <h2>Tell Us Where You Are in Your Hospital Journey.</h2>
+            </div>
+            <div class="hosmed-contact__needs-grid">
+              <article class="wow fadeInUp" data-wow-delay="0ms"><i class="fas fa-hospital"></i><h3>Planning a New Hospital?</h3><span>01</span></article>
+              <article class="wow fadeInUp" data-wow-delay="80ms"><i class="fas fa-expand-arrows-alt"></i><h3>Expanding an Existing Hospital?</h3><span>02</span></article>
+              <article class="wow fadeInUp" data-wow-delay="160ms"><i class="fas fa-award"></i><h3>Preparing for NABH/NABL?</h3><span>03</span></article>
+              <article class="wow fadeInUp" data-wow-delay="240ms"><i class="fas fa-laptop-medical"></i><h3>Looking for Hospital Software?</h3><span>04</span></article>
+              <article class="wow fadeInUp" data-wow-delay="320ms"><i class="fas fa-brain"></i><h3>Want to Bring AI Into Your Hospital?</h3><span>05</span></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-contact__consultation section-space" id="consultation">
+          <div class="container">
+            <div class="hosmed-contact__consultation-grid">
+              <div class="hosmed-contact__intro wow fadeInLeft" data-wow-duration="1200ms">
+                <p class="hosmed-contact__eyebrow">Let’s Talk.</p>
+                <h2>Start a Conversation With Our Healthcare Experts.</h2>
+                <p>Share your hospital requirements with us. Our team will understand your priorities and connect you with the right planning, compliance or technology experts.</p>
+                <div class="hosmed-contact__channel"><i class="fas fa-envelope"></i><div><span>Email Us</span><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a></div></div>
+                <div class="hosmed-contact__channel"><i class="fas fa-comments"></i><div><span>Consultation</span><strong>Hospital Planning &amp; Digital Healthcare</strong></div></div>
+              </div>
+              <form class="hosmed-contact__form wow fadeInRight" data-wow-duration="1200ms" action="#">
+                <div class="hosmed-contact__form-grid">
+                  <label><span>Your Name</span><input type="text" name="name" placeholder="Enter your name" autocomplete="name" required></label>
+                  <label><span>Hospital / Organisation</span><input type="text" name="organisation" placeholder="Organisation name" autocomplete="organization" required></label>
+                  <label><span>Phone Number</span><input type="tel" name="phone" placeholder="Enter phone number" autocomplete="tel" required></label>
+                  <label><span>Email Address</span><input type="email" name="email" placeholder="Enter email address" autocomplete="email" required></label>
+                  <label class="hosmed-contact__form-full"><span>How Can We Help?</span><select name="requirement" required><option value="">Select your requirement</option><option>New Hospital Planning</option><option>Hospital Expansion</option><option>NABH / NABL Accreditation</option><option>Hospital Software</option><option>AI Healthcare Solutions</option><option>Other</option></select></label>
+                  <label class="hosmed-contact__form-full"><span>Tell Us About Your Project</span><textarea name="message" rows="4" placeholder="Share your requirements"></textarea></label>
+                </div>
+                <button type="submit" class="heartox-btn heartox-btn--secondary">Book a Consultation <i class="fas fa-arrow-right"></i></button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-contact__brand">
+          <div class="container">
+            <div class="hosmed-contact__brand-inner wow fadeInUp" data-wow-duration="1200ms">
+              <div><p>HosmedAI</p><h2>Complete Hospital Solutions</h2><span>Plan. Build. Comply. Digitise. Grow.</span></div>
+              <a href="#consultation" class="heartox-btn heartox-btn--secondary">Book a Consultation</a>
+            </div>
+          </div>
+        </section>
+      </main>`;
+
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, contactPage);
+    }
+
     if (page === pages['index.html'] || page === pages['about.html']) {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -315,7 +383,9 @@ function App() {
   useEffect(() => {
     document.title = page === pages['about.html']
       ? 'About HosmedAI | Integrated Hospital Development'
-      : (page.title || 'Hosmed AI');
+      : page === pages['contact.html']
+        ? 'Contact HosmedAI | Book a Hospital Consultation'
+        : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
     (async () => {
