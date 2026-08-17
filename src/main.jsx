@@ -374,6 +374,31 @@ function App() {
       html = html.replace(/(?=<footer class=)/, faqSection);
     }
 
+    const sharedFooter = `<footer class="hosmed-footer">
+      <div class="hosmed-footer__decor hosmed-footer__decor--one"></div>
+      <div class="hosmed-footer__decor hosmed-footer__decor--two"></div>
+      <div class="container">
+        <div class="hosmed-footer__top">
+          <div class="hosmed-footer__brand">
+            <a href="/" class="hosmed-footer__logo" aria-label="HosmedAI Home"><img src="/assets/images/hosmed-mark.png" alt=""><span><strong>Hosmed<span>AI</span></strong><small>Smarter Hospitals. Better Care.</small></span></a>
+            <p>We partner with healthcare organisations to design, build and operate smarter hospitals through integrated solutions.</p>
+            <div class="hosmed-footer__social"><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a></div>
+          </div>
+          <nav class="hosmed-footer__column" aria-label="Footer links"><h3>Links</h3><ul><li><a href="/">Home</a></li><li><a href="/about">About Us</a></li><li><a href="/hospital-planning">Hospital Planning</a></li><li><a href="/nabh-nabl">NABH / NABL</a></li><li><a href="/hospital-software">Hospital Software</a></li><li><a href="/ai-healthcare">AI Healthcare</a></li><li><a href="/services">Solutions</a></li><li><a href="/who-we-serve">Who We Serve</a></li><li><a href="/portfolio">Projects</a></li><li><a href="/contact">Contact</a></li></ul></nav>
+          <nav class="hosmed-footer__column" aria-label="Explore"><h3>Explore</h3><ul><li><a href="/hospital-planning">Planning &amp; Design</a></li><li><a href="/nabh-nabl">Quality &amp; Accreditation</a></li><li><a href="/hospital-software">Hospital Technology</a></li><li><a href="/ai-healthcare">Healthcare AI</a></li><li><a href="/portfolio">Our Projects</a></li><li><a href="/contact">Book a Consultation</a></li></ul></nav>
+          <div class="hosmed-footer__contact"><h3>Contact</h3><div><i class="fas fa-phone-alt"></i><p><a href="tel:+9138008060">+91 3800 8060</a><a href="tel:+9195550114">+91 9555 0114</a></p></div><div><i class="fas fa-envelope"></i><p><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a><a href="https://hosmedai.vercel.app">hosmedai.vercel.app</a></p></div><div><i class="fas fa-map-marker-alt"></i><p><span>Healthcare Solutions</span><span>India</span></p></div></div>
+        </div>
+        <div class="hosmed-footer__subscribe">
+          <div class="hosmed-footer__subscribe-icon"><i class="far fa-envelope"></i></div>
+          <div><h3>Subscribe to Get Our <span>Important Updates</span></h3><p>Stay updated with our latest news, insights and healthcare solutions.</p></div>
+          <form action="#"><input type="email" aria-label="Email Address" placeholder="Email Address" required><button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button></form>
+        </div>
+      </div>
+      <div class="hosmed-footer__bottom"><div class="container"><p><i class="fas fa-shield-alt"></i> © 2026 HosmedAI. All Rights Reserved.</p><nav><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Cookie Policy</a></nav></div></div>
+    </footer>`;
+
+    html = html.replace(/<footer class="[^"]*">[\s\S]*?<\/footer>/, sharedFooter);
+
     html = html.replace(/\$/g, '₹');
     html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
 

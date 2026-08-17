@@ -545,6 +545,394 @@ p {
   }
 }
 
+/* Shared HosmedAI footer */
+.hosmed-footer {
+  position: relative;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.82);
+  background:
+    radial-gradient(circle at 82% 20%, rgba(27, 63, 99, 0.72), transparent 35%),
+    linear-gradient(120deg, #071f35, #0b2944 55%, #061b30);
+  font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif);
+}
+
+.hosmed-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  pointer-events: none;
+  background-image:
+    linear-gradient(30deg, transparent 48%, rgba(233, 173, 69, 0.26) 49%, rgba(233, 173, 69, 0.26) 51%, transparent 52%),
+    linear-gradient(150deg, transparent 48%, rgba(233, 173, 69, 0.2) 49%, rgba(233, 173, 69, 0.2) 51%, transparent 52%);
+  background-size: 90px 155px;
+  background-position: calc(100% + 20px) -30px;
+  background-repeat: no-repeat;
+}
+
+.hosmed-footer a {
+  color: inherit;
+  transition: color 250ms ease, transform 250ms ease, background-color 250ms ease;
+}
+
+.hosmed-footer__top {
+  display: grid;
+  grid-template-columns: 1.35fr 0.8fr 0.8fr 1.15fr;
+  gap: 48px;
+  padding: 72px 20px 52px;
+}
+
+.hosmed-footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  margin-bottom: 24px;
+}
+
+.hosmed-footer__logo > img {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  transform: scale(1.55);
+}
+
+.hosmed-footer__logo > span,
+.hosmed-footer__logo small {
+  display: block;
+}
+
+.hosmed-footer__logo strong {
+  color: #fff;
+  font-family: var(--heartox-heading-font, "Nunito", sans-serif);
+  font-size: 35px;
+  line-height: 1;
+}
+
+.hosmed-footer__logo strong span {
+  color: #16b4ad;
+}
+
+.hosmed-footer__logo small {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.hosmed-footer__brand > p {
+  max-width: 350px;
+  margin: 0 0 24px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.hosmed-footer__social {
+  display: flex;
+  gap: 12px;
+}
+
+.hosmed-footer__social a {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(46, 91, 128, 0.5);
+}
+
+.hosmed-footer__social a:hover {
+  transform: translateY(-4px);
+  color: var(--heartox-base, #102a43);
+  background: var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__column,
+.hosmed-footer__contact {
+  padding-left: 38px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hosmed-footer__column h3,
+.hosmed-footer__contact > h3 {
+  position: relative;
+  margin: 0 0 30px;
+  padding-bottom: 13px;
+  color: var(--heartox-secondary, #e9ad45);
+  font-family: var(--heartox-heading-font, "Nunito", sans-serif);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.hosmed-footer__column h3::after,
+.hosmed-footer__contact > h3::after {
+  content: "";
+  width: 42px;
+  height: 2px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__column ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hosmed-footer__column li + li {
+  margin-top: 13px;
+}
+
+.hosmed-footer__column a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.hosmed-footer__column a::before {
+  content: "›";
+  color: var(--heartox-secondary, #e9ad45);
+  font-size: 24px;
+  line-height: 0;
+}
+
+.hosmed-footer__column a:hover {
+  color: var(--heartox-secondary, #e9ad45);
+  transform: translateX(4px);
+}
+
+.hosmed-footer__contact > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 0;
+}
+
+.hosmed-footer__contact > div + div {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hosmed-footer__contact > div > i {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--heartox-secondary, #e9ad45);
+  font-size: 19px;
+}
+
+.hosmed-footer__contact p,
+.hosmed-footer__contact a,
+.hosmed-footer__contact span {
+  display: block;
+  margin: 0;
+}
+
+.hosmed-footer__contact a + a,
+.hosmed-footer__contact span + span {
+  margin-top: 5px;
+}
+
+.hosmed-footer__contact a:hover {
+  color: var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__subscribe {
+  display: grid;
+  grid-template-columns: auto 1fr 1.35fr;
+  align-items: center;
+  gap: 28px;
+  margin: 0 0 38px;
+  padding: 32px 45px;
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+}
+
+.hosmed-footer__subscribe-icon {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--heartox-base, #102a43);
+  background: var(--heartox-secondary, #e9ad45);
+  font-size: 25px;
+}
+
+.hosmed-footer__subscribe h3 {
+  max-width: 390px;
+  margin: 0;
+  color: #fff;
+  font-family: var(--heartox-heading-font, "Nunito", sans-serif);
+  font-size: 23px;
+  line-height: 1.3;
+}
+
+.hosmed-footer__subscribe h3 span {
+  color: var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__subscribe p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.hosmed-footer__subscribe form {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+}
+
+.hosmed-footer__subscribe input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  padding: 17px 20px;
+  color: #fff;
+  background: rgba(5, 28, 48, 0.5);
+  font-family: inherit;
+}
+
+.hosmed-footer__subscribe input::placeholder {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.hosmed-footer__subscribe button {
+  width: 76px;
+  border: 0;
+  color: #fff;
+  background: var(--heartox-secondary, #e9ad45);
+  font-size: 22px;
+}
+
+.hosmed-footer__bottom {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__bottom .container {
+  min-height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.hosmed-footer__bottom p {
+  margin: 0;
+}
+
+.hosmed-footer__bottom p i {
+  margin-right: 10px;
+  color: var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__bottom nav {
+  display: flex;
+  gap: 0;
+}
+
+.hosmed-footer__bottom nav a {
+  padding: 0 25px;
+}
+
+.hosmed-footer__bottom nav a + a {
+  border-left: 1px solid var(--heartox-secondary, #e9ad45);
+}
+
+.hosmed-footer__bottom nav a:hover {
+  color: var(--heartox-secondary, #e9ad45);
+}
+
+@media (max-width: 1199px) {
+  .hosmed-footer__top {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hosmed-footer__subscribe {
+    grid-template-columns: auto 1fr;
+  }
+
+  .hosmed-footer__subscribe form {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .hosmed-footer__top {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding: 45px 5px 32px;
+  }
+
+  .hosmed-footer__column,
+  .hosmed-footer__contact {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .hosmed-footer__column h3,
+  .hosmed-footer__contact > h3 {
+    margin-bottom: 20px;
+  }
+
+  .hosmed-footer__column ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .hosmed-footer__column li + li {
+    margin-top: 0;
+  }
+
+  .hosmed-footer__subscribe {
+    grid-template-columns: 1fr;
+    gap: 17px;
+    margin-bottom: 28px;
+    padding: 24px 18px;
+  }
+
+  .hosmed-footer__subscribe form {
+    grid-column: auto;
+  }
+
+  .hosmed-footer__bottom .container {
+    min-height: 0;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .hosmed-footer__bottom nav {
+    flex-wrap: wrap;
+    gap: 10px 0;
+  }
+
+  .hosmed-footer__bottom nav a {
+    padding: 0 12px;
+  }
+
+  .hosmed-footer__bottom nav a:first-child {
+    padding-left: 0;
+  }
+}
+
 /* HosmedAI Contact page */
 .hosmed-contact {
   color: var(--heartox-text, #66788a);
