@@ -49,7 +49,7 @@ function App() {
   const page = useMemo(() => {
     const requested = `${routeName}.html`;
     if (routeName === 'contact' && !pages[requested]) return pages['about.html'];
-    if (routeName === 'projects' && !pages[requested]) return pages['portfolio.html'];
+    if (routeName === 'projects' || routeName === 'portfolio') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
