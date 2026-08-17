@@ -50,6 +50,24 @@ function App() {
   const markup = useMemo(() => {
     let html = page.html;
 
+    const primaryNavigation = `<ul class="main-menu__list hosmed-navigation">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/hospital-planning">Hospital Planning</a></li>
+      <li><a href="/nabh-nabl">NABH / NABL</a></li>
+      <li><a href="/hospital-software">Hospital Software</a></li>
+      <li><a href="/ai-healthcare">AI Healthcare</a></li>
+      <li><a href="/services">Solutions</a></li>
+      <li><a href="/who-we-serve">Who We Serve</a></li>
+      <li><a href="/portfolio">Projects</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>`;
+
+    html = html.replace(
+      /<ul class="main-menu__list">[\s\S]*?<\/ul>\s*<\/nav>/,
+      `${primaryNavigation}</nav>`
+    );
+
     if (page === pages['index.html']) {
       html = html
         .replace('assets/images/backgrounds/slider-1-2.jpg', 'assets/images/backgrounds/slider-2.png')

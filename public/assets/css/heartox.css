@@ -2668,6 +2668,32 @@ p {
     margin-bottom: 60px;
   }
 }
+
+/* HosmedAI primary navigation */
+@media (min-width: 1200px) {
+  .main-menu .hosmed-navigation > li + li {
+    margin-left: 18px;
+  }
+
+  .main-menu .hosmed-navigation > li > a {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .main-header--one .main-header__bottom {
+    padding-left: 35px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .main-menu .hosmed-navigation > li + li {
+    margin-left: 12px;
+  }
+
+  .main-menu .hosmed-navigation > li > a {
+    font-size: 12px;
+  }
+}
 @media (max-width: 991px) {
   .main-footer__middle__inner {
     flex-direction: column;
