@@ -71,6 +71,7 @@ function App() {
         /<a[^>]*class="[^"]*main-header__info__item[^"]*"[^>]*>\s*<i class="icon-trolley-cart_4175270"><\/i>\s*<\/a>/g,
         ''
       )
+      .replace(/<div class="main-header__info">[\s\S]*?<\/div>/g, '')
       .replace(/<div class="main-header__btn">[\s\S]*?<\/div>/g, '');
 
     if (page === pages['index.html']) {
