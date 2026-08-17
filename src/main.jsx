@@ -50,6 +50,7 @@ function App() {
     const requested = `${routeName}.html`;
     if (routeName === 'contact' && !pages[requested]) return pages['about.html'];
     if (routeName === 'projects' || routeName === 'portfolio') return pages['about.html'];
+    if (routeName === 'services' && !pages[requested]) return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -406,6 +407,26 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, projectsPage);
     }
 
+    if (routeName === 'services') {
+      const solutions = [
+        ['STARTING A HOSPITAL?', 'fas fa-hospital', 'Hospital Planning & Design', 'Feasibility studies, architectural master planning, clinical layouts, equipment planning and functional design.'],
+        ['BUILDING A HOSPITAL?', 'fas fa-users-cog', 'Project & Clinical Consultancy', 'End-to-end project management, clinical workflow planning, vendor coordination and quality assurance.'],
+        ['SEEKING ACCREDITATION?', 'fas fa-award', 'NABH / NABL Consultancy', 'Complete support for NABH, NABL accreditation, documentation, training and compliance readiness.'],
+        ['RUNNING A HOSPITAL?', 'fas fa-cogs', 'Hospital Management Solutions', 'Operations management, HR, finance, supply chain, patient experience and performance improvement.'],
+        ['DIGITISING YOUR HOSPITAL?', 'fas fa-desktop', 'Hospital ERP / HIS', 'Integrated Hospital Information Systems, EMR, billing, inventory, pharmacy and reporting.'],
+        ['WANT SMARTER OPERATIONS?', 'fas fa-brain', 'AI & Healthcare Analytics', 'AI-powered insights, predictive analytics, dashboards and decision support for better outcomes.']
+      ].map(([eyebrow, icon, title, copy], index) => `<article class="hosmed-solutions__card wow fadeInUp" data-wow-delay="${index * 80}ms"><div class="hosmed-solutions__icon"><i class="${icon}"></i></div><p>${eyebrow}</p><h3>${title}</h3><span></span><div>${copy}</div><a href="/contact">Learn More <i class="fas fa-arrow-right"></i></a></article>`).join('');
+
+      const solutionsPage = `<main class="hosmed-solutions">
+        <section class="hosmed-solutions__hero"><div class="container"><div class="hosmed-solutions__hero-copy"><p class="hosmed-solutions__eyebrow wow fadeInDown">Our Solutions</p><h1 class="wow fadeInUp">Solutions for Every Stage of Your Healthcare Journey.</h1><span></span><p class="wow fadeInUp" data-wow-delay="120ms">From planning to operations, our complete end-to-end solutions help you build smarter, compliant and future-ready hospitals.</p></div></div></section>
+        <section class="hosmed-solutions__content section-space"><div class="container"><div class="hosmed-solutions__grid">${solutions}</div>
+          <div class="hosmed-solutions__stats wow fadeInUp"><div><i class="fas fa-hospital"></i><p><strong>200+</strong><span>Projects Completed</span></p></div><div><i class="fas fa-map-marker-alt"></i><p><strong>25+</strong><span>Cities Served</span></p></div><div><i class="fas fa-users-cog"></i><p><strong>50M+</strong><span>Sq. Ft. Planned</span></p></div><div><i class="fas fa-award"></i><p><strong>100%</strong><span>Client Satisfaction</span></p></div></div>
+          <div class="hosmed-solutions__cta wow fadeInUp"><div><h2>Need a Custom Solution for Your Hospital?</h2><p>Let's discuss how we can help you build a smarter, more efficient and future-ready healthcare facility.</p></div><a href="/contact" class="heartox-btn">Talk to Our Experts <i class="fas fa-arrow-right"></i></a><i class="fas fa-stethoscope" aria-hidden="true"></i></div>
+        </div></section>
+      </main>`;
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, solutionsPage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -473,6 +494,8 @@ function App() {
         ? 'Contact HosmedAI | Book a Hospital Consultation'
         : routeName === 'projects' || routeName === 'portfolio'
           ? 'Projects & Case Studies | HosmedAI'
+          : routeName === 'services'
+            ? 'Healthcare Solutions | HosmedAI'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
