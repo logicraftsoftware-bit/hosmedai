@@ -41,11 +41,16 @@ function loadScript(src) {
 }
 
 function App() {
-  const page = useMemo(() => {
+  const routeName = useMemo(() => {
     const route = location.pathname.split('/').filter(Boolean).pop() || 'index';
-    const requested = route.endsWith('.html') ? route : `${route}.html`;
-    return pages[requested] || pages['404.html'] || pages['index.html'];
+    return route.replace(/\.html$/i, '');
   }, []);
+
+  const page = useMemo(() => {
+    const requested = `${routeName}.html`;
+    if (routeName === 'contact' && !pages[requested]) return pages['about.html'];
+    return pages[requested] || pages['404.html'] || pages['index.html'];
+  }, [routeName]);
 
   const markup = useMemo(() => {
     let html = page.html;
@@ -191,7 +196,7 @@ function App() {
         );
     }
 
-    if (page === pages['about.html']) {
+    if (routeName === 'about') {
       const aboutPage = `<main class="hosmed-about">
         <section class="hosmed-about__hero">
           <div class="container">
@@ -278,7 +283,7 @@ function App() {
       );
     }
 
-    if (page === pages['contact.html']) {
+    if (routeName === 'contact') {
       const contactPage = `<main class="hosmed-contact">
         <section class="hosmed-contact__hero">
           <div class="container">
@@ -346,7 +351,7 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, contactPage);
     }
 
-    if (page === pages['index.html'] || page === pages['about.html']) {
+    if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
           <div class="hosmed-faq__inner">
@@ -379,12 +384,12 @@ function App() {
         return `href=${quote}${path}${hash}${quote}`;
       }
     );
-  }, [page]);
+  }, [page, routeName]);
 
   useEffect(() => {
-    document.title = page === pages['about.html']
+    document.title = routeName === 'about'
       ? 'About HosmedAI | Integrated Hospital Development'
-      : page === pages['contact.html']
+      : routeName === 'contact'
         ? 'Contact HosmedAI | Book a Hospital Consultation'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
@@ -404,7 +409,7 @@ function App() {
       }
     })();
     return () => { active = false; };
-  }, [page]);
+  }, [page, routeName]);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
