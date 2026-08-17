@@ -2671,6 +2671,10 @@ p {
 
 /* HosmedAI primary navigation */
 @media (min-width: 1200px) {
+  .main-header--one .main-header__bottom::after {
+    display: none;
+  }
+
   .main-menu .hosmed-navigation > li + li {
     margin-left: 18px;
   }
