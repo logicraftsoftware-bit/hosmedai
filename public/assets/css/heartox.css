@@ -17437,6 +17437,296 @@ body.boxed-wrapper .funfact-one__single {
   }
 }
 
+/* Mobile-only homepage refinements */
+@media (max-width: 767px) {
+  /* Keep the menu control visible against the white mobile header. */
+  .main-header--one .main-header__inner {
+    position: relative;
+  }
+
+  .main-header--one .main-header__right {
+    display: flex !important;
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    z-index: 20;
+    transform: translateY(-50%);
+  }
+
+  .main-header--one .mobile-nav__btn {
+    width: 42px;
+    height: 42px;
+    display: flex !important;
+    justify-content: center;
+    margin: 0;
+    padding: 11px 9px;
+    border-radius: 8px;
+    background: var(--heartox-secondary, #e9ad45);
+    box-shadow: 0 5px 14px rgba(16, 42, 67, 0.16);
+  }
+
+  .main-header--one .mobile-nav__btn span {
+    height: 2px;
+    border-radius: 4px;
+    background: var(--heartox-base, #102a43);
+  }
+
+  /* Four statistics in one compact row. */
+  .funfact-one {
+    margin: 24px 0 35px;
+    padding: 0 8px;
+  }
+
+  .funfact-one .container {
+    padding: 0;
+  }
+
+  .funfact-one .row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0;
+  }
+
+  .funfact-one .row > div {
+    width: auto;
+    padding: 0;
+  }
+
+  .funfact-one__single {
+    min-height: 116px;
+    padding: 6px 3px 10px;
+  }
+
+  .funfact-one__icon__inner {
+    width: 48px;
+    height: 45px;
+    margin: -5px auto 10px;
+    font-size: 22px;
+  }
+
+  .funfact-one__icon::before {
+    width: 44px;
+    height: 49px;
+    top: -8px;
+  }
+
+  .funfact-one__count {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .funfact-one__text {
+    padding: 0 2px;
+    font-size: 11px;
+    line-height: 1.15;
+  }
+
+  /* Show two expertise cards at a time and allow touch scrolling. */
+  .charity-cause {
+    padding-bottom: 45px;
+  }
+
+  .charity-cause__list {
+    display: flex;
+    flex-wrap: nowrap !important;
+    gap: 10px;
+    margin: 0 -2px;
+    padding: 2px 2px 12px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .charity-cause__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .charity-cause__list li {
+    width: calc(50% - 5px);
+    flex: 0 0 calc(50% - 5px);
+    scroll-snap-align: start;
+  }
+
+  .charity-cause__list__item {
+    height: 168px;
+  }
+
+  .charity-cause__list__item__icon {
+    padding: 20px 15px 17px;
+    font-size: 36px;
+  }
+
+  .charity-cause__list__item__title {
+    padding: 12px 7px;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  /* Compact journey card matching the supplied mobile layout. */
+  .hospital-journey {
+    width: calc(100% - 24px);
+    margin: 35px auto 45px;
+  }
+
+  .hospital-journey__inner {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 34px 20px 22px;
+    border-radius: 24px;
+    background:
+      linear-gradient(90deg, rgba(7, 42, 72, 0.97), rgba(7, 42, 72, 0.9)),
+      url("../images/backgrounds/slider-2.png") center / cover no-repeat;
+  }
+
+  .hospital-journey__inner::after {
+    left: -115px;
+    bottom: auto;
+    top: 360px;
+    width: 185px;
+    height: 300px;
+  }
+
+  .hospital-journey__intro {
+    order: 1;
+  }
+
+  .hospital-journey__process {
+    display: contents;
+  }
+
+  .hospital-journey__steps {
+    order: 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px 4px;
+    margin-top: 30px;
+    padding: 28px 8px 18px;
+    border: 1px solid rgba(112, 171, 213, 0.46);
+    border-bottom: 0;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .hospital-journey__action {
+    order: 3;
+    margin: 0;
+    padding: 14px 20px 24px;
+    border: 1px solid rgba(112, 171, 213, 0.46);
+    border-top: 0;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .hospital-journey__promise {
+    order: 4;
+    margin: 26px 18px 0;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .hospital-journey__progress {
+    order: 5;
+    margin-top: 28px;
+    padding: 48px 15px 22px;
+    border-radius: 18px;
+  }
+
+  .hospital-journey__eyebrow {
+    margin-bottom: 22px;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  .hospital-journey__intro h2 {
+    max-width: 330px;
+    font-size: clamp(32px, 10.5vw, 43px);
+    line-height: 1.28;
+    letter-spacing: -0.7px;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .hospital-journey__intro h2 br {
+    display: block !important;
+  }
+
+  .hospital-journey__accent {
+    width: 105px;
+    margin-top: 25px;
+  }
+
+  .hospital-journey__step span {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 9px;
+    font-size: 21px;
+  }
+
+  .hospital-journey__step strong {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  .hospital-journey__step:not(:nth-child(4n))::after {
+    display: block;
+    top: 17px;
+    right: -8px;
+    font-size: 17px;
+  }
+
+  .hospital-journey__action .heartox-btn {
+    width: min(100%, 250px);
+    padding: 13px 18px;
+    font-size: 15px;
+  }
+
+  .hospital-journey__action p {
+    margin-top: 14px;
+    font-size: 16px;
+  }
+
+  .hospital-journey__bar {
+    margin: 5px 8px 32px;
+  }
+
+  .hospital-journey__bar b {
+    top: -50px;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .hospital-journey__figures {
+    gap: 8px;
+  }
+
+  .hospital-journey__figures > div {
+    width: 50%;
+    flex-direction: column;
+    gap: 7px;
+    text-align: center;
+  }
+
+  .hospital-journey__figures > div + div {
+    border-left: 1px solid rgba(112, 171, 213, 0.4);
+  }
+
+  .hospital-journey__figures > div > i {
+    width: 50px;
+    height: 50px;
+    font-size: 21px;
+  }
+
+  .hospital-journey__figures strong {
+    font-size: 22px;
+  }
+
+  .hospital-journey__figures span {
+    font-size: 13px;
+  }
+}
+
 @media (max-width: 1199px) {
   .main-header__logo {
     width: 170px;
