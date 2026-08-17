@@ -3969,6 +3969,25 @@ p {
 }
 
 @media (min-width: 1601px) {
+  .main-header--one:not(.sticky-header--cloned) .main-header__inner {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .main-header--one:not(.sticky-header--cloned) .container {
+    width: 100%;
+    max-width: 1360px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .main-header--one:not(.sticky-header--cloned) .main-header__bottom {
+    width: calc(100% + 140px);
+  }
+
   .main-header--one:not(.sticky-header--cloned) .main-header__inner__right {
     position: absolute;
     top: 9px;
