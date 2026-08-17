@@ -192,13 +192,13 @@ function App() {
       const aboutPage = `<main class="hosmed-about">
         <section class="hosmed-about__hero">
           <div class="container">
-            <p class="hosmed-about__eyebrow">About Us</p>
-            <h1>We Understand Hospitals Because We Understand Healthcare.</h1>
+            <p class="hosmed-about__eyebrow wow fadeInDown" data-wow-duration="1200ms">About Us</p>
+            <h1 class="wow fadeInUp" data-wow-duration="1200ms">We Understand Hospitals Because We Understand Healthcare.</h1>
             <span class="hosmed-about__hero-accent"></span>
-            <p>HosmedAI brings hospital planning, design, compliance, accreditation, technology and operations together through one integrated healthcare platform.</p>
+            <p class="wow fadeInUp" data-wow-duration="1200ms" data-wow-delay="150ms">HosmedAI brings hospital planning, design, compliance, accreditation, technology and operations together through one integrated healthcare platform.</p>
           </div>
           <div class="container hosmed-about__stats-wrap">
-            <div class="hosmed-about__stats">
+            <div class="hosmed-about__stats wow fadeInUp" data-wow-duration="1200ms" data-wow-delay="200ms">
               <div class="hosmed-about__stat"><i class="fas fa-hospital"></i><p><strong>200+</strong><span>Hospitals Supported</span></p></div>
               <div class="hosmed-about__stat"><i class="fas fa-users"></i><p><strong>50+</strong><span>Healthcare Experts</span></p></div>
               <div class="hosmed-about__stat"><i class="fas fa-award"></i><p><strong>100%</strong><span>Quality &amp; Compliance</span></p></div>
@@ -211,12 +211,12 @@ function App() {
           <div class="container">
             <div class="row align-items-center gutter-y-30">
               <div class="col-lg-6">
-                <div class="hosmed-about__image">
+                <div class="hosmed-about__image wow fadeInLeft" data-wow-duration="1300ms">
                   <img src="/assets/images/about/about-001.png" alt="Healthcare professional working in a modern hospital">
                 </div>
               </div>
               <div class="col-lg-6">
-                <div class="hosmed-about__copy">
+                <div class="hosmed-about__copy wow fadeInRight" data-wow-duration="1300ms">
                   <p class="hosmed-about__eyebrow">Our Vision</p>
                   <h2>HosmedAI was created with a simple vision:</h2>
                   <blockquote>Make Hospital Development Simpler, Smarter &amp; More Integrated.</blockquote>
@@ -230,25 +230,25 @@ function App() {
 
         <section class="hosmed-about__integration section-space">
           <div class="container">
-            <div class="hosmed-about__heading">
+            <div class="hosmed-about__heading wow fadeInUp" data-wow-duration="1200ms">
               <p class="hosmed-about__eyebrow">What We Do</p>
               <h2>Everything Required to Plan, Build and Run Better Hospitals.</h2>
               <p>One coordinated team connects every stage of hospital development, reducing complexity and helping healthcare organisations make better decisions.</p>
             </div>
             <div class="hosmed-about__capabilities">
-              <article><i class="fas fa-drafting-compass"></i><h3>Hospital Planning</h3><p>Feasibility, clinical planning, architecture, infrastructure and equipment planning.</p></article>
-              <article><i class="fas fa-award"></i><h3>Quality &amp; Accreditation</h3><p>NABH, NABL, quality systems, SOPs, documentation, training and audit readiness.</p></article>
-              <article><i class="fas fa-laptop-medical"></i><h3>Hospital Technology</h3><p>ERP, HIS, EMR, analytics, connected workflows and purposeful healthcare AI.</p></article>
-              <article><i class="fas fa-hospital-user"></i><h3>Hospital Operations</h3><p>Operational planning, process design, performance improvement and ongoing support.</p></article>
-              <article><i class="fas fa-shield-alt"></i><h3>Compliance &amp; Legal</h3><p>Regulatory approvals, policies, legal compliance and risk management.</p></article>
-              <article><i class="fas fa-headset"></i><h3>Training &amp; Support</h3><p>Staff training, change management and continuous operational support.</p></article>
+              <article class="wow fadeInUp" data-wow-delay="0ms"><i class="fas fa-drafting-compass"></i><h3>Hospital Planning</h3><p>Feasibility, clinical planning, architecture, infrastructure and equipment planning.</p></article>
+              <article class="wow fadeInUp" data-wow-delay="80ms"><i class="fas fa-award"></i><h3>Quality &amp; Accreditation</h3><p>NABH, NABL, quality systems, SOPs, documentation, training and audit readiness.</p></article>
+              <article class="wow fadeInUp" data-wow-delay="160ms"><i class="fas fa-laptop-medical"></i><h3>Hospital Technology</h3><p>ERP, HIS, EMR, analytics, connected workflows and purposeful healthcare AI.</p></article>
+              <article class="wow fadeInUp" data-wow-delay="240ms"><i class="fas fa-hospital-user"></i><h3>Hospital Operations</h3><p>Operational planning, process design, performance improvement and ongoing support.</p></article>
+              <article class="wow fadeInUp" data-wow-delay="320ms"><i class="fas fa-shield-alt"></i><h3>Compliance &amp; Legal</h3><p>Regulatory approvals, policies, legal compliance and risk management.</p></article>
+              <article class="wow fadeInUp" data-wow-delay="400ms"><i class="fas fa-headset"></i><h3>Training &amp; Support</h3><p>Staff training, change management and continuous operational support.</p></article>
             </div>
           </div>
         </section>
 
         <section class="hosmed-about__philosophy section-space">
           <div class="container">
-            <div class="hosmed-about__philosophy-card">
+            <div class="hosmed-about__philosophy-card wow fadeInUp" data-wow-duration="1300ms">
               <div>
                 <p class="hosmed-about__eyebrow">Our Philosophy</p>
                 <h2>Healthcare First. Technology With Purpose. Quality By Design.</h2>
@@ -260,7 +260,7 @@ function App() {
 
         <section class="hosmed-about__cta">
           <div class="container">
-            <div class="hosmed-about__cta-inner">
+            <div class="hosmed-about__cta-inner wow fadeInUp" data-wow-duration="1200ms">
               <div><h2>Planning a New Hospital or Transforming an Existing One?</h2><p>Talk to our healthcare experts and move forward with confidence.</p></div>
               <a href="/contact" class="heartox-btn heartox-btn--secondary">Talk to Our Experts <i class="fas fa-arrow-right"></i></a>
               <span class="hosmed-about__cta-visual" aria-hidden="true"><i class="fas fa-stethoscope"></i></span>
