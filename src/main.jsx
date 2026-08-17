@@ -57,21 +57,21 @@ function App() {
   const markup = useMemo(() => {
     let html = page.html;
 
-    const navItem = (name, href, label, aliases = []) => {
+    const navItem = (name, href, label, icon, aliases = []) => {
       const active = [name, ...aliases].includes(routeName);
-      return `<li${active ? ' class="current"' : ''}><a href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a></li>`;
+      return `<li${active ? ' class="current"' : ''}><a href="${href}"${active ? ' aria-current="page"' : ''}><i class="${icon}" aria-hidden="true"></i><span>${label}</span></a></li>`;
     };
     const primaryNavigation = `<ul class="main-menu__list hosmed-navigation">
-      ${navItem('index', '/', 'Home')}
-      ${navItem('about', '/about', 'About')}
-      ${navItem('hospital-planning', '/hospital-planning', 'Hospital Planning')}
-      ${navItem('nabh-nabl', '/nabh-nabl', 'NABH / NABL')}
-      ${navItem('hospital-software', '/hospital-software', 'Hospital Software')}
-      ${navItem('ai-healthcare', '/ai-healthcare', 'AI Healthcare')}
-      ${navItem('services', '/services', 'Solutions')}
-      ${navItem('who-we-serve', '/who-we-serve', 'Who We Serve')}
-      ${navItem('projects', '/projects', 'Projects', ['portfolio'])}
-      ${navItem('contact', '/contact', 'Contact')}
+      ${navItem('index', '/', 'Home', 'fas fa-home')}
+      ${navItem('about', '/about', 'About', 'fas fa-hospital-user')}
+      ${navItem('hospital-planning', '/hospital-planning', 'Hospital Planning', 'fas fa-drafting-compass')}
+      ${navItem('nabh-nabl', '/nabh-nabl', 'NABH / NABL', 'fas fa-award')}
+      ${navItem('hospital-software', '/hospital-software', 'Hospital Software', 'fas fa-laptop-medical')}
+      ${navItem('ai-healthcare', '/ai-healthcare', 'AI Healthcare', 'fas fa-brain')}
+      ${navItem('services', '/services', 'Solutions', 'fas fa-th-large')}
+      ${navItem('who-we-serve', '/who-we-serve', 'Who We Serve', 'fas fa-users')}
+      ${navItem('projects', '/projects', 'Projects', 'fas fa-briefcase-medical', ['portfolio'])}
+      ${navItem('contact', '/contact', 'Contact', 'fas fa-envelope')}
     </ul>`;
 
     html = html.replace(

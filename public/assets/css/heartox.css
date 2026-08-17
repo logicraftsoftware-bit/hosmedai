@@ -3875,17 +3875,26 @@ p {
 
 /* HosmedAI primary navigation */
 @media (min-width: 1200px) {
+  .main-header--one:not(.sticky-header--cloned) .main-header__bottom {
+    width: calc(100% + 80px);
+  }
+
   .main-header--one .main-header__bottom::after {
     display: none;
   }
 
   .main-menu .hosmed-navigation > li + li {
-    margin-left: 18px;
+    margin-left: 8px;
   }
 
   .main-menu .hosmed-navigation > li > a {
     font-size: 13px;
     white-space: nowrap;
+  }
+
+  .main-menu .hosmed-navigation > li > a > i {
+    margin-right: 5px;
+    font-size: 11px;
   }
 
   .main-header--one .main-header__bottom {
@@ -3895,7 +3904,7 @@ p {
 
 @media (min-width: 1200px) and (max-width: 1399px) {
   .main-menu .hosmed-navigation > li + li {
-    margin-left: 12px;
+    margin-left: 6px;
   }
 
   .main-menu .hosmed-navigation > li > a {
@@ -3933,6 +3942,21 @@ p {
   color: var(--heartox-base, #102a43);
   background: var(--heartox-secondary, #e9ad45);
   font-weight: 800;
+}
+
+.mobile-nav__content .hosmed-navigation li > a > i {
+  width: 22px;
+  margin-right: 8px;
+  color: var(--heartox-secondary, #e9ad45);
+  text-align: center;
+}
+
+.mobile-nav__content .hosmed-navigation li > a > span {
+  margin-right: auto;
+}
+
+.mobile-nav__content .hosmed-navigation li.current > a > i {
+  color: var(--heartox-base, #102a43);
 }
 
 @media (max-width: 991px) {
