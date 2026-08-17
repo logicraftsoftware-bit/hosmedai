@@ -578,23 +578,21 @@ p {
 .hosmed-footer__top {
   display: grid;
   grid-template-columns: 1.35fr 0.8fr 0.8fr 1.15fr;
-  gap: 48px;
-  padding: 72px 20px 52px;
+  gap: 30px;
+  padding: 40px 20px 28px;
 }
 
 .hosmed-footer__logo {
   display: flex;
   align-items: center;
-  gap: 12px;
   width: fit-content;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .hosmed-footer__logo > img {
-  width: 78px;
-  height: 78px;
-  object-fit: cover;
-  transform: scale(1.55);
+  width: min(245px, 100%);
+  height: auto;
+  object-fit: contain;
 }
 
 .hosmed-footer__logo > span,
@@ -624,9 +622,9 @@ p {
 
 .hosmed-footer__brand > p {
   max-width: 350px;
-  margin: 0 0 24px;
-  font-size: 16px;
-  line-height: 1.8;
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .hosmed-footer__social {
@@ -635,8 +633,8 @@ p {
 }
 
 .hosmed-footer__social a {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -652,18 +650,18 @@ p {
 
 .hosmed-footer__column,
 .hosmed-footer__contact {
-  padding-left: 38px;
+  padding-left: 25px;
   border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .hosmed-footer__column h3,
 .hosmed-footer__contact > h3 {
   position: relative;
-  margin: 0 0 30px;
+  margin: 0 0 20px;
   padding-bottom: 13px;
   color: var(--heartox-secondary, #e9ad45);
   font-family: var(--heartox-heading-font, "Nunito", sans-serif);
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 800;
 }
 
@@ -685,14 +683,14 @@ p {
 }
 
 .hosmed-footer__column li + li {
-  margin-top: 13px;
+  margin-top: 8px;
 }
 
 .hosmed-footer__column a {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .hosmed-footer__column a::before {
@@ -710,8 +708,8 @@ p {
 .hosmed-footer__contact > div {
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 17px 0;
+  gap: 14px;
+  padding: 10px 0;
 }
 
 .hosmed-footer__contact > div + div {
@@ -719,9 +717,9 @@ p {
 }
 
 .hosmed-footer__contact > div > i {
-  width: 52px;
-  height: 52px;
-  flex: 0 0 52px;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -750,9 +748,9 @@ p {
   display: grid;
   grid-template-columns: auto 1fr 1.35fr;
   align-items: center;
-  gap: 28px;
-  margin: 0 0 38px;
-  padding: 32px 45px;
+  gap: 22px;
+  margin: 0 0 22px;
+  padding: 20px 28px;
   position: relative;
   z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -760,8 +758,8 @@ p {
 }
 
 .hosmed-footer__subscribe-icon {
-  width: 62px;
-  height: 62px;
+  width: 52px;
+  height: 52px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -775,7 +773,7 @@ p {
   margin: 0;
   color: #fff;
   font-family: var(--heartox-heading-font, "Nunito", sans-serif);
-  font-size: 23px;
+  font-size: 20px;
   line-height: 1.3;
 }
 
@@ -800,7 +798,7 @@ p {
   flex: 1;
   border: 0;
   outline: 0;
-  padding: 17px 20px;
+  padding: 13px 18px;
   color: #fff;
   background: rgba(5, 28, 48, 0.5);
   font-family: inherit;
@@ -811,7 +809,7 @@ p {
 }
 
 .hosmed-footer__subscribe button {
-  width: 76px;
+  width: 64px;
   border: 0;
   color: #fff;
   background: var(--heartox-secondary, #e9ad45);
@@ -825,7 +823,7 @@ p {
 }
 
 .hosmed-footer__bottom .container {
-  min-height: 75px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -875,8 +873,8 @@ p {
 @media (max-width: 767px) {
   .hosmed-footer__top {
     grid-template-columns: 1fr;
-    gap: 34px;
-    padding: 45px 5px 32px;
+    gap: 25px;
+    padding: 32px 5px 24px;
   }
 
   .hosmed-footer__column,
@@ -903,8 +901,8 @@ p {
   .hosmed-footer__subscribe {
     grid-template-columns: 1fr;
     gap: 17px;
-    margin-bottom: 28px;
-    padding: 24px 18px;
+    margin-bottom: 20px;
+    padding: 18px;
   }
 
   .hosmed-footer__subscribe form {
@@ -915,8 +913,8 @@ p {
     min-height: 0;
     align-items: flex-start;
     flex-direction: column;
-    padding-top: 22px;
-    padding-bottom: 22px;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
   .hosmed-footer__bottom nav {

@@ -380,7 +380,7 @@ function App() {
       <div class="container">
         <div class="hosmed-footer__top">
           <div class="hosmed-footer__brand">
-            <a href="/" class="hosmed-footer__logo" aria-label="HosmedAI Home"><img src="/assets/images/hosmed-mark.png" alt=""><span><strong>Hosmed<span>AI</span></strong><small>Smarter Hospitals. Better Care.</small></span></a>
+            <a href="/" class="hosmed-footer__logo" aria-label="HosmedAI Home"><img src="/assets/images/footer_logo.png" alt="HosmedAI - Smarter Hospitals. Better Care."></a>
             <p>We partner with healthcare organisations to design, build and operate smarter hospitals through integrated solutions.</p>
             <div class="hosmed-footer__social"><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a></div>
           </div>
