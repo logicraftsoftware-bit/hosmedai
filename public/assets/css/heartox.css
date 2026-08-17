@@ -931,6 +931,99 @@ p {
   }
 }
 
+/* HosmedAI Projects page */
+.hosmed-projects {
+  overflow: hidden;
+  color: #637487;
+  background: #fff;
+  font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif);
+}
+
+.hosmed-projects h1, .hosmed-projects h2, .hosmed-projects h3 { font-family: var(--heartox-heading-font, "Nunito", sans-serif); }
+.hosmed-projects__hero { position: relative; padding: 66px 0 82px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98) 0%, rgba(7,48,80,.92) 54%, rgba(5,38,66,.7) 100%), url("../images/backgrounds/slider-1-1.jpg") center 43%/cover; }
+.hosmed-projects__hero::after { content: ""; position: absolute; right: -4%; bottom: -1px; width: 52%; height: 72px; background: #fff; clip-path: ellipse(64% 38% at 68% 100%); border-top: 4px solid #efae37; }
+.hosmed-projects__hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; align-items: center; gap: 70px; position: relative; z-index: 1; }
+.hosmed-projects__hero-copy { max-width: 710px; }
+.hosmed-projects__eyebrow { margin: 0 0 12px; color: #f2af35; font-family: var(--heartox-special-font, "Caveat", cursive); font-size: 21px; font-weight: 700; }
+.hosmed-projects__hero h1 { margin: 0; color: #fff; font-size: clamp(36px, 3.15vw, 58px); line-height: 1.12; font-weight: 700; }
+.hosmed-projects__accent { display: block; width: 64px; height: 3px; margin: 20px 0; background: #efae37; }
+.hosmed-projects__hero-copy > p:last-child { max-width: 585px; margin: 0; color: #d6e1eb; font-size: 15px; line-height: 1.75; }
+.hosmed-projects__impact { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 30px; padding: 32px; border: 1px solid rgba(255,255,255,.18); border-radius: 16px; background: rgba(5,32,55,.3); backdrop-filter: blur(5px); }
+.hosmed-projects__impact > div { display: flex; align-items: center; gap: 13px; }
+.hosmed-projects__impact i { color: #f2af35; font-size: 25px; }
+.hosmed-projects__impact p { margin: 0; }
+.hosmed-projects__impact strong, .hosmed-projects__impact span { display: block; }
+.hosmed-projects__impact strong { color: #fff; font-size: 24px; line-height: 1; }
+.hosmed-projects__impact span { margin-top: 5px; color: #cedae5; font-size: 11px; }
+.hosmed-projects__showcase { padding-top: 45px; padding-bottom: 55px; }
+.hosmed-projects__filters { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; }
+.hosmed-projects__filters::-webkit-scrollbar { display: none; }
+.hosmed-projects__filters button, .hosmed-projects__filters span { flex: 0 0 auto; border: 1px solid #dce4eb; border-radius: 5px; padding: 9px 13px; color: #506376; background: #f7f9fb; font: 600 11px/1 var(--heartox-font, sans-serif); }
+.hosmed-projects__filters button { cursor: pointer; }
+.hosmed-projects__filters button.active, .hosmed-projects__filters button:hover { color: #fff; border-color: #0b3559; background: #0b3559; }
+.hosmed-projects__filters span { margin-left: auto; min-width: 125px; display: flex; justify-content: space-between; }
+.hosmed-projects__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.hosmed-projects__card { overflow: hidden; border: 1px solid #e2e8ee; border-radius: 9px; background: #fff; box-shadow: 0 10px 30px rgba(11,53,89,.07); transition: transform .35s ease, box-shadow .35s ease; }
+.hosmed-projects__card:hover { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(11,53,89,.15); }
+.hosmed-projects__image { position: relative; height: 210px; overflow: hidden; }
+.hosmed-projects__image img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.hosmed-projects__card:hover img { transform: scale(1.06); }
+.hosmed-projects__image span { position: absolute; top: 12px; right: 12px; padding: 6px 10px; border-radius: 4px; color: #fff; background: #0b3559; font-size: 10px; font-weight: 700; }
+.hosmed-projects__card-body { padding: 19px 20px 20px; }
+.hosmed-projects__card-body > p:first-child { margin: 0 0 5px; color: #e7a72f; font-size: 10px; font-weight: 700; }
+.hosmed-projects__card h3 { margin: 0 0 10px; color: #0b2f50; font-size: 18px; line-height: 1.25; font-weight: 800; }
+.hosmed-projects__meta span { color: #637487; font-size: 11px; }
+.hosmed-projects__meta i { margin-right: 6px; color: #e7a72f; }
+.hosmed-projects__services { min-height: 40px; margin: 10px 0 13px; padding-top: 10px; border-top: 1px solid #edf1f4; font-size: 11px; line-height: 1.55; }
+.hosmed-projects__card-body a { color: #0b3559; font-size: 11px; font-weight: 800; }
+.hosmed-projects__card-body a i { margin-left: 5px; color: #e7a72f; transition: transform .25s ease; }
+.hosmed-projects__card-body a:hover i { transform: translateX(4px); }
+.hosmed-projects__promise { padding: 0 0 30px; }
+.hosmed-projects__promise-inner { display: grid; grid-template-columns: 1.2fr repeat(4, 1fr); gap: 0; padding: 28px 30px; color: #d5e0ea; border-radius: 12px; background: linear-gradient(120deg, #082b49, #0e3c63); }
+.hosmed-projects__promise-inner > div { padding: 0 22px; border-left: 1px solid rgba(255,255,255,.14); }
+.hosmed-projects__promise-inner > div:first-child { padding-left: 0; border-left: 0; }
+.hosmed-projects__promise h2, .hosmed-projects__promise h3 { margin: 0; color: #fff; }
+.hosmed-projects__promise h2 { font-size: 24px; line-height: 1.2; }
+.hosmed-projects__promise h3 { margin: 9px 0 5px; font-size: 14px; }
+.hosmed-projects__promise i { color: #f2af35; font-size: 22px; }
+.hosmed-projects__promise p { margin: 0; font-size: 10px; line-height: 1.5; }
+.hosmed-projects__cta { padding: 0 0 45px; }
+.hosmed-projects__cta-inner { position: relative; overflow: hidden; min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 24px 34px; border-radius: 12px; background: linear-gradient(100deg, #f7bd51, #efa92c); box-shadow: 0 12px 30px rgba(234,168,48,.24); }
+.hosmed-projects__cta h2 { margin: 0 0 3px; color: #092e4e; font-size: 24px; }
+.hosmed-projects__cta p { margin: 0; color: #183d5b; font-size: 11px; }
+.hosmed-projects__cta .heartox-btn { z-index: 1; padding: 15px 24px; color: #fff; background: #0b3559; font-size: 12px; }
+.hosmed-projects__cta-inner > i { position: absolute; right: 8%; color: rgba(105,69,13,.15); font-size: 110px; transform: rotate(-18deg); }
+
+@media (max-width: 991px) {
+  .hosmed-projects__hero { padding: 55px 0 70px; }
+  .hosmed-projects__hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hosmed-projects__impact { max-width: 620px; }
+  .hosmed-projects__grid { grid-template-columns: repeat(2, 1fr); }
+  .hosmed-projects__promise-inner { grid-template-columns: repeat(2, 1fr); gap: 24px 0; }
+  .hosmed-projects__promise-inner > div:nth-child(3) { border-left: 0; }
+  .hosmed-projects__promise-inner > div:first-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 575px) {
+  .hosmed-projects__hero { padding: 40px 0 58px; }
+  .hosmed-projects__hero h1 { font-size: 31px; }
+  .hosmed-projects__hero-copy > p:last-child { font-size: 13px; }
+  .hosmed-projects__impact { gap: 20px 12px; padding: 22px 16px; }
+  .hosmed-projects__impact strong { font-size: 20px; }
+  .hosmed-projects__impact i { font-size: 20px; }
+  .hosmed-projects__showcase { padding: 30px 0 36px; }
+  .hosmed-projects__filters { margin-bottom: 20px; }
+  .hosmed-projects__grid { grid-template-columns: 1fr; gap: 17px; }
+  .hosmed-projects__image { height: 195px; }
+  .hosmed-projects__promise-inner { grid-template-columns: 1fr 1fr; padding: 24px 15px; }
+  .hosmed-projects__promise-inner > div { padding: 0 12px; }
+  .hosmed-projects__promise-inner > div:nth-child(2), .hosmed-projects__promise-inner > div:nth-child(4) { border-left: 0; }
+  .hosmed-projects__promise-inner > div:nth-child(3) { border-left: 1px solid rgba(255,255,255,.14); }
+  .hosmed-projects__cta { padding-bottom: 30px; }
+  .hosmed-projects__cta-inner { align-items: flex-start; flex-direction: column; padding: 22px; }
+  .hosmed-projects__cta h2 { font-size: 21px; }
+}
+
 /* HosmedAI Contact page */
 .hosmed-contact {
   color: var(--heartox-text, #66788a);

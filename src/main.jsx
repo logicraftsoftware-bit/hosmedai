@@ -49,6 +49,7 @@ function App() {
   const page = useMemo(() => {
     const requested = `${routeName}.html`;
     if (routeName === 'contact' && !pages[requested]) return pages['about.html'];
+    if (routeName === 'projects' && !pages[requested]) return pages['portfolio.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -64,7 +65,7 @@ function App() {
       <li><a href="/ai-healthcare">AI Healthcare</a></li>
       <li><a href="/services">Solutions</a></li>
       <li><a href="/who-we-serve">Who We Serve</a></li>
-      <li><a href="/portfolio">Projects</a></li>
+      <li><a href="/projects">Projects</a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>`;
 
@@ -351,6 +352,60 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, contactPage);
     }
 
+    if (routeName === 'projects' || routeName === 'portfolio') {
+      const projectCards = [
+        ['150 Beds', '/assets/images/backgrounds/slider-1-1.jpg', 'Hospital Planning & Digital Transformation', '150-Bed Multi-Specialty Hospital', 'Pune, Maharashtra', 'Planning • Clinical Design • Compliance • Technology'],
+        ['300 Beds', '/assets/images/backgrounds/slider-1-2.jpg', 'Integrated Hospital Development', '300-Bed Super Specialty Hospital', 'Hyderabad, Telangana', 'Feasibility • Architecture • Equipment • Technology'],
+        ['100 Beds', '/assets/images/backgrounds/slider-1-3.jpg', 'Healthcare Technology Integration', '100-Bed Women & Child Hospital', 'Bengaluru, Karnataka', 'HIS • Operations • Quality • AI Workflows'],
+        ['250 Beds', '/assets/images/about/about-2-1.jpg', 'Hospital Expansion & Accreditation', '250-Bed Multi-Specialty Hospital', 'Ahmedabad, Gujarat', 'Expansion • NABH • SOPs • Staff Training'],
+        ['500 Beds', '/assets/images/backgrounds/slider-4-1.jpg', 'Smart Hospital Transformation', '500-Bed Tertiary Care Hospital', 'New Delhi', 'Digital Design • EMR • Analytics • Compliance'],
+        ['75 Beds', '/assets/images/about/about-4-1.jpg', 'Purpose-Built Community Healthcare', '75-Bed Community Hospital', 'Indore, Madhya Pradesh', 'Planning • Infrastructure • Operations • Support']
+      ].map(([beds, image, label, title, location, services], index) => `<article class="hosmed-projects__card wow fadeInUp" data-wow-delay="${index * 70}ms">
+          <div class="hosmed-projects__image"><img src="${image}" alt="${title}"><span>${beds}</span></div>
+          <div class="hosmed-projects__card-body"><p>${label}</p><h3>${title}</h3><div class="hosmed-projects__meta"><span><i class="fas fa-map-marker-alt"></i>${location}</span></div><p class="hosmed-projects__services">${services}</p><a href="/contact">View Case Study <i class="fas fa-arrow-right"></i></a></div>
+        </article>`).join('');
+
+      const projectsPage = `<main class="hosmed-projects">
+        <section class="hosmed-projects__hero">
+          <div class="container hosmed-projects__hero-grid">
+            <div class="hosmed-projects__hero-copy">
+              <p class="hosmed-projects__eyebrow wow fadeInDown">Projects / Case Studies</p>
+              <h1 class="wow fadeInUp">From Vision to Reality.<br>Healthcare Projects. Designed With Purpose.</h1>
+              <span class="hosmed-projects__accent"></span>
+              <p class="wow fadeInUp" data-wow-delay="120ms">We partner with healthcare organisations to plan, build and transform hospitals that deliver better care and better outcomes.</p>
+            </div>
+            <div class="hosmed-projects__impact wow fadeInRight" data-wow-duration="1200ms">
+              <div><i class="fas fa-hospital"></i><p><strong>200+</strong><span>Projects Completed</span></p></div>
+              <div><i class="fas fa-history"></i><p><strong>25+</strong><span>Cities Served</span></p></div>
+              <div><i class="fas fa-ruler-combined"></i><p><strong>50M+</strong><span>Sq. Ft. Planned</span></p></div>
+              <div><i class="fas fa-check-circle"></i><p><strong>100%</strong><span>Client Satisfaction</span></p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="hosmed-projects__showcase section-space">
+          <div class="container">
+            <div class="hosmed-projects__filters wow fadeInUp" aria-label="Project categories"><button class="active">All Projects</button><button>Hospital Planning</button><button>Compliance</button><button>Digital Transformation</button><button>Hospital Design</button><button>Technology</button><span>All Locations <i class="fas fa-chevron-down"></i></span></div>
+            <div class="hosmed-projects__grid">${projectCards}</div>
+          </div>
+        </section>
+
+        <section class="hosmed-projects__promise">
+          <div class="container"><div class="hosmed-projects__promise-inner wow fadeInUp">
+            <div><p class="hosmed-projects__eyebrow">Why Choose HosmedAI?</p><h2>Every Project Has a Story.</h2></div>
+            <div><i class="fas fa-hospital-user"></i><h3>Integrated Approach</h3><p>Planning, compliance, technology and operations—all in one place.</p></div>
+            <div><i class="fas fa-clipboard-check"></i><h3>Experienced Team</h3><p>Healthcare experts, architects, engineers and IT professionals.</p></div>
+            <div><i class="fas fa-award"></i><h3>Quality by Design</h3><p>Built around safety, compliance and operational excellence.</p></div>
+            <div><i class="fas fa-headset"></i><h3>End-to-End Support</h3><p>From concept to commissioning and beyond.</p></div>
+          </div></div>
+        </section>
+
+        <section class="hosmed-projects__cta"><div class="container"><div class="hosmed-projects__cta-inner wow fadeInUp"><div><h2>Have a Project in Mind?</h2><p>Let's build the future of healthcare together. Plan better, build smarter &amp; deliver impact.</p></div><a href="/contact" class="heartox-btn">View Our Projects <i class="fas fa-arrow-right"></i></a><i class="fas fa-stethoscope" aria-hidden="true"></i></div></div></section>
+      </main>`;
+
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, projectsPage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -384,8 +439,8 @@ function App() {
             <p>We partner with healthcare organisations to design, build and operate smarter hospitals through integrated solutions.</p>
             <div class="hosmed-footer__social"><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a></div>
           </div>
-          <nav class="hosmed-footer__column" aria-label="Footer links"><h3>Links</h3><ul><li><a href="/">Home</a></li><li><a href="/about">About Us</a></li><li><a href="/hospital-planning">Hospital Planning</a></li><li><a href="/nabh-nabl">NABH / NABL</a></li><li><a href="/hospital-software">Hospital Software</a></li><li><a href="/ai-healthcare">AI Healthcare</a></li><li><a href="/services">Solutions</a></li><li><a href="/who-we-serve">Who We Serve</a></li><li><a href="/portfolio">Projects</a></li><li><a href="/contact">Contact</a></li></ul></nav>
-          <nav class="hosmed-footer__column" aria-label="Explore"><h3>Explore</h3><ul><li><a href="/hospital-planning">Planning &amp; Design</a></li><li><a href="/nabh-nabl">Quality &amp; Accreditation</a></li><li><a href="/hospital-software">Hospital Technology</a></li><li><a href="/ai-healthcare">Healthcare AI</a></li><li><a href="/portfolio">Our Projects</a></li><li><a href="/contact">Book a Consultation</a></li></ul></nav>
+          <nav class="hosmed-footer__column" aria-label="Footer links"><h3>Links</h3><ul><li><a href="/">Home</a></li><li><a href="/about">About Us</a></li><li><a href="/hospital-planning">Hospital Planning</a></li><li><a href="/nabh-nabl">NABH / NABL</a></li><li><a href="/hospital-software">Hospital Software</a></li><li><a href="/ai-healthcare">AI Healthcare</a></li><li><a href="/services">Solutions</a></li><li><a href="/who-we-serve">Who We Serve</a></li><li><a href="/projects">Projects</a></li><li><a href="/contact">Contact</a></li></ul></nav>
+          <nav class="hosmed-footer__column" aria-label="Explore"><h3>Explore</h3><ul><li><a href="/hospital-planning">Planning &amp; Design</a></li><li><a href="/nabh-nabl">Quality &amp; Accreditation</a></li><li><a href="/hospital-software">Hospital Technology</a></li><li><a href="/ai-healthcare">Healthcare AI</a></li><li><a href="/projects">Our Projects</a></li><li><a href="/contact">Book a Consultation</a></li></ul></nav>
           <div class="hosmed-footer__contact"><h3>Contact</h3><div><i class="fas fa-phone-alt"></i><p><a href="tel:+9138008060">+91 3800 8060</a><a href="tel:+9195550114">+91 9555 0114</a></p></div><div><i class="fas fa-envelope"></i><p><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a><a href="https://hosmedai.vercel.app">hosmedai.vercel.app</a></p></div><div><i class="fas fa-map-marker-alt"></i><p><span>Healthcare Solutions</span><span>India</span></p></div></div>
         </div>
         <div class="hosmed-footer__subscribe">
@@ -416,6 +471,8 @@ function App() {
       ? 'About HosmedAI | Integrated Hospital Development'
       : routeName === 'contact'
         ? 'Contact HosmedAI | Book a Hospital Consultation'
+        : routeName === 'projects' || routeName === 'portfolio'
+          ? 'Projects & Case Studies | HosmedAI'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
