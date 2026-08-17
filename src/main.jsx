@@ -281,17 +281,19 @@ function App() {
     if (page === pages['index.html'] || page === pages['about.html']) {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
-          <div class="hosmed-faq__inner wow fadeInUp" data-wow-duration="1200ms">
-            <div class="hosmed-faq__heading">
-              <p>Frequently Asked Question</p>
-              <h2>How does HosmedAI support a hospital from planning to operations?</h2>
+          <div class="hosmed-faq__inner">
+            <div class="hosmed-faq__heading wow fadeInUp" data-wow-duration="1000ms">
+              <p>FAQ</p>
+              <h2>Frequently Asked Questions</h2>
             </div>
-            <details class="hosmed-faq__item">
-              <summary><span>View Answer</span><i class="fas fa-plus"></i></summary>
-              <div class="hosmed-faq__answer">
-                <p>HosmedAI works as one integrated healthcare partner across the complete hospital journey—from feasibility, clinical planning, architecture and equipment planning to NABH/NABL readiness, hospital software, AI-enabled workflows and operational support. This coordinated approach reduces complexity, improves decision-making and keeps every stage aligned with quality healthcare outcomes.</p>
-              </div>
-            </details>
+            <div class="hosmed-faq__list wow fadeInUp" data-wow-duration="1200ms" data-wow-delay="100ms">
+              <details class="hosmed-faq__item"><summary><span>How does HosmedAI support a hospital from planning to operations?</span><i class="fas fa-plus"></i></summary><div class="hosmed-faq__answer"><p>HosmedAI works as one integrated healthcare partner across feasibility, clinical planning, architecture, equipment, accreditation, hospital software and operational support.</p></div></details>
+              <details class="hosmed-faq__item"><summary><span>Can HosmedAI help us plan a new hospital from the concept stage?</span><i class="fas fa-plus"></i></summary><div class="hosmed-faq__answer"><p>Yes. We support feasibility studies, service planning, departmental planning, clinical workflows, architecture coordination, infrastructure and equipment planning from concept through commissioning.</p></div></details>
+              <details class="hosmed-faq__item"><summary><span>Do you provide NABH and NABL accreditation consultancy?</span><i class="fas fa-plus"></i></summary><div class="hosmed-faq__answer"><p>Yes. Our team supports gap assessment, SOP development, quality systems, documentation, staff training, internal audits and accreditation readiness for NABH and NABL.</p></div></details>
+              <details class="hosmed-faq__item"><summary><span>Can HosmedAI digitise an existing hospital?</span><i class="fas fa-plus"></i></summary><div class="hosmed-faq__answer"><p>Yes. We help hospitals implement connected ERP, HIS, EMR, billing, pharmacy, laboratory, radiology, inventory, finance, analytics and AI-enabled workflows.</p></div></details>
+              <details class="hosmed-faq__item"><summary><span>Does HosmedAI work with small hospitals as well as large healthcare groups?</span><i class="fas fa-plus"></i></summary><div class="hosmed-faq__answer"><p>Yes. Our solutions are tailored for clinics, diagnostic centres, small and mid-sized hospitals, medical colleges, specialty hospitals and multi-location healthcare groups.</p></div></details>
+              <details class="hosmed-faq__item"><summary><span>Can we engage HosmedAI for only one specific service?</span><i class="fas fa-plus"></i></summary><div class="hosmed-faq__answer"><p>Yes. You can engage us for a focused requirement or use HosmedAI as an end-to-end partner across the complete hospital development and operations journey.</p></div></details>
+            </div>
           </div>
         </div>
       </section>`;

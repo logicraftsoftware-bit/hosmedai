@@ -549,8 +549,8 @@ p {
 .hosmed-faq {
   position: relative;
   overflow: hidden;
-  padding: 60px 0;
-  background: #f2f5f8;
+  padding: 65px 0;
+  background: #f7f9f8;
 }
 
 .hosmed-faq::before,
@@ -566,7 +566,7 @@ p {
   height: 240px;
   top: -150px;
   left: -90px;
-  border: 45px solid rgba(233, 173, 69, 0.2);
+  border: 45px solid rgba(233, 173, 69, 0.12);
 }
 
 .hosmed-faq::after {
@@ -578,61 +578,65 @@ p {
 }
 
 .hosmed-faq__inner {
-  max-width: 1050px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 46px 55px;
+  padding: 0;
   position: relative;
   z-index: 1;
-  border-radius: 24px;
-  background: linear-gradient(125deg, #102a43, #1b3f63);
-  box-shadow: 0 18px 42px rgba(16, 42, 67, 0.16);
 }
 
 .hosmed-faq__heading {
   max-width: 820px;
-  margin-bottom: 28px;
+  margin: 0 auto 32px;
+  text-align: center;
 }
 
 .hosmed-faq__heading > p {
   margin: 0 0 10px;
   color: var(--heartox-secondary, #e9ad45);
-  font-family: var(--heartox-special-font, "Caveat", cursive);
-  font-size: 24px;
+  font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif);
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
 }
 
 .hosmed-faq__heading h2 {
   margin: 0;
-  color: #fff;
+  color: var(--heartox-base, #102a43);
   font-family: var(--heartox-heading-font, "Nunito", sans-serif);
-  font-size: clamp(30px, 3vw, 43px);
+  font-size: clamp(30px, 3vw, 42px);
   font-weight: 700;
   line-height: 1.2;
 }
 
+.hosmed-faq__list {
+  border-top: 1px solid #d8e0e6;
+}
+
 .hosmed-faq__item {
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 15px;
-  background: rgba(255, 255, 255, 0.08);
-  transition: background-color 350ms ease, border-color 350ms ease;
+  border: 0;
+  border-bottom: 1px solid #d8e0e6;
+  border-radius: 0;
+  background: transparent;
+  transition: background-color 350ms ease;
 }
 
 .hosmed-faq__item[open] {
-  border-color: rgba(233, 173, 69, 0.6);
-  background: rgba(255, 255, 255, 0.12);
+  background: #fff;
 }
 
 .hosmed-faq__item summary {
-  min-height: 68px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 16px 20px 16px 24px;
+  padding: 15px 4px 15px 0;
   cursor: pointer;
   list-style: none;
-  color: #fff;
+  color: var(--heartox-base, #102a43);
   font-family: var(--heartox-heading-font, "Nunito", sans-serif);
   font-size: 17px;
   font-weight: 700;
@@ -643,14 +647,15 @@ p {
 }
 
 .hosmed-faq__item summary i {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--heartox-base, #102a43);
-  background: var(--heartox-secondary, #e9ad45);
+  color: var(--heartox-primary, #1b3f63);
+  background: rgba(233, 173, 69, 0.18);
+  font-size: 12px;
   transition: transform 350ms ease;
 }
 
@@ -668,8 +673,9 @@ p {
 .hosmed-faq__answer p {
   overflow: hidden;
   margin: 0;
-  padding: 0 24px 24px;
-  color: rgba(255, 255, 255, 0.82);
+  max-width: 950px;
+  padding: 0 55px 20px 0;
+  color: var(--heartox-text, #66788a);
   font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif);
   font-size: 15px;
   line-height: 1.75;
@@ -689,8 +695,7 @@ p {
   }
 
   .hosmed-faq__inner {
-    padding: 30px 20px;
-    border-radius: 19px;
+    padding: 0 3px;
   }
 
   .hosmed-faq__heading {
@@ -698,7 +703,7 @@ p {
   }
 
   .hosmed-faq__heading > p {
-    font-size: 20px;
+    font-size: 11px;
   }
 
   .hosmed-faq__heading h2 {
@@ -707,12 +712,12 @@ p {
 
   .hosmed-faq__item summary {
     min-height: 58px;
-    padding: 12px 14px 12px 17px;
+    padding: 12px 2px 12px 0;
     font-size: 15px;
   }
 
   .hosmed-faq__answer p {
-    padding: 0 17px 18px;
+    padding: 0 42px 16px 0;
     font-size: 13px;
     line-height: 1.65;
   }
