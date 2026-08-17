@@ -17843,3 +17843,28 @@ body.boxed-wrapper .funfact-one__single {
     height: 88px !important;
   }
 }
+
+@media (max-width: 767px) {
+  .main-header--one .main-header__inner {
+    min-height: 68px;
+    padding: 5px 12px;
+  }
+
+  .main-header--one .main-header__logo {
+    width: 125px;
+    min-width: 125px;
+    height: 58px;
+  }
+
+  .main-header--one .main-header__logo img {
+    width: 122px !important;
+    height: 62px !important;
+    object-position: center 43%;
+  }
+
+  .main-header--one .mobile-nav__btn {
+    width: 38px;
+    height: 38px;
+    padding: 10px 8px;
+  }
+}
