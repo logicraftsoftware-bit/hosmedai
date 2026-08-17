@@ -55,6 +55,7 @@ function App() {
     if (routeName === 'ai-healthcare') return pages['about.html'];
     if (routeName === 'hospital-software') return pages['about.html'];
     if (routeName === 'nabh-nabl') return pages['about.html'];
+    if (routeName === 'hospital-planning') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
@@ -508,6 +509,22 @@ function App() {
       html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, accreditationPage);
     }
 
+    if (routeName === 'hospital-planning') {
+      const planningServices = [
+        ['fas fa-file-medical-alt','Hospital feasibility studies','Evaluate opportunities, risks and viability to ensure the right start.'],['fas fa-chart-line','Business & project planning','Comprehensive business models and project roadmaps for success.'],['fas fa-bed','Bed-capacity planning','Optimal bed mix and capacity planning for current and future demand.'],['fas fa-stethoscope','Clinical department planning','Designing efficient, connected clinical departments.'],['fas fa-hospital','Hospital master planning','Strategic master plans that align growth, infrastructure and vision.'],['fas fa-ruler-combined','Architectural planning','Functional, aesthetic and sustainable architectural designs.'],
+        ['fas fa-project-diagram','Functional & workflow planning','Smart workflows that improve efficiency and patient experience.'],['fas fa-procedures','OT & ICU planning','Specialized planning for OT suites, ICU and critical care areas.'],['fas fa-ambulance','Emergency department planning','Designing high-performance EDs for faster care and better outcomes.'],['fas fa-user-md','OPD planning','Patient-friendly OPD layouts that reduce wait times and crowding.'],['fas fa-microscope','Diagnostic department planning','Efficient layouts for labs, radiology and advanced diagnostics.'],['fas fa-clipboard-list','Equipment planning','Right equipment, right quantity, right placement.'],
+        ['fas fa-fire-extinguisher','Medical gas planning','Safe, compliant and future-ready medical gas systems.'],['fas fa-wind','HVAC & MEP coordination','Integrated HVAC, electrical and MEP for seamless operations.'],['fas fa-shield-alt','Infection-control planning','Spaces and systems designed to minimize infection risks.'],['fas fa-laptop-medical','Biomedical equipment planning','Planning for BMET, maintenance and equipment life-cycle.'],['fas fa-tasks','Project management & commissioning support','End-to-end support from planning to commissioning and handover.']
+      ].map(([icon,title,copy], index) => `<article class="hosmed-planning__service wow fadeInUp" data-wow-delay="${(index % 6) * 50}ms"><span><i class="${icon}"></i></span><div><h3>${title}</h3><p>${copy}</p></div></article>`).join('');
+      const approach = [['fas fa-comments','Understand','We understand your vision, needs, patient profile and operational goals.'],['fas fa-clipboard-check','Plan','We plan every detail with data, strategy and real-world insight.'],['fas fa-drafting-compass','Design','We design spaces that are functional, safe, sustainable and future-ready.'],['fas fa-chart-line','Optimise','We optimise workflows, resources and systems for maximum efficiency.'],['fas fa-hard-hat','Execute','We support execution, commissioning and a successful launch.']].map(([icon,title,copy], index) => `<div class="wow fadeInUp" data-wow-delay="${index * 80}ms"><span><i class="${icon}"></i></span><h3>${title}</h3><p>${copy}</p>${index < 4 ? '<b>→</b>' : ''}</div>`).join('');
+      const planningPage = `<main class="hosmed-planning">
+        <section class="hosmed-planning__hero"><div class="container"><div class="hosmed-planning__hero-copy"><p class="wow fadeInDown">HOSPITAL PLANNING &amp; DESIGN</p><i></i><h1 class="wow fadeInUp">Your Hospital<br><span>Starts With<br>the Right Plan.</span></h1><h2 class="wow fadeInUp" data-wow-delay="80ms">Design for Patients. Plan for Efficiency.<br>Build for the Future.</h2><i></i><p class="wow fadeInUp" data-wow-delay="150ms">A successful hospital isn’t simply a beautiful building.<br>It is a carefully engineered healthcare ecosystem where patients, doctors, nurses, technology, equipment and information move efficiently.</p></div></div></section>
+        <section class="hosmed-planning__services section-space"><div class="container"><div class="hosmed-planning__heading wow fadeInUp"><i></i><h2>WHAT WE DO</h2><i></i></div><div class="hosmed-planning__services-grid">${planningServices}</div></div></section>
+        <section class="hosmed-planning__approach"><div class="container"><div class="hosmed-planning__approach-inner"><div class="hosmed-planning__heading wow fadeInUp"><i></i><h2>OUR APPROACH</h2><i></i></div><div class="hosmed-planning__approach-grid">${approach}</div></div></div></section>
+        <section class="hosmed-planning__cta"><div class="container"><div class="hosmed-planning__cta-inner wow fadeInUp"><div><h2>Build a Hospital That Works<br><span>Before You Build the Hospital.</span></h2><i></i><p>The right planning today reduces costs, improves efficiency, ensures compliance and delivers better care for years to come.</p><a href="/contact" class="heartox-btn">Plan My Hospital <i class="fas fa-arrow-right"></i></a></div></div><div class="hosmed-planning__benefits"><div><i class="far fa-heart"></i><p><b>Patient-Centric</b><span>Designed around patient comfort and safety.</span></p></div><div><i class="fas fa-bullseye"></i><p><b>Efficient &amp; Scalable</b><span>Built for efficiency, scalability and growth.</span></p></div><div><i class="fas fa-shield-alt"></i><p><b>Compliant &amp; Safe</b><span>Aligned with NABH, NABL and global standards.</span></p></div><div><i class="fas fa-leaf"></i><p><b>Sustainable Design</b><span>Environment-friendly and future-ready.</span></p></div><div><i class="fas fa-handshake"></i><p><b>End-to-End Support</b><span>From concept to commissioning.</span></p></div></div></div></section>
+      </main>`;
+      html = html.replace(/<section class="page-header[\s\S]*?(?=<footer class=)/, planningPage);
+    }
+
     if (routeName === 'index' || routeName === 'about') {
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -585,6 +602,8 @@ function App() {
                   ? 'Hospital Software & HIS | HosmedAI'
                   : routeName === 'nabh-nabl'
                     ? 'NABH / NABL Accreditation Consultancy | HosmedAI'
+                    : routeName === 'hospital-planning'
+                      ? 'Hospital Planning & Design | HosmedAI'
         : (page.title || 'Hosmed AI');
     document.body.className = page.bodyClass || '';
     let active = true;
