@@ -50,7 +50,7 @@ function App() {
     const requested = `${routeName}.html`;
     if (routeName === 'contact' && !pages[requested]) return pages['about.html'];
     if (routeName === 'projects' || routeName === 'portfolio') return pages['about.html'];
-    if (routeName === 'services' && !pages[requested]) return pages['about.html'];
+    if (routeName === 'services') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
   }, [routeName]);
 
