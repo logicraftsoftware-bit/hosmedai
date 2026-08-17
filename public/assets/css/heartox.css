@@ -18032,14 +18032,14 @@ body.boxed-wrapper .funfact-one__single {
 .hosmed-about__cta { order: 5; }
 
 .hosmed-about .section-space {
-  padding-top: 70px;
-  padding-bottom: 70px;
+  padding-top: 46px;
+  padding-bottom: 46px;
 }
 
 .hosmed-about__hero {
-  min-height: 475px;
-  padding: 70px 0 125px;
-  margin-bottom: 105px;
+  min-height: 420px;
+  padding: 52px 0 105px;
+  margin-bottom: 82px;
   position: relative;
   overflow: visible;
   color: #fff;
@@ -18114,7 +18114,7 @@ body.boxed-wrapper .funfact-one__single {
 .hosmed-about__stats-wrap {
   position: absolute !important;
   right: 0;
-  bottom: -78px;
+  bottom: -60px;
   left: 0;
   z-index: 3 !important;
 }
@@ -18122,8 +18122,8 @@ body.boxed-wrapper .funfact-one__single {
 .hosmed-about__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  min-height: 130px;
-  padding: 25px 28px;
+  min-height: 108px;
+  padding: 18px 24px;
   border: 1px solid rgba(16, 42, 67, 0.08);
   border-radius: 26px;
   background: #fff;
@@ -18143,15 +18143,15 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__stat i {
-  width: 58px;
-  height: 58px;
-  flex: 0 0 58px;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   color: var(--heartox-secondary, #e9ad45);
   background: var(--heartox-base, #102a43);
-  font-size: 23px;
+  font-size: 20px;
 }
 
 .hosmed-about__stat p,
@@ -18163,7 +18163,7 @@ body.boxed-wrapper .funfact-one__single {
 .hosmed-about__stat strong {
   display: block;
   color: var(--heartox-base, #102a43);
-  font-size: 27px;
+  font-size: 24px;
   line-height: 1.15;
   white-space: nowrap;
 }
@@ -18183,7 +18183,7 @@ body.boxed-wrapper .funfact-one__single {
 
 .hosmed-about__image img {
   width: 100%;
-  height: 410px;
+  height: 350px;
   min-height: 0;
   display: block;
   object-fit: cover;
@@ -18203,13 +18203,13 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__copy blockquote {
-  margin: 30px 0;
-  padding: 22px 28px;
+  margin: 20px 0;
+  padding: 17px 22px;
   border-left: 5px solid var(--heartox-secondary, #e9ad45);
   border-radius: 0 14px 14px 0;
   color: var(--heartox-primary, #1b3f63);
   background: #f2f5f8;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
   line-height: 1.45;
 }
@@ -18225,7 +18225,7 @@ body.boxed-wrapper .funfact-one__single {
 
 .hosmed-about__heading {
   max-width: 850px;
-  margin: 0 auto 55px;
+  margin: 0 auto 30px;
   text-align: center;
 }
 
@@ -18241,7 +18241,7 @@ body.boxed-wrapper .funfact-one__single {
 }
 
 .hosmed-about__capabilities article {
-  padding: 26px 18px;
+  padding: 20px 15px;
   border: 1px solid #e0e7ed;
   border-radius: 18px;
   background: #fff;
@@ -18253,7 +18253,7 @@ body.boxed-wrapper .funfact-one__single {
   height: 52px;
   display: grid;
   place-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 13px;
   border-radius: 14px;
   color: var(--heartox-secondary, #e9ad45);
   background: var(--heartox-base, #102a43);
@@ -18276,8 +18276,8 @@ body.boxed-wrapper .funfact-one__single {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   align-items: center;
-  gap: 70px;
-  padding: 48px 55px;
+  gap: 45px;
+  padding: 36px 42px;
   border-radius: 24px;
   color: #fff;
   background: linear-gradient(120deg, #102a43, #1b3f63);
@@ -18290,10 +18290,10 @@ body.boxed-wrapper .funfact-one__single {
 
 .hosmed-about__philosophy-card > p {
   margin: 0;
-  padding-left: 45px;
+  padding-left: 32px;
   border-left: 1px solid rgba(255, 255, 255, 0.3);
   color: rgba(255, 255, 255, 0.88);
-  font-size: 20px;
+  font-size: 17px;
   line-height: 1.8;
 }
 
@@ -18371,7 +18371,7 @@ body.boxed-wrapper .funfact-one__single {
 
 @media (max-width: 991px) {
   .hosmed-about__hero {
-    margin-bottom: 150px;
+    margin-bottom: 125px;
   }
 
   .hosmed-about__stats {
@@ -18413,14 +18413,14 @@ body.boxed-wrapper .funfact-one__single {
 
 @media (max-width: 767px) {
   .hosmed-about .section-space {
-    padding-top: 38px !important;
-    padding-bottom: 38px !important;
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
   }
 
   .hosmed-about__hero {
     min-height: 0;
-    padding: 68px 8px 170px;
-    margin-bottom: 155px;
+    padding: 48px 8px 145px;
+    margin-bottom: 135px;
     background:
       linear-gradient(90deg, rgba(8, 39, 67, 0.98), rgba(8, 48, 84, 0.68)),
       url("../images/backgrounds/slider-2.png") 62% center / cover no-repeat;
@@ -18445,14 +18445,14 @@ body.boxed-wrapper .funfact-one__single {
   }
 
   .hosmed-about__stats-wrap {
-    bottom: -135px;
+    bottom: -118px;
     padding: 0 18px;
   }
 
   .hosmed-about__stats {
     gap: 0;
-    row-gap: 18px;
-    padding: 20px 8px;
+    row-gap: 13px;
+    padding: 15px 8px;
     border-radius: 20px;
   }
 
@@ -18482,7 +18482,7 @@ body.boxed-wrapper .funfact-one__single {
   }
 
   .hosmed-about__image img {
-    height: 330px;
+    height: 275px;
     min-height: 0;
   }
 
@@ -18528,7 +18528,7 @@ body.boxed-wrapper .funfact-one__single {
   }
 
   .hosmed-about__philosophy-card {
-    padding: 32px 22px;
+    padding: 25px 18px;
   }
 
   .hosmed-about__philosophy-card > p {
