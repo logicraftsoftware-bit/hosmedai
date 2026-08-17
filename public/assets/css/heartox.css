@@ -17777,6 +17777,58 @@ body.boxed-wrapper .funfact-one__single {
   .blog-one__top {
     margin-bottom: 20px;
   }
+
+  /* Keep the Integrated Capabilities panel contained below its image. */
+  .about-one__thumb {
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid rgba(233, 173, 69, 0.7);
+    border-radius: 16px;
+    background: var(--heartox-base, #102a43);
+  }
+
+  .about-one__thumb::after,
+  .about-one__thumb__bottom__shape,
+  .about-one__thumb__item__icon {
+    display: none;
+  }
+
+  .about-one__thumb__item img {
+    height: 275px;
+    border-radius: 15px 15px 0 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .about-one__thumb__bottom {
+    width: 100%;
+    position: relative;
+    left: auto;
+    bottom: auto;
+  }
+
+  .about-one__thumb__funfact {
+    min-height: 76px;
+    position: static;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 16px 12px;
+    transform: none;
+  }
+
+  .about-one__thumb__funfact__count {
+    margin: 0;
+    font-size: 36px;
+    line-height: 1;
+    transform: none;
+  }
+
+  .about-one__thumb__funfact__text {
+    max-width: 145px;
+    font-size: 17px;
+    line-height: 1.25;
+    transform: none;
+  }
 }
 
 @media (max-width: 1199px) {
