@@ -19,7 +19,10 @@ jobs:
           script: |
             set -e
             cd /var/www/hosmedai
-            git pull --ff-only origin main
+            mkdir -p /var/backups/hosmedai
+            git diff > /var/backups/hosmedai/pre-deploy.patch || true
+            git fetch origin main
+            git reset --hard origin/main
             npm ci
             npm run build
             find dist -type f \( -name '*.js' -o -name '*.css' -o -name '*.svg' \) -exec gzip -9 -k -f {} \;
