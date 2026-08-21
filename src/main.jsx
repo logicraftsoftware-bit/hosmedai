@@ -102,6 +102,7 @@ function App() {
         .replace('assets/images/shapes/image-logo.png', 'assets/images/shapes/image-logo-blue.png')
         .replace('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.png')
         .replace('assets/images/resources/donation-2-1.jpg', 'assets/images/resources/contact-us.png')
+        .replace("Send a Gift for <br> Children's", "Send a Gift for <br> Doctor's")
         .replace('Our Core Solutions', 'Our 3 Core Solutions')
         .replace(
           'From hospital planning to digital healthcare, HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance and technology together.',
