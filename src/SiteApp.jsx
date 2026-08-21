@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import pages from './pages.runtime.generated.js';
 import './cms-page.css';
 import './home-sections.css';
+import './home-carousel.css';
 
 const scripts = [
   '/assets/vendors/jquery/jquery-3.7.1.min.js',
@@ -544,6 +545,24 @@ export default function SiteApp() {
       if (routeName === 'index') {
         const homeVisualSections = `<section class="hosmed-visual-solutions"><div class="container-fluid"><div class="hosmed-visual-solutions__grid"><a href="/hospital-planning" style="--card-image:url('/assets/images/charity/charity-1-1.jpg')"><small>Plan Better</small><h2>Hospital Planning<br>&amp; Design</h2><span>Explore Solution <i class="fas fa-arrow-right"></i></span></a><a href="/nabh-nabl" style="--card-image:url('/assets/images/charity/charity-1-2.jpg')"><small>Build Quality</small><h2>NABH / NABL<br>Compliance</h2><span>Explore Solution <i class="fas fa-arrow-right"></i></span></a><a href="/hospital-software" style="--card-image:url('/assets/images/charity/charity-1-3.jpg')"><small>Transform Digitally</small><h2>Hospital Software<br>&amp; AI</h2><span>Explore Solution <i class="fas fa-arrow-right"></i></span></a></div></div></section><section class="hosmed-service-showcase section-space"><div class="container"><div class="hosmed-section-heading"><p><i class="fas fa-shield-alt"></i> Integrated Healthcare Solutions</p><h2>Everything Your Hospital Needs</h2></div><div class="hosmed-service-showcase__grid"><article><img src="/assets/images/charity/charity-2-1.jpg" alt="Hospital planning"><i class="fas fa-drafting-compass"></i><h3>Hospital Planning</h3><p>From feasibility and clinical planning to commissioning support.</p><a href="/hospital-planning">Learn More</a></article><article><img src="/assets/images/charity/charity-2-2.jpg" alt="Hospital accreditation"><i class="fas fa-award"></i><h3>Quality &amp; Accreditation</h3><p>Practical NABH and NABL systems built for lasting quality.</p><a href="/nabh-nabl">Learn More</a></article><article><img src="/assets/images/charity/charity-2-3.jpg" alt="Hospital software"><i class="fas fa-laptop-medical"></i><h3>Hospital Technology</h3><p>Connected ERP, HIS, EMR and operational intelligence.</p><a href="/hospital-software">Learn More</a></article><article><img src="/assets/images/about/about-1-2.jpg" alt="Healthcare artificial intelligence"><i class="fas fa-brain"></i><h3>Healthcare AI</h3><p>Turn hospital data into faster, smarter decisions.</p><a href="/ai-healthcare">Learn More</a></article></div></div></section><section class="hosmed-testimonials section-space"><div class="container"><div class="hosmed-section-heading"><p><i class="fas fa-comments"></i> Client Experiences</p><h2>What Healthcare Leaders Say</h2></div><div class="hosmed-testimonials__grid"><blockquote><div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>HosmedAI brought planning, compliance and technology together with a practical understanding of hospital operations.</p><footer><strong>Hospital Leadership Team</strong><span>Integrated Healthcare Project</span></footer></blockquote><blockquote><div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>Their structured approach helped our team improve workflows, documentation and accreditation readiness.</p><footer><strong>Quality Management Team</strong><span>NABH Readiness Programme</span></footer></blockquote><aside><strong>4.9</strong><div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><b>Client Satisfaction</b><span>End-to-end support</span></aside></div></div></section><section class="hosmed-difference"><div class="container"><div class="hosmed-difference__top"><div><p><i class="fas fa-shield-alt"></i> Why HosmedAI</p><h2>What Makes Us<br>Different</h2></div><div class="hosmed-difference__features"><span><i class="fas fa-hospital"></i><b>Healthcare<br>Focused</b></span><span><i class="fas fa-link"></i><b>Fully<br>Integrated</b></span><span><i class="fas fa-user-md"></i><b>Expert<br>Led</b></span><span><i class="fas fa-chart-line"></i><b>Outcome<br>Driven</b></span></div></div><div class="hosmed-difference__cta"><div><small>Start Your Hospital Journey</small><h2>Build a Smarter, Safer and Future-Ready Hospital.</h2></div><a href="/contact" class="heartox-btn">Book a Consultation</a></div></div></section>`;
         html = html.replace(/(?=<footer class=)/, homeVisualSections);
+
+        // Keep the solution cards immediately below the homepage banner. The
+        // rest of the custom homepage sections remain near the footer.
+        const visualCardsMatch = html.match(/<section class="hosmed-visual-solutions">[\s\S]*?<\/section>/);
+        if (visualCardsMatch) {
+          const visualCards = visualCardsMatch[0].replace(
+            '<div class="hosmed-visual-solutions__grid">',
+            '<div class="hosmed-visual-solutions__controls"><button type="button" data-solution-scroll="prev" aria-label="Previous solution"><i class="fas fa-chevron-left"></i></button><button type="button" data-solution-scroll="next" aria-label="Next solution"><i class="fas fa-chevron-right"></i></button></div><div class="hosmed-visual-solutions__grid">'
+          );
+          html = html.replace(visualCardsMatch[0], '');
+          html = html.replace('<!-- main-slider-end -->', `<!-- main-slider-end -->${visualCards}`);
+        }
+
+        // These template carousels depend on the original demo's runtime and
+        // rendered as isolated cards with large empty gaps. Custom equivalents
+        // are rendered below, so remove the broken duplicate sections.
+        html = html.replace(/<section class="testimonials-one[\s\S]*?<\/section><!-- \/\.testimonials-one -->/, '');
+        html = html.replace(/<section class="charity-cause[\s\S]*?<\/section><!-- \/\.charity-cause -->/, '');
       }
       const faqSection = `<section class="hosmed-faq section-space">
         <div class="container">
@@ -666,6 +685,19 @@ export default function SiteApp() {
     })();
     return () => { active = false; };
   }, [page, routeName, pageSettings]);
+
+  useEffect(() => {
+    const scrollSolutions = (event) => {
+      const button = event.target.closest('[data-solution-scroll]');
+      if (!button) return;
+      const track = button.closest('.hosmed-visual-solutions')?.querySelector('.hosmed-visual-solutions__grid');
+      if (!track) return;
+      const direction = button.dataset.solutionScroll === 'prev' ? -1 : 1;
+      track.scrollBy({ left: track.clientWidth * 0.9 * direction, behavior: 'smooth' });
+    };
+    document.addEventListener('click', scrollSolutions);
+    return () => document.removeEventListener('click', scrollSolutions);
+  }, []);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
