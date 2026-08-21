@@ -8,7 +8,8 @@
     "server": "node server/index.js",
     "start": "node server/index.js",
     "db:init": "node server/init-db.js",
-    "build": "vite build",
+    "generate:runtime-pages": "node scripts/generate-runtime-pages.mjs",
+    "build": "npm run generate:runtime-pages && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

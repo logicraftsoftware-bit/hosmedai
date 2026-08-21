@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import pages from './pages.generated.js';
+import pages from './pages.runtime.generated.js';
 import './cms-page.css';
 
 const scripts = [
