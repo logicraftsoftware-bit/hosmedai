@@ -19400,6 +19400,12 @@ body.boxed-wrapper .funfact-one__single {
 
 /* Final mobile header presentation: floating compact pill. */
 @media (max-width: 767px) {
+  .main-header--one .main-header__logo a::after,
+  .main-header--one.sticky-header--cloned .main-header__logo a::after {
+    content: none !important;
+    display: none !important;
+  }
+
   .main-header--one,
   .main-header--one.sticky-header--cloned {
     padding: 8px;
