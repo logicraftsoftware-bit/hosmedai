@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './admin.css';
 
 const empty = { title: '', slug: '', excerpt: '', body: '', image_url: '', status: 'draft' };
 async function api(url, options = {}) {

@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
+import './admin.css';
 
 const isAdmin = location.pathname.replace(/\/$/, '') === '/admin';
 const Application = lazy(() => isAdmin ? import('./AdminApp.jsx') : import('./SiteApp.jsx'));
