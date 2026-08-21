@@ -42,6 +42,7 @@ function loadScript(src) {
 
 export default function SiteApp() {
   const [pageSettings, setPageSettings] = useState(null);
+  const [websiteSettings, setWebsiteSettings] = useState(null);
   const routeName = useMemo(() => {
     const route = location.pathname.split('/').filter(Boolean).pop() || 'index';
     return route.replace(/\.html$/i, '');
@@ -66,6 +67,10 @@ export default function SiteApp() {
     fetch(`/api/pages/${pageKey}`).then(response => response.ok ? response.json() : null).then(data => { if (active) setPageSettings(data); }).catch(() => { if (active) setPageSettings(null); });
     return () => { active = false; };
   }, [routeName]);
+
+  useEffect(() => {
+    fetch('/api/website-settings').then(response => response.ok ? response.json() : null).then(setWebsiteSettings).catch(() => setWebsiteSettings(null));
+  }, []);
 
   const markup = useMemo(() => {
     let html = page.html;
@@ -582,6 +587,19 @@ export default function SiteApp() {
 
     html = html.replace(/<footer class="[^"]*">[\s\S]*?<\/footer>/, sharedFooter);
 
+    if (websiteSettings) {
+      const safe = value => String(value || '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[character]);
+      const list = value => Array.isArray(value) ? value : (() => { try { return JSON.parse(value || '[]'); } catch { return []; } })();
+      if (websiteSettings.header_logo) html = html.replace(/(<header class="main-header[\s\S]*?<img src=")[^"]+("[^>]*>)/, `$1${safe(websiteSettings.header_logo)}$2`);
+      if (websiteSettings.footer_logo) html = html.replace('/assets/images/footer_logo.png', safe(websiteSettings.footer_logo));
+      if (websiteSettings.email) html = html.replace(/hello@hosmedai\.com/g, safe(websiteSettings.email));
+      const phones = list(websiteSettings.phones).filter(Boolean);
+      if (phones.length) html = html.replace(/<div><i class="fas fa-phone-alt"><\/i><p>[\s\S]*?<\/p><\/div>/, `<div><i class="fas fa-phone-alt"></i><p>${phones.map(phone => `<a href="tel:${safe(phone).replace(/[^+0-9]/g, '')}">${safe(phone)}</a>`).join('')}</p></div>`);
+      if (websiteSettings.address) html = html.replace(/<div><i class="fas fa-map-marker-alt"><\/i><p>[\s\S]*?<\/p><\/div>/, `<div><i class="fas fa-map-marker-alt"></i><p>${safe(websiteSettings.address).replace(/\r?\n/g, '<br>')}</p></div>`);
+      const socials = list(websiteSettings.social_links).filter(item => item?.link);
+      if (socials.length) html = html.replace(/<div class="hosmed-footer__social">[\s\S]*?<\/div>/, `<div class="hosmed-footer__social">${socials.map(item => `<a href="${safe(item.link)}" target="_blank" rel="noopener noreferrer" aria-label="Social media"><i class="${safe(item.icon)}"></i></a>`).join('')}</div>`);
+    }
+
     html = html.replace(/\$/g, '₹');
     html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
 
@@ -599,7 +617,7 @@ export default function SiteApp() {
         return `href=${quote}${path}${hash}${quote}`;
       }
     );
-  }, [page, routeName, pageSettings]);
+  }, [page, routeName, pageSettings, websiteSettings]);
 
   useEffect(() => {
     document.title = pageSettings?.page_title || (routeName === 'about'

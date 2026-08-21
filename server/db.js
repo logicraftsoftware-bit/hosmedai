@@ -43,4 +43,14 @@ export async function ensureSchema() {
     status ENUM('draft','published') NOT NULL DEFAULT 'draft',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS website_settings (
+    id TINYINT UNSIGNED PRIMARY KEY DEFAULT 1,
+    header_logo VARCHAR(500) NULL,
+    footer_logo VARCHAR(500) NULL,
+    email VARCHAR(255) NULL,
+    phones JSON NULL,
+    address TEXT NULL,
+    social_links JSON NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
 }

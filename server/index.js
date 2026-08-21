@@ -51,6 +51,17 @@ app.get('/api/admin/content', requireAdmin, async (_req, res) => {
 app.get('/api/admin/pages', requireAdmin, async (_req, res) => {
   const [rows] = await pool.query('SELECT * FROM page_settings ORDER BY page_name'); res.json(rows);
 });
+app.get('/api/admin/website-settings', requireAdmin, async (_req, res) => {
+  const [rows] = await pool.query('SELECT * FROM website_settings WHERE id=1'); res.json(rows[0] || null);
+});
+app.put('/api/admin/website-settings', requireAdmin, async (req, res) => {
+  const cleanList = value => Array.isArray(value) ? value.map(item => String(item || '').trim()).filter(Boolean).slice(0, 20) : [];
+  const socialLinks = Array.isArray(req.body.social_links) ? req.body.social_links.map(item => ({ icon: String(item.icon || '').trim(), link: String(item.link || '').trim() })).filter(item => item.icon || item.link).slice(0, 20) : [];
+  const values = [String(req.body.header_logo || ''), String(req.body.footer_logo || ''), String(req.body.email || '').trim(), JSON.stringify(cleanList(req.body.phones)), String(req.body.address || '').trim(), JSON.stringify(socialLinks)];
+  await pool.execute(`INSERT INTO website_settings (id,header_logo,footer_logo,email,phones,address,social_links) VALUES (1,?,?,?,?,?,?)
+    ON DUPLICATE KEY UPDATE header_logo=VALUES(header_logo),footer_logo=VALUES(footer_logo),email=VALUES(email),phones=VALUES(phones),address=VALUES(address),social_links=VALUES(social_links)`, values);
+  const [rows] = await pool.query('SELECT * FROM website_settings WHERE id=1'); res.json(rows[0]);
+});
 app.get('/api/admin/pages/:key', requireAdmin, async (req, res) => {
   const [rows] = await pool.execute('SELECT * FROM page_settings WHERE page_key=? LIMIT 1', [req.params.key]);
   res.json(rows[0] || null);
@@ -102,6 +113,10 @@ app.get('/api/content/:slug', async (req, res) => {
 app.get('/api/pages/:key', async (req, res) => {
   const [rows] = await pool.execute("SELECT page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,updated_at FROM page_settings WHERE page_key=? AND status='published' LIMIT 1", [req.params.key]);
   rows[0] ? res.json(rows[0]) : res.status(404).json({ error: 'Published page settings not found.' });
+});
+app.get('/api/website-settings', async (_req, res) => {
+  const [rows] = await pool.query('SELECT header_logo,footer_logo,email,phones,address,social_links,updated_at FROM website_settings WHERE id=1');
+  res.json(rows[0] || {});
 });
 
 const dist = path.join(root, 'dist');
