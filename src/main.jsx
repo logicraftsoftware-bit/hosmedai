@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 import pages from './pages.generated.js';
+import AdminApp from './AdminApp.jsx';
 
 const scripts = [
   '/assets/vendors/jquery/jquery-3.7.1.min.js',
@@ -628,4 +629,4 @@ function App() {
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(location.pathname.replace(/\/$/, '') === '/admin' ? <AdminApp /> : <App />);
