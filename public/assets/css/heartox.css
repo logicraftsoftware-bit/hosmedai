@@ -1912,16 +1912,6 @@ p {
     height: 100%;
   }
 
-  .main-header--one .main-header__logo a::after {
-    content: "HosmedAI";
-    color: var(--heartox-base, #102a43);
-    font-family: var(--heartox-heading-font, "Nunito", sans-serif);
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    white-space: nowrap;
-  }
-
   .main-header--one .main-header__logo img {
     width: 45px !important;
     height: 45px !important;
