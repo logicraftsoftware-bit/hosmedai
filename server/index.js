@@ -99,6 +99,10 @@ app.get('/api/content/:slug', async (req, res) => {
   const [rows] = await pool.execute("SELECT id,title,slug,excerpt,body,image_url,updated_at FROM content_items WHERE status='published' AND slug=? LIMIT 1", [req.params.slug]);
   rows[0] ? res.json(rows[0]) : res.status(404).json({ error: 'Content not found.' });
 });
+app.get('/api/pages/:key', async (req, res) => {
+  const [rows] = await pool.execute("SELECT page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,updated_at FROM page_settings WHERE page_key=? AND status='published' LIMIT 1", [req.params.key]);
+  rows[0] ? res.json(rows[0]) : res.status(404).json({ error: 'Published page settings not found.' });
+});
 
 const dist = path.join(root, 'dist');
 app.use(express.static(dist));

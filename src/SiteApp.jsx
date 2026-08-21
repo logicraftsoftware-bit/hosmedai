@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import pages from './pages.generated.js';
+import './cms-page.css';
 
 const scripts = [
   '/assets/vendors/jquery/jquery-3.7.1.min.js',
@@ -40,6 +41,7 @@ function loadScript(src) {
 }
 
 export default function SiteApp() {
+  const [pageSettings, setPageSettings] = useState(null);
   const routeName = useMemo(() => {
     const route = location.pathname.split('/').filter(Boolean).pop() || 'index';
     return route.replace(/\.html$/i, '');
@@ -56,6 +58,13 @@ export default function SiteApp() {
     if (routeName === 'nabh-nabl') return pages['about.html'];
     if (routeName === 'hospital-planning') return pages['about.html'];
     return pages[requested] || pages['404.html'] || pages['index.html'];
+  }, [routeName]);
+
+  useEffect(() => {
+    const pageKey = routeName === 'index' ? 'home' : routeName === 'services' ? 'solutions' : routeName;
+    let active = true;
+    fetch(`/api/pages/${pageKey}`).then(response => response.ok ? response.json() : null).then(data => { if (active) setPageSettings(data); }).catch(() => { if (active) setPageSettings(null); });
+    return () => { active = false; };
   }, [routeName]);
 
   const markup = useMemo(() => {
@@ -576,6 +585,13 @@ export default function SiteApp() {
     html = html.replace(/\$/g, '₹');
     html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
 
+    if (pageSettings) {
+      const escape = value => String(value || '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[character]);
+      const paragraphs = escape(pageSettings.body).split(/\r?\n\r?\n/).filter(Boolean).map(text => `<p>${text.replace(/\r?\n/g, '<br>')}</p>`).join('');
+      const managedContent = `<section class="cms-page${pageSettings.image_url ? ' cms-page--image' : ''}"${pageSettings.image_url ? ` style="--cms-image:url('${escape(pageSettings.image_url)}')"` : ''}><div class="container"><div class="cms-page__inner"><p class="cms-page__eyebrow">${escape(pageSettings.page_name)}</p>${pageSettings.hero_title ? `<h1>${escape(pageSettings.hero_title)}</h1>` : ''}${pageSettings.hero_subtitle ? `<p class="cms-page__subtitle">${escape(pageSettings.hero_subtitle)}</p>` : ''}${paragraphs ? `<div class="cms-page__body">${paragraphs}</div>` : ''}</div></div></section>`;
+      html = html.replace(/(?=<footer class=)/, managedContent);
+    }
+
     return html.replace(
       /href=(["'])([a-z0-9-]+)\.html(#[^"']*)?\1/gi,
       (_, quote, name, hash = '') => {
@@ -583,10 +599,10 @@ export default function SiteApp() {
         return `href=${quote}${path}${hash}${quote}`;
       }
     );
-  }, [page, routeName]);
+  }, [page, routeName, pageSettings]);
 
   useEffect(() => {
-    document.title = routeName === 'about'
+    document.title = pageSettings?.page_title || (routeName === 'about'
       ? 'About HosmedAI | Integrated Hospital Development'
       : routeName === 'contact'
         ? 'Contact HosmedAI | Book a Hospital Consultation'
@@ -604,7 +620,11 @@ export default function SiteApp() {
                     ? 'NABH / NABL Accreditation Consultancy | HosmedAI'
                     : routeName === 'hospital-planning'
                       ? 'Hospital Planning & Design | HosmedAI'
-        : (page.title || 'Hosmed AI');
+        : (page.title || 'Hosmed AI'));
+    if (pageSettings?.seo_description) {
+      let description = document.querySelector('meta[name="description"]');
+      if (description) description.setAttribute('content', pageSettings.seo_description);
+    }
     document.body.className = page.bodyClass || '';
     let active = true;
     (async () => {
@@ -622,7 +642,7 @@ export default function SiteApp() {
       }
     })();
     return () => { active = false; };
-  }, [page, routeName]);
+  }, [page, routeName, pageSettings]);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
