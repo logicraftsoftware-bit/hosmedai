@@ -17,9 +17,12 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            set -e
             cd /var/www/hosmedai
-            git pull origin main
-            npm install
+            git pull --ff-only origin main
+            npm ci
             npm run build
+            find dist -type f \( -name '*.js' -o -name '*.css' -o -name '*.svg' \) -exec gzip -9 -k -f {} \;
+            pm2 restart hosmedai --update-env
             nginx -t
             systemctl reload nginx

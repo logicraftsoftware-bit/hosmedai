@@ -31,4 +31,16 @@ export async function ensureSchema() {
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_status_updated (status, updated_at)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS page_settings (
+    page_key VARCHAR(80) PRIMARY KEY,
+    page_name VARCHAR(120) NOT NULL,
+    page_title VARCHAR(255) NULL,
+    seo_description VARCHAR(500) NULL,
+    hero_title VARCHAR(255) NULL,
+    hero_subtitle TEXT NULL,
+    body LONGTEXT NULL,
+    image_url VARCHAR(500) NULL,
+    status ENUM('draft','published') NOT NULL DEFAULT 'draft',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
 }

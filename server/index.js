@@ -48,6 +48,22 @@ app.get('/api/admin/me', requireAdmin, (req, res) => res.json({ username: req.ad
 app.get('/api/admin/content', requireAdmin, async (_req, res) => {
   const [rows] = await pool.query('SELECT * FROM content_items ORDER BY updated_at DESC'); res.json(rows);
 });
+app.get('/api/admin/pages', requireAdmin, async (_req, res) => {
+  const [rows] = await pool.query('SELECT * FROM page_settings ORDER BY page_name'); res.json(rows);
+});
+app.get('/api/admin/pages/:key', requireAdmin, async (req, res) => {
+  const [rows] = await pool.execute('SELECT * FROM page_settings WHERE page_key=? LIMIT 1', [req.params.key]);
+  res.json(rows[0] || null);
+});
+app.put('/api/admin/pages/:key', requireAdmin, async (req, res) => {
+  const key = String(req.params.key).toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const value = field => String(req.body[field] || '').trim();
+  const values = [key, value('page_name'), value('page_title'), value('seo_description'), value('hero_title'), value('hero_subtitle'), String(req.body.body || ''), value('image_url'), req.body.status === 'published' ? 'published' : 'draft'];
+  if (!key || !values[1]) return res.status(400).json({ error: 'Page name is required.' });
+  await pool.execute(`INSERT INTO page_settings (page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,status)
+    VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE page_name=VALUES(page_name),page_title=VALUES(page_title),seo_description=VALUES(seo_description),hero_title=VALUES(hero_title),hero_subtitle=VALUES(hero_subtitle),body=VALUES(body),image_url=VALUES(image_url),status=VALUES(status)`, values);
+  const [rows] = await pool.execute('SELECT * FROM page_settings WHERE page_key=?', [key]); res.json(rows[0]);
+});
 app.post('/api/admin/upload', requireAdmin, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Choose a JPG, PNG, WebP, or GIF image under 5 MB.' });
   res.status(201).json({ url: `/uploads/${req.file.filename}` });
