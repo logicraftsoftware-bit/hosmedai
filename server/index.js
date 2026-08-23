@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
+import compression from 'compression';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
@@ -20,6 +21,7 @@ const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret || jwtSecret.length < 32) throw new Error('JWT_SECRET must contain at least 32 characters.');
 
 app.use(helmet({ contentSecurityPolicy: false }));
+app.use(compression());
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 app.use('/uploads', express.static(uploadDir, { maxAge: '1d', index: false }));
@@ -120,8 +122,14 @@ app.get('/api/website-settings', async (_req, res) => {
 });
 
 const dist = path.join(root, 'dist');
-app.use(express.static(dist));
-app.get(/.*/, (_req, res) => res.sendFile(path.join(dist, 'index.html')));
+app.use(express.static(dist, {
+  maxAge: '1y',
+  immutable: true,
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('index.html')) res.setHeader('Cache-Control', 'no-cache');
+  }
+}));
+app.get(/.*/, (_req, res) => res.set('Cache-Control', 'no-cache').sendFile(path.join(dist, 'index.html')));
 app.use((error, _req, res, _next) => res.status(error.code === 'LIMIT_FILE_SIZE' ? 413 : 500).json({ error: error.code === 'LIMIT_FILE_SIZE' ? 'Image must be under 5 MB.' : 'Server error.' }));
 
 await ensureSchema();

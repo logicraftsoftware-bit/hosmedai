@@ -9,12 +9,14 @@
     "start": "node server/index.js",
     "db:init": "node server/init-db.js",
     "generate:runtime-pages": "node scripts/generate-runtime-pages.mjs",
-    "build": "npm run generate:runtime-pages && vite build",
+    "minify:theme-css": "lightningcss --minify public/assets/css/heartox.css -o public/assets/css/heartox.min.css",
+    "build": "npm run generate:runtime-pages && npm run minify:theme-css && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@vitejs/plugin-react": "4.3.4",
     "bcryptjs": "^3.0.3",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -26,5 +28,8 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "vite": "6.4.3"
+  },
+  "devDependencies": {
+    "lightningcss-cli": "^1.33.0"
   }
 }

@@ -7,7 +7,7 @@
     url('fonts/icomoon5274-4.html?5s98m0#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
-  font-display: block;
+  font-display: swap;
 }
 
 [class^="icon-"], [class*=" icon-"] {

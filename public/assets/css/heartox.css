@@ -1078,7 +1078,7 @@ p {
 /* Why HosmedAI page */
 .hosmed-why { overflow: hidden; color: #66788a; background: #fff; font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif); }
 .hosmed-why h1, .hosmed-why h2, .hosmed-why h3 { font-family: var(--heartox-heading-font, "Nunito", sans-serif); }
-.hosmed-why__hero { position: relative; padding: 70px 0 88px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98), rgba(5,42,71,.86) 55%, rgba(5,38,66,.28)), url("../images/backgrounds/slider-1-1.jpg") center 48%/cover; }
+.hosmed-why__hero { position: relative; padding: 70px 0 88px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98), rgba(5,42,71,.86) 55%, rgba(5,38,66,.28)), url("../images/backgrounds/slider-1-1.webp") center 48%/cover; }
 .hosmed-why__hero::after { content: ""; position: absolute; right: -3%; bottom: -1px; width: 53%; height: 70px; background: #fff; clip-path: ellipse(67% 38% at 70% 100%); }
 .hosmed-why__hero-copy { position: relative; z-index: 1; max-width: 700px; }
 .hosmed-why__hero-copy > p:first-child { display: flex; align-items: center; gap: 12px; margin: 0 0 13px; color: #f2af35; font-size: 13px; font-weight: 800; }
@@ -1113,7 +1113,7 @@ p {
 .hosmed-why__advantage-grid h3 { margin: 3px 0 10px; color: #fff; font-size: 14px; }
 .hosmed-why__advantage-grid p { clear: both; margin: 0; font-size: 10px; line-height: 1.55; }
 .hosmed-why__cta { padding: 0 0 42px; }
-.hosmed-why__cta-inner { min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 24px 38px; color: #fff; border-radius: 12px; background: linear-gradient(100deg, rgba(5,145,139,.97), rgba(6,63,91,.88)), url("../images/about/about-001.png") right 35%/cover; }
+.hosmed-why__cta-inner { min-height: 112px; display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 24px 38px; color: #fff; border-radius: 12px; background: linear-gradient(100deg, rgba(5,145,139,.97), rgba(6,63,91,.88)), url("../images/about/about-001.webp") right 35%/cover; }
 .hosmed-why__cta h2 { margin: 0 0 4px; color: #fff; font-size: 23px; }
 .hosmed-why__cta p { max-width: 580px; margin: 0; color: #e3eef3; font-size: 11px; }
 .hosmed-why__cta .heartox-btn { padding: 14px 24px; color: #0b3559; background: #fff; font-size: 12px; }
@@ -1144,7 +1144,7 @@ p {
 /* HosmedAI Solutions page */
 .hosmed-solutions { overflow: hidden; color: #68798b; background: #fff; font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif); }
 .hosmed-solutions h1, .hosmed-solutions h2, .hosmed-solutions h3 { font-family: var(--heartox-heading-font, "Nunito", sans-serif); }
-.hosmed-solutions__hero { position: relative; padding: 66px 0 92px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98), rgba(6,43,72,.88) 54%, rgba(6,41,69,.58)), url("../images/backgrounds/slider-1-1.jpg") center 48%/cover; }
+.hosmed-solutions__hero { position: relative; padding: 66px 0 92px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98), rgba(6,43,72,.88) 54%, rgba(6,41,69,.58)), url("../images/backgrounds/slider-1-1.webp") center 48%/cover; }
 .hosmed-solutions__hero::after { content: ""; position: absolute; right: -4%; bottom: -1px; width: 56%; height: 82px; background: #fff; clip-path: ellipse(67% 39% at 70% 100%); border-top: 5px solid #efad35; }
 .hosmed-solutions__hero-copy { position: relative; z-index: 1; max-width: 720px; }
 .hosmed-solutions__eyebrow { margin: 0 0 10px; color: #f2af35; font-family: var(--heartox-special-font, "Caveat", cursive); font-size: 21px; font-weight: 700; }
@@ -1209,7 +1209,7 @@ p {
 }
 
 .hosmed-projects h1, .hosmed-projects h2, .hosmed-projects h3 { font-family: var(--heartox-heading-font, "Nunito", sans-serif); }
-.hosmed-projects__hero { position: relative; padding: 66px 0 82px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98) 0%, rgba(7,48,80,.92) 54%, rgba(5,38,66,.7) 100%), url("../images/backgrounds/slider-1-1.jpg") center 43%/cover; }
+.hosmed-projects__hero { position: relative; padding: 66px 0 82px; color: #fff; background: linear-gradient(90deg, rgba(5,38,66,.98) 0%, rgba(7,48,80,.92) 54%, rgba(5,38,66,.7) 100%), url("../images/backgrounds/slider-1-1.webp") center 43%/cover; }
 .hosmed-projects__hero::after { content: ""; position: absolute; right: -4%; bottom: -1px; width: 52%; height: 72px; background: #fff; clip-path: ellipse(64% 38% at 68% 100%); border-top: 4px solid #efae37; }
 .hosmed-projects__hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; align-items: center; gap: 70px; position: relative; z-index: 1; }
 .hosmed-projects__hero-copy { max-width: 710px; }
