@@ -382,7 +382,7 @@
     });
   }
 
-  if ($(".wow").length) {
+  if ($(".wow").length && typeof WOW !== "undefined") {
     var wow = new WOW({
       boxClass: "wow",
       animateClass: "animated",

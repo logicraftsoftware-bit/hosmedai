@@ -1,0 +1,17 @@
+# HosmedAI
+
+> HosmedAI provides integrated hospital planning, healthcare compliance, accreditation, hospital software, and artificial-intelligence solutions for healthcare organisations.
+
+## Main pages
+
+- [Home](https://hosmedai.com/)
+- [Why HosmedAI](https://hosmedai.com/why-hosmedai)
+- [About HosmedAI](https://hosmedai.com/about)
+- [Hospital Planning and Design](https://hosmedai.com/hospital-planning)
+- [NABH and NABL Accreditation](https://hosmedai.com/nabh-nabl)
+- [Hospital Software](https://hosmedai.com/hospital-software)
+- [AI for Healthcare](https://hosmedai.com/ai-healthcare)
+- [Healthcare Solutions](https://hosmedai.com/services)
+- [Who We Serve](https://hosmedai.com/who-we-serve)
+- [Projects](https://hosmedai.com/projects)
+- [Contact](https://hosmedai.com/contact)

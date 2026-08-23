@@ -11,7 +11,6 @@ const scripts = [
   '/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js',
   '/assets/vendors/jquery-validate/jquery.validate.min.js',
   '/assets/vendors/owl-carousel/js/owl.carousel.min.js',
-  '/assets/vendors/wow/wow.js',
   '/assets/js/heartox.js'
 ];
 
@@ -617,6 +616,11 @@ export default function SiteApp() {
 
     html = html.replace(/\$/g, '₹');
     html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
+
+    html = html.replace(
+      /<a href="team\.html">/g,
+      '<a href="/team" aria-label="Meet the HosmedAI team">'
+    );
 
     // Keep below-the-fold template images out of the critical network path.
     html = html.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"');
