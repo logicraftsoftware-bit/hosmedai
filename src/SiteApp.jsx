@@ -24,6 +24,62 @@ function loadScript(src) {
   });
 }
 
+function applyStructuredSections(html, routeName, rawSections) {
+  let sections = rawSections;
+  if (typeof sections === 'string') { try { sections = JSON.parse(sections); } catch { sections = {}; } }
+  if (!sections || typeof sections !== 'object' || !Object.keys(sections).length) return html;
+  const documentNode = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html');
+  const setText = (selector, value) => { const node = documentNode.querySelector(selector); if (node && value !== undefined && value !== null && value !== '') node.textContent = value; };
+  const setImage = (selector, value, background = false) => { const node = documentNode.querySelector(selector); if (!node || !value) return; if (background) node.style.backgroundImage = `url('${value}')`; else node.setAttribute('src', value); };
+  const iconCard = (item, className = '') => { const article = documentNode.createElement('article'); article.className = className; const icon = documentNode.createElement('i'); icon.className = item.icon || 'fas fa-hospital'; const title = documentNode.createElement('h3'); title.textContent = item.title || ''; const copy = documentNode.createElement('p'); copy.textContent = item.description || ''; article.append(icon, title, copy); return article; };
+  const applyFaqs = faqs => {
+    const list = documentNode.querySelector('.hosmed-faq__list');
+    const valid = Array.isArray(faqs) ? faqs.filter(item => item.question || item.answer) : [];
+    if (!list || !valid.length) return;
+    list.replaceChildren(...valid.map(item => { const details = documentNode.createElement('details'); details.className = 'hosmed-faq__item'; const summary = documentNode.createElement('summary'); const label = documentNode.createElement('span'); label.textContent = item.question || ''; const plus = documentNode.createElement('i'); plus.className = 'fas fa-plus'; summary.append(label, plus); const answer = documentNode.createElement('div'); answer.className = 'hosmed-faq__answer'; const paragraph = documentNode.createElement('p'); paragraph.textContent = item.answer || ''; answer.append(paragraph); details.append(summary, answer); return details; }));
+  };
+
+  if (routeName === 'index') {
+    const banners = Array.isArray(sections.banners) ? sections.banners.filter(item => item.title || item.image) : [];
+    const carousel = documentNode.querySelector('.main-slider-one__carousel');
+    if (carousel && banners.length) {
+      const template = carousel.querySelector('.item');
+      if (template) carousel.replaceChildren(...banners.map(item => { const slide = template.cloneNode(true); const background = slide.querySelector('.main-slider-one__bg'); if (background && item.image) background.style.backgroundImage = `url('${item.image}')`; const shortTitle = slide.querySelector('.main-slider-one__sub-title'); if (shortTitle) shortTitle.textContent = item.short_title || ''; const title = slide.querySelector('.main-slider-one__title'); if (title) title.textContent = item.title || ''; const subtitle = slide.querySelector('.main-slider-one__text'); if (subtitle) subtitle.textContent = item.subtitle || ''; return slide; }));
+    }
+    const serviceCards = Array.isArray(sections.service_cards) ? sections.service_cards.filter(item => item.title || item.background_image) : [];
+    const serviceGrid = documentNode.querySelector('.hosmed-visual-solutions__grid');
+    if (serviceGrid && serviceCards.length) serviceGrid.replaceChildren(...serviceCards.map(item => { const link = documentNode.createElement('a'); link.href = item.button_link || '#'; if (item.background_image) link.style.setProperty('--card-image', `url('${item.background_image}')`); const small = documentNode.createElement('small'); small.textContent = item.short_title || ''; const title = documentNode.createElement('h2'); title.textContent = item.title || ''; const action = documentNode.createElement('span'); action.innerHTML = 'Explore Solution <i class="fas fa-arrow-right"></i>'; link.append(small, title, action); return link; }));
+    setText('.about-one .sec-title__title', sections.about?.title); setText('.about-one__text', sections.about?.description); setImage('.about-one img', sections.about?.image);
+    const aboutCards = Array.isArray(sections.about?.cards) ? sections.about.cards : [];
+    documentNode.querySelectorAll('.about-one__feature, .about-one__item').forEach((node, index) => { const item = aboutCards[index]; if (!item) return; const title = node.querySelector('h3,h4'); const copy = node.querySelector('p'); if (title) title.textContent = item.title || ''; if (copy) copy.textContent = item.description || ''; });
+    setImage('.donate-now__bg, .donate-now__left', sections.contact?.image, true);
+    applyFaqs(sections.faqs);
+  }
+
+  if (routeName === 'about') {
+    setImage('.hosmed-about__hero', sections.banner?.image, true); setText('.hosmed-about__hero h1', sections.banner?.title); setText('.hosmed-about__hero .container > p:last-child', sections.banner?.description);
+    setText('.hosmed-about__copy .hosmed-about__eyebrow', sections.vision?.small_heading); setText('.hosmed-about__copy h2', sections.vision?.heading); setText('.hosmed-about__copy > p:last-child', sections.vision?.description);
+    setText('.hosmed-about__philosophy-card .hosmed-about__eyebrow', sections.mission?.small_heading); setText('.hosmed-about__philosophy-card h2', sections.mission?.heading); setText('.hosmed-about__philosophy-card > p', sections.mission?.description);
+    setText('.hosmed-about__heading h2', sections.what_we_do?.heading); setText('.hosmed-about__heading > p:last-child', sections.what_we_do?.subheading);
+    const grid = documentNode.querySelector('.hosmed-about__capabilities'); const cards = Array.isArray(sections.what_we_do?.cards) ? sections.what_we_do.cards.filter(item => item.title || item.description) : [];
+    if (grid && cards.length) grid.replaceChildren(...cards.map(item => iconCard(item, 'wow fadeInUp')));
+    applyFaqs(sections.faqs);
+  }
+
+  if (routeName === 'why-hosmedai') {
+    setText('.hosmed-why__hero-copy h1', sections.hero?.title); setText('.hosmed-why__hero-copy h2', sections.hero?.subtitle); setText('.hosmed-why__hero-copy > p:last-child', sections.hero?.description);
+    const grid = documentNode.querySelector('.hosmed-why__reasons-grid'); const cards = Array.isArray(sections.cards) ? sections.cards.filter(item => item.title || item.description) : [];
+    if (grid && cards.length) { const timeline = grid.querySelector('.hosmed-why__timeline'); grid.replaceChildren(...cards.map((item, index) => { const card = iconCard(item, `hosmed-why__reason hosmed-why__reason--${index % 2 ? 'right' : 'left'}`); const number = documentNode.createElement('b'); number.textContent = String(index + 1).padStart(2, '0'); card.prepend(number); return card; }), ...(timeline ? [timeline] : [])); }
+  }
+
+  if (routeName === 'hospital-planning') {
+    setText('.hosmed-planning__hero-copy h1', sections.hero?.title); setText('.hosmed-planning__hero-copy h2', sections.hero?.subtitle); setText('.hosmed-planning__hero-copy > p:last-child', sections.hero?.description);
+    const grid = documentNode.querySelector('.hosmed-planning__services-grid'); const cards = Array.isArray(sections.what_we_do?.cards) ? sections.what_we_do.cards.filter(item => item.title || item.description) : [];
+    if (grid && cards.length) grid.replaceChildren(...cards.map(item => { const article = iconCard(item, 'hosmed-planning__service'); const icon = article.querySelector('i'); if (icon) { const span = documentNode.createElement('span'); span.append(icon); article.prepend(span); } const title = article.querySelector('h3'); const copy = article.querySelector('p'); if (title && copy) { const wrapper = documentNode.createElement('div'); wrapper.append(title, copy); article.append(wrapper); } return article; }));
+  }
+  return documentNode.body.innerHTML;
+}
+
 export default function SiteApp() {
   const [pageSettings, setPageSettings] = useState(null);
   const [websiteSettings, setWebsiteSettings] = useState(null);
@@ -614,6 +670,8 @@ export default function SiteApp() {
       if (socials.length) html = html.replace(/<div class="hosmed-footer__social">[\s\S]*?<\/div>/, `<div class="hosmed-footer__social">${socials.map(item => `<a href="${safe(item.link)}" target="_blank" rel="noopener noreferrer" aria-label="Social media"><i class="${safe(item.icon)}"></i></a>`).join('')}</div>`);
     }
 
+    if (pageSettings?.sections) html = applyStructuredSections(html, routeName, pageSettings.sections);
+
     html = html.replace(/\$/g, '₹');
     html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
 
@@ -634,7 +692,7 @@ export default function SiteApp() {
       '$1 loading="eager" decoding="async" fetchpriority="high"'
     );
 
-    if (pageSettings) {
+    if (pageSettings && !['index', 'about', 'why-hosmedai', 'hospital-planning'].includes(routeName)) {
       const escape = value => String(value || '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[character]);
       const paragraphs = escape(pageSettings.body).split(/\r?\n\r?\n/).filter(Boolean).map(text => `<p>${text.replace(/\r?\n/g, '<br>')}</p>`).join('');
       const managedContent = `<section class="cms-page${pageSettings.image_url ? ' cms-page--image' : ''}"${pageSettings.image_url ? ` style="--cms-image:url('${escape(pageSettings.image_url)}')"` : ''}><div class="container"><div class="cms-page__inner"><p class="cms-page__eyebrow">${escape(pageSettings.page_name)}</p>${pageSettings.hero_title ? `<h1>${escape(pageSettings.hero_title)}</h1>` : ''}${pageSettings.hero_subtitle ? `<p class="cms-page__subtitle">${escape(pageSettings.hero_subtitle)}</p>` : ''}${paragraphs ? `<div class="cms-page__body">${paragraphs}</div>` : ''}</div></div></section>`;

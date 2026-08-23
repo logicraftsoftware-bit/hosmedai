@@ -39,20 +39,70 @@ function GeneralSettings() {
   return <form className="admin-page-editor" onSubmit={save}><div className="admin-page-heading"><div><small>Website Settings</small><h1>General Website Settings</h1><p>Manage information shared across the header, footer, and contact areas.</p></div><a href="/" target="_blank" rel="noreferrer">View website <i className="fas fa-external-link-alt" /></a></div><div className="admin-page-fields"><div className="admin-logo-grid"><div className="admin-logo-field"><label>Header logo<input type="file" accept="image/jpeg,image/png,image/webp" onChange={event => uploadLogo(event, 'header_logo')} /></label>{settings.header_logo && <img src={settings.header_logo} alt="Header logo preview" />}</div><div className="admin-logo-field admin-logo-field--dark"><label>Footer logo<input type="file" accept="image/jpeg,image/png,image/webp" onChange={event => uploadLogo(event, 'footer_logo')} /></label>{settings.footer_logo && <img src={settings.footer_logo} alt="Footer logo preview" />}</div></div><label>Email address<input type="email" value={settings.email || ''} onChange={event => setSettings({ ...settings, email: event.target.value })} /></label><fieldset className="admin-repeat"><legend>Phone numbers</legend>{(settings.phones || ['']).map((phone, index) => <div key={index}><input type="tel" value={phone} placeholder="Phone number" onChange={event => setSettings({ ...settings, phones: settings.phones.map((item, itemIndex) => itemIndex === index ? event.target.value : item) })} />{settings.phones.length > 1 && <button type="button" onClick={() => setSettings({ ...settings, phones: settings.phones.filter((_, itemIndex) => itemIndex !== index) })}><i className="fas fa-times" /></button>}</div>)}<button type="button" className="admin-add" onClick={() => setSettings({ ...settings, phones: [...(settings.phones || []), ''] })}><i className="fas fa-plus" /> Add phone number</button></fieldset><label>Address<textarea rows="4" value={settings.address || ''} onChange={event => setSettings({ ...settings, address: event.target.value })} /></label><fieldset className="admin-repeat"><legend>Social media</legend>{(settings.social_links || []).map((social, index) => <div className="admin-social-row" key={index}><select value={social.icon} onChange={event => setSettings({ ...settings, social_links: settings.social_links.map((item, itemIndex) => itemIndex === index ? { ...item, icon: event.target.value } : item) })}><option value="fab fa-facebook-f">Facebook</option><option value="fab fa-instagram">Instagram</option><option value="fab fa-linkedin-in">LinkedIn</option><option value="fab fa-youtube">YouTube</option><option value="fab fa-x-twitter">X / Twitter</option></select><input type="url" value={social.link} placeholder="https://…" onChange={event => setSettings({ ...settings, social_links: settings.social_links.map((item, itemIndex) => itemIndex === index ? { ...item, link: event.target.value } : item) })} /><button type="button" onClick={() => setSettings({ ...settings, social_links: settings.social_links.filter((_, itemIndex) => itemIndex !== index) })}><i className="fas fa-times" /></button></div>)}<button type="button" className="admin-add" onClick={() => setSettings({ ...settings, social_links: [...(settings.social_links || []), { icon: 'fab fa-facebook-f', link: '' }] })}><i className="fas fa-plus" /> Add social link</button></fieldset>{message && <p className={message.includes('saved') || message.includes('uploaded') ? 'admin-success' : 'admin-error'}>{message}</p>}<button className="admin-primary">Save website settings</button></div></form>;
 }
 
-function PageEditor({ pageKey }) {
+const structuredDefaults = {
+  home: { banners: [], service_cards: [], about: { title: '', description: '', image: '', cards: [{ title: '', description: '' }, { title: '', description: '' }] }, contact: { image: '' }, faqs: [] },
+  about: { banner: { image: '', title: '', description: '' }, vision: { heading: '', small_heading: '', description: '' }, mission: { heading: '', small_heading: '', description: '' }, what_we_do: { heading: '', subheading: '', cards: [] }, faqs: [] },
+  'why-hosmedai': { hero: { title: '', subtitle: '', description: '' }, cards: [] },
+  'hospital-planning': { hero: { title: '', subtitle: '', description: '' }, what_we_do: { cards: [] } }
+};
+
+const parseSections = (pageKey, value) => {
+  let parsed = value;
+  if (typeof parsed === 'string') { try { parsed = JSON.parse(parsed); } catch { parsed = {}; } }
+  const defaults = structuredDefaults[pageKey] || {};
+  return { ...defaults, ...(parsed && typeof parsed === 'object' ? parsed : {}) };
+};
+
+function ImageField({ label, value, onChange, upload }) {
+  return <div className="admin-structured-image"><label>{label}<input value={value || ''} onChange={event => onChange(event.target.value)} placeholder="/assets/images/... or upload below" /></label><label className="admin-file-button"><i className="fas fa-upload" /> Upload image<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => upload(event, onChange)} /></label>{value && <img src={value} alt={`${label} preview`} />}</div>;
+}
+
+function RepeatEditor({ title, items, blank, onChange, children, min = 0 }) {
+  const list = Array.isArray(items) ? items : [];
+  return <fieldset className="admin-section admin-repeater"><legend>{title}</legend>{list.map((item, index) => <article key={index}><div className="admin-repeat-heading"><strong>{title.replace(/s$/, '')} {index + 1}</strong>{list.length > min && <button type="button" onClick={() => onChange(list.filter((_, itemIndex) => itemIndex !== index))}><i className="fas fa-trash" /> Remove</button>}</div>{children(item, index, next => onChange(list.map((current, itemIndex) => itemIndex === index ? { ...current, ...next } : current)))}</article>)}<button type="button" className="admin-add admin-add-section" onClick={() => onChange([...list, { ...blank }])}><i className="fas fa-plus" /> Add {title.replace(/s$/, '').toLowerCase()}</button></fieldset>;
+}
+
+function StructuredPageFields({ pageKey, sections, setSections, upload }) {
+  const set = (name, value) => setSections(current => ({ ...current, [name]: value }));
+  const group = (name, value) => set(name, { ...(sections[name] || {}), ...value });
+  const text = (label, value, onChange, area = false) => <label>{label}{area ? <textarea rows="4" value={value || ''} onChange={event => onChange(event.target.value)} /> : <input value={value || ''} onChange={event => onChange(event.target.value)} />}</label>;
+  const iconCard = (item, _index, change) => <div className="admin-card-fields">{text('Icon class', item.icon, value => change({ icon: value }))}{text('Title', item.title, value => change({ title: value }))}{text('Description', item.description, value => change({ description: value }), true)}</div>;
+  const faq = (item, _index, change) => <div className="admin-card-fields">{text('Question', item.question, value => change({ question: value }))}{text('Answer', item.answer, value => change({ answer: value }), true)}</div>;
+
+  if (pageKey === 'home') return <div className="admin-structured-fields">
+    <RepeatEditor title="Banners" items={sections.banners} blank={{ image: '', short_title: '', title: '', subtitle: '' }} onChange={value => set('banners', value)}>{(item, _index, change) => <div className="admin-card-fields"><ImageField label="Banner image" value={item.image} onChange={value => change({ image: value })} upload={upload} />{text('Short title', item.short_title, value => change({ short_title: value }))}{text('Title', item.title, value => change({ title: value }))}{text('Subtitle', item.subtitle, value => change({ subtitle: value }), true)}</div>}</RepeatEditor>
+    <RepeatEditor title="Service cards" items={sections.service_cards} blank={{ background_image: '', short_title: '', title: '', button_link: '' }} onChange={value => set('service_cards', value)}>{(item, _index, change) => <div className="admin-card-fields"><ImageField label="Background image" value={item.background_image} onChange={value => change({ background_image: value })} upload={upload} />{text('Short title', item.short_title, value => change({ short_title: value }))}{text('Title', item.title, value => change({ title: value }))}{text('Button link', item.button_link, value => change({ button_link: value }))}</div>}</RepeatEditor>
+    <fieldset className="admin-section"><legend>Home page about</legend>{text('Title', sections.about?.title, value => group('about', { title: value }))}{text('Description', sections.about?.description, value => group('about', { description: value }), true)}<ImageField label="About image" value={sections.about?.image} onChange={value => group('about', { image: value })} upload={upload} /><RepeatEditor title="About cards" min={2} items={sections.about?.cards || []} blank={{ title: '', description: '' }} onChange={value => group('about', { cards: value })}>{(item, _index, change) => <div className="admin-card-fields">{text('Title', item.title, value => change({ title: value }))}{text('Description', item.description, value => change({ description: value }), true)}</div>}</RepeatEditor></fieldset>
+    <fieldset className="admin-section"><legend>Home page contact form</legend><ImageField label="Left-side image" value={sections.contact?.image} onChange={value => group('contact', { image: value })} upload={upload} /></fieldset>
+    <RepeatEditor title="FAQs" items={sections.faqs} blank={{ question: '', answer: '' }} onChange={value => set('faqs', value)}>{faq}</RepeatEditor>
+  </div>;
+
+  if (pageKey === 'about') return <div className="admin-structured-fields">
+    <fieldset className="admin-section"><legend>Banner</legend><ImageField label="Banner image" value={sections.banner?.image} onChange={value => group('banner', { image: value })} upload={upload} />{text('Title', sections.banner?.title, value => group('banner', { title: value }))}{text('Description', sections.banner?.description, value => group('banner', { description: value }), true)}</fieldset>
+    {['vision', 'mission'].map(name => <fieldset className="admin-section" key={name}><legend>Our {name[0].toUpperCase() + name.slice(1)}</legend>{text('Heading', sections[name]?.heading, value => group(name, { heading: value }))}{text('Small heading', sections[name]?.small_heading, value => group(name, { small_heading: value }))}{text('Description', sections[name]?.description, value => group(name, { description: value }), true)}</fieldset>)}
+    <fieldset className="admin-section"><legend>What We Do</legend>{text('Heading', sections.what_we_do?.heading, value => group('what_we_do', { heading: value }))}{text('Sub heading', sections.what_we_do?.subheading, value => group('what_we_do', { subheading: value }))}<RepeatEditor title="Cards" items={sections.what_we_do?.cards || []} blank={{ icon: 'fas fa-hospital', title: '', description: '' }} onChange={value => group('what_we_do', { cards: value })}>{iconCard}</RepeatEditor></fieldset>
+    <RepeatEditor title="FAQs" items={sections.faqs} blank={{ question: '', answer: '' }} onChange={value => set('faqs', value)}>{faq}</RepeatEditor>
+  </div>;
+
+  const hero = sections.hero || {};
+  return <div className="admin-structured-fields"><fieldset className="admin-section"><legend>Page introduction</legend>{text('Title', hero.title, value => group('hero', { title: value }))}{text('Subtitle', hero.subtitle, value => group('hero', { subtitle: value }))}{text('Description', hero.description, value => group('hero', { description: value }), true)}</fieldset>{pageKey === 'why-hosmedai' ? <RepeatEditor title="Zig-zag cards" items={sections.cards} blank={{ icon: 'fas fa-hospital', title: '', description: '' }} onChange={value => set('cards', value)}>{iconCard}</RepeatEditor> : <RepeatEditor title="What We Do cards" items={sections.what_we_do?.cards || []} blank={{ icon: 'fas fa-hospital', title: '', description: '' }} onChange={value => group('what_we_do', { cards: value })}>{iconCard}</RepeatEditor>}</div>;
+}
+
+function LegacyPageEditor({ pageKey }) {
   const pageName = websitePages.find(([key]) => key === pageKey)?.[1] || pageKey;
   const blank = { page_name: pageName, page_title: '', seo_description: '', hero_title: '', hero_subtitle: '', body: '', image_url: '', status: 'draft' };
   const [page, setPage] = useState(blank);
+  const [sections, setSections] = useState(parseSections(pageKey, {}));
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   useEffect(() => {
     setLoading(true); setMessage('');
-    api(`/api/admin/pages/${pageKey}`).then(data => setPage(data || blank)).catch(error => setMessage(error.message)).finally(() => setLoading(false));
+    api(`/api/admin/pages/${pageKey}`).then(data => { const next = data || blank; setPage(next); setSections(parseSections(pageKey, next.sections)); }).catch(error => setMessage(error.message)).finally(() => setLoading(false));
   }, [pageKey]);
   const change = event => setPage(current => ({ ...current, [event.target.name]: event.target.value }));
   const save = async event => {
     event.preventDefault(); setMessage('Saving…');
-    try { setPage(await api(`/api/admin/pages/${pageKey}`, { method: 'PUT', body: JSON.stringify(page) })); setMessage('Page settings saved.'); }
+    try { const saved = await api(`/api/admin/pages/${pageKey}`, { method: 'PUT', body: JSON.stringify({ ...page, sections }) }); setPage(saved); setSections(parseSections(pageKey, saved.sections)); setMessage('Page settings saved.'); }
     catch (error) { setMessage(error.message); }
   };
   const upload = async event => {
@@ -61,8 +111,45 @@ function PageEditor({ pageKey }) {
     try { const result = await api('/api/admin/upload', { method: 'POST', body: data }); setPage(current => ({ ...current, image_url: result.url })); setMessage('Image uploaded. Save the page to keep it.'); }
     catch (error) { setMessage(error.message); }
   };
+  const uploadStructured = async (event, onChange) => {
+    if (!event.target.files[0]) return;
+    const data = new FormData(); data.append('image', event.target.files[0]); setMessage('Uploadingâ€¦');
+    try { const result = await api('/api/admin/upload', { method: 'POST', body: data }); onChange(result.url); setMessage('Image uploaded. Save the page to publish it.'); }
+    catch (error) { setMessage(error.message); }
+  };
   if (loading) return <section className="admin-page-editor"><p>Loading page settings…</p></section>;
   return <form className="admin-page-editor" onSubmit={save}><div className="admin-page-heading"><div><small>Website Settings</small><h1>{pageName}</h1><p>Manage the primary content and search information for this page.</p></div><a href={pageKey === 'home' ? '/' : `/${pageKey}`} target="_blank" rel="noreferrer">View page <i className="fas fa-external-link-alt" /></a></div><div className="admin-page-fields"><label>Browser/SEO title<input name="page_title" value={page.page_title || ''} onChange={change} placeholder={`${pageName} | HosmedAI`} /></label><label>SEO description<textarea name="seo_description" rows="3" maxLength="500" value={page.seo_description || ''} onChange={change} /></label><label>Hero heading<input name="hero_title" value={page.hero_title || ''} onChange={change} /></label><label>Hero supporting text<textarea name="hero_subtitle" rows="4" value={page.hero_subtitle || ''} onChange={change} /></label><label>Page content<textarea name="body" rows="12" value={page.body || ''} onChange={change} placeholder="Add the main page content here…" /></label><div className="admin-upload admin-page-upload"><label>Hero / featured image<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={upload} /></label>{page.image_url && <img src={page.image_url} alt="Page preview" />}</div><label>Publishing status<select name="status" value={page.status || 'draft'} onChange={change}><option value="draft">Draft</option><option value="published">Published</option></select></label>{message && <p className={message.includes('saved') || message.includes('uploaded') ? 'admin-success' : 'admin-error'}>{message}</p>}<button className="admin-primary">Save page settings</button></div></form>;
+}
+
+function StructuredPageEditor({ pageKey }) {
+  const pageName = websitePages.find(([key]) => key === pageKey)?.[1] || pageKey;
+  const blank = { page_name: pageName, page_title: '', seo_description: '', status: 'draft' };
+  const [page, setPage] = useState(blank);
+  const [sections, setSections] = useState(parseSections(pageKey, {}));
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  useEffect(() => {
+    setLoading(true); setMessage('');
+    api(`/api/admin/pages/${pageKey}`).then(data => { const next = data || blank; setPage(next); setSections(parseSections(pageKey, next.sections)); }).catch(error => setMessage(error.message)).finally(() => setLoading(false));
+  }, [pageKey]);
+  const change = event => setPage(current => ({ ...current, [event.target.name]: event.target.value }));
+  const save = async event => {
+    event.preventDefault(); setMessage('Savingâ€¦');
+    try { const saved = await api(`/api/admin/pages/${pageKey}`, { method: 'PUT', body: JSON.stringify({ ...page, page_name: pageName, sections }) }); setPage(saved); setSections(parseSections(pageKey, saved.sections)); setMessage('Page settings saved.'); }
+    catch (error) { setMessage(error.message); }
+  };
+  const upload = async (event, onChange) => {
+    if (!event.target.files[0]) return;
+    const data = new FormData(); data.append('image', event.target.files[0]); setMessage('Uploadingâ€¦');
+    try { const result = await api('/api/admin/upload', { method: 'POST', body: data }); onChange(result.url); setMessage('Image uploaded. Save the page to publish it.'); }
+    catch (error) { setMessage(error.message); }
+  };
+  if (loading) return <section className="admin-page-editor"><p>Loading page settings...</p></section>;
+  return <form className="admin-page-editor" onSubmit={save}><div className="admin-page-heading"><div><small>Website Settings</small><h1>{pageName}</h1><p>Manage every editable section on this page.</p></div><a href={pageKey === 'home' ? '/' : `/${pageKey}`} target="_blank" rel="noreferrer">View page <i className="fas fa-external-link-alt" /></a></div><div className="admin-page-fields"><fieldset className="admin-section admin-seo"><legend>Search &amp; publishing</legend><label>Browser/SEO title<input name="page_title" value={page.page_title || ''} onChange={change} placeholder={`${pageName} | HosmedAI`} /></label><label>SEO description<textarea name="seo_description" rows="3" maxLength="500" value={page.seo_description || ''} onChange={change} /></label><label>Publishing status<select name="status" value={page.status || 'draft'} onChange={change}><option value="draft">Draft</option><option value="published">Published</option></select></label></fieldset><StructuredPageFields pageKey={pageKey} sections={sections} setSections={setSections} upload={upload} />{message && <p className={message.includes('saved') || message.includes('uploaded') ? 'admin-success' : 'admin-error'}>{message}</p>}<button className="admin-primary">Save all page changes</button></div></form>;
+}
+
+function PageEditor({ pageKey }) {
+  return structuredDefaults[pageKey] ? <StructuredPageEditor pageKey={pageKey} /> : <LegacyPageEditor pageKey={pageKey} />;
 }
 
 export default function AdminApp() {

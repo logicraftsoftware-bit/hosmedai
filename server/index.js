@@ -71,10 +71,13 @@ app.get('/api/admin/pages/:key', requireAdmin, async (req, res) => {
 app.put('/api/admin/pages/:key', requireAdmin, async (req, res) => {
   const key = String(req.params.key).toLowerCase().replace(/[^a-z0-9-]/g, '');
   const value = field => String(req.body[field] || '').trim();
-  const values = [key, value('page_name'), value('page_title'), value('seo_description'), value('hero_title'), value('hero_subtitle'), String(req.body.body || ''), value('image_url'), req.body.status === 'published' ? 'published' : 'draft'];
+  const sections = req.body.sections && typeof req.body.sections === 'object' && !Array.isArray(req.body.sections) ? req.body.sections : {};
+  const sectionsJson = JSON.stringify(sections);
+  if (sectionsJson.length > 750000) return res.status(413).json({ error: 'Page sections are too large.' });
+  const values = [key, value('page_name'), value('page_title'), value('seo_description'), value('hero_title'), value('hero_subtitle'), String(req.body.body || ''), value('image_url'), sectionsJson, req.body.status === 'published' ? 'published' : 'draft'];
   if (!key || !values[1]) return res.status(400).json({ error: 'Page name is required.' });
-  await pool.execute(`INSERT INTO page_settings (page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,status)
-    VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE page_name=VALUES(page_name),page_title=VALUES(page_title),seo_description=VALUES(seo_description),hero_title=VALUES(hero_title),hero_subtitle=VALUES(hero_subtitle),body=VALUES(body),image_url=VALUES(image_url),status=VALUES(status)`, values);
+  await pool.execute(`INSERT INTO page_settings (page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,sections,status)
+    VALUES (?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE page_name=VALUES(page_name),page_title=VALUES(page_title),seo_description=VALUES(seo_description),hero_title=VALUES(hero_title),hero_subtitle=VALUES(hero_subtitle),body=VALUES(body),image_url=VALUES(image_url),sections=VALUES(sections),status=VALUES(status)`, values);
   const [rows] = await pool.execute('SELECT * FROM page_settings WHERE page_key=?', [key]); res.json(rows[0]);
 });
 app.post('/api/admin/upload', requireAdmin, upload.single('image'), (req, res) => {
@@ -113,7 +116,7 @@ app.get('/api/content/:slug', async (req, res) => {
   rows[0] ? res.json(rows[0]) : res.status(404).json({ error: 'Content not found.' });
 });
 app.get('/api/pages/:key', async (req, res) => {
-  const [rows] = await pool.execute("SELECT page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,updated_at FROM page_settings WHERE page_key=? AND status='published' LIMIT 1", [req.params.key]);
+  const [rows] = await pool.execute("SELECT page_key,page_name,page_title,seo_description,hero_title,hero_subtitle,body,image_url,sections,updated_at FROM page_settings WHERE page_key=? AND status='published' LIMIT 1", [req.params.key]);
   rows[0] ? res.json(rows[0]) : res.status(404).json({ error: 'Published page settings not found.' });
 });
 app.get('/api/website-settings', async (_req, res) => {
