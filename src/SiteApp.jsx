@@ -100,13 +100,13 @@ export default function SiteApp() {
 
     if (page === pages['index.html']) {
       html = html
-        .replace('assets/images/backgrounds/slider-1-1.jpg', 'assets/images/backgrounds/slider-1-1.webp')
-        .replace('assets/images/backgrounds/slider-1-2.jpg', 'assets/images/backgrounds/slider-2.webp')
-        .replace('assets/images/backgrounds/slider-1-3.jpg', 'assets/images/backgrounds/slider-3.webp')
-        .replace('assets/images/about/about-1-1.jpg', 'assets/images/about/about-001.webp')
-        .replace('assets/images/shapes/image-logo.png', 'assets/images/shapes/image-logo-blue.webp')
-        .replace('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.webp')
-        .replace('assets/images/resources/donation-2-1.jpg', 'assets/images/resources/contact-us.webp')
+        .replaceAll('assets/images/backgrounds/slider-1-1.jpg', 'assets/images/backgrounds/slider-1-1.webp')
+        .replaceAll('assets/images/backgrounds/slider-1-2.jpg', 'assets/images/backgrounds/slider-2.webp')
+        .replaceAll('assets/images/backgrounds/slider-1-3.jpg', 'assets/images/backgrounds/slider-3.webp')
+        .replaceAll('assets/images/about/about-1-1.jpg', 'assets/images/about/about-001.webp')
+        .replaceAll('assets/images/shapes/image-logo.png', 'assets/images/shapes/image-logo-blue.webp')
+        .replaceAll('assets/images/shapes/shape-about-1-1.png', 'assets/images/shapes/shape-about-1-1-blue.webp')
+        .replaceAll('assets/images/resources/donation-2-1.jpg', 'assets/images/resources/contact-us.webp')
         .replace("Send a Gift for <br> Children's", "Send a Gift for <br> Doctor's")
         .replace('Our Core Solutions', 'Our 3 Core Solutions')
         .replace(
@@ -621,6 +621,11 @@ export default function SiteApp() {
       /<a href="team\.html">/g,
       '<a href="/team" aria-label="Meet the HosmedAI team">'
     );
+    html = html
+      .replaceAll('assets/images/logo-light.png', 'assets/images/logo-light.webp')
+      .replaceAll('assets/images/backgrounds/charity-bg-1-1.png', 'assets/images/backgrounds/charity-bg-1-1.webp')
+      .replace(/<img\b[^>]*\bsrc=(?:""|'')[^>]*>/gi, '')
+      .replace(/(<img\b[^>]*\bsrc=["'][^"']*\/shapes\/shield\.png["'])(?![^>]*\bwidth=)([^>]*>)/gi, '$1 width="24" height="24"$2');
 
     // Keep below-the-fold template images out of the critical network path.
     html = html.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"');
