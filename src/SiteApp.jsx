@@ -75,7 +75,14 @@ export default function SiteApp() {
   }, []);
 
   const markup = useMemo(() => {
-    let html = page.html;
+    // The legacy template preloader is removed here because its hide handler is
+    // registered after the window load event by the asynchronously loaded
+    // vendor scripts. On slower connections that leaves a full-screen overlay
+    // covering an otherwise rendered page indefinitely.
+    let html = page.html.replace(
+      /<div class="preloader">[\s\S]*?<\/div>\s*<\/div>\s*<!-- \/\.preloader -->/,
+      ''
+    );
 
     const navItem = (name, href, label, icon, aliases = []) => {
       const active = [name, ...aliases].includes(routeName);
@@ -644,6 +651,8 @@ export default function SiteApp() {
   }, [page, routeName, pageSettings, websiteSettings]);
 
   useEffect(() => {
+    // Defensive cleanup for cached or newly imported template markup.
+    document.querySelectorAll('.preloader').forEach(element => element.remove());
     document.title = pageSettings?.page_title || (routeName === 'about'
       ? 'About HosmedAI | Integrated Hospital Development'
       : routeName === 'contact'
