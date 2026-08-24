@@ -134,6 +134,11 @@ function applyStructuredSections(html, routeName, rawSections) {
             if (title) title.textContent = item.title || "";
             const subtitle = slide.querySelector(".main-slider-one__text");
             if (subtitle) subtitle.textContent = item.subtitle || "";
+            const button = slide.querySelector(".main-slider-one__btn > a");
+            if (button) {
+              button.textContent = item.button_text || "Explore Solutions";
+              button.href = item.button_link || "/services";
+            }
             return slide;
           }),
         );
@@ -188,6 +193,117 @@ function applyStructuredSections(html, routeName, rawSections) {
       sections.contact?.image,
       true,
     );
+    setText(
+      ".hosmed-service-showcase .hosmed-section-heading p",
+      sections.showcase?.short_title,
+    );
+    setText(
+      ".hosmed-service-showcase .hosmed-section-heading h2",
+      sections.showcase?.title,
+    );
+    const showcaseGrid = documentNode.querySelector(
+      ".hosmed-service-showcase__grid",
+    );
+    const showcaseCards = Array.isArray(sections.showcase?.cards)
+      ? sections.showcase.cards.filter((item) => item.title || item.image)
+      : [];
+    if (showcaseGrid && showcaseCards.length)
+      showcaseGrid.replaceChildren(
+        ...showcaseCards.map((item) => {
+          const article = documentNode.createElement("article");
+          const image = documentNode.createElement("img");
+          image.src = item.image || "";
+          image.alt = item.title || "";
+          const icon = documentNode.createElement("i");
+          icon.className = item.icon || "fas fa-hospital";
+          const title = documentNode.createElement("h3");
+          title.textContent = item.title || "";
+          const copy = documentNode.createElement("p");
+          copy.textContent = item.description || "";
+          const link = documentNode.createElement("a");
+          link.href = item.button_link || "#";
+          link.textContent = item.button_text || "Learn More";
+          article.append(image, icon, title, copy, link);
+          return article;
+        }),
+      );
+    setText(
+      ".hosmed-testimonials .hosmed-section-heading p",
+      sections.testimonials?.short_title,
+    );
+    setText(
+      ".hosmed-testimonials .hosmed-section-heading h2",
+      sections.testimonials?.title,
+    );
+    const testimonialItems = Array.isArray(sections.testimonials?.items)
+      ? sections.testimonials.items
+      : [];
+    documentNode
+      .querySelectorAll(".hosmed-testimonials blockquote")
+      .forEach((node, index) => {
+        const item = testimonialItems[index];
+        if (!item) return;
+        const quote = node.querySelector(":scope > p");
+        const name = node.querySelector("footer strong");
+        const role = node.querySelector("footer span");
+        if (quote) quote.textContent = item.quote || "";
+        if (name) name.textContent = item.name || "";
+        if (role) role.textContent = item.role || "";
+      });
+    setText(
+      ".hosmed-testimonials aside > strong",
+      sections.testimonials?.rating,
+    );
+    setText(
+      ".hosmed-testimonials aside > b",
+      sections.testimonials?.rating_title,
+    );
+    setText(
+      ".hosmed-testimonials aside > span",
+      sections.testimonials?.rating_text,
+    );
+    setText(
+      ".hosmed-difference__top > div:first-child > p",
+      sections.difference?.short_title,
+    );
+    setText(
+      ".hosmed-difference__top > div:first-child > h2",
+      sections.difference?.title,
+    );
+    const featureGrid = documentNode.querySelector(
+      ".hosmed-difference__features",
+    );
+    const features = Array.isArray(sections.difference?.features)
+      ? sections.difference.features
+      : [];
+    if (featureGrid && features.length)
+      featureGrid.replaceChildren(
+        ...features.map((item) => {
+          const span = documentNode.createElement("span");
+          const icon = documentNode.createElement("i");
+          icon.className = item.icon || "fas fa-check";
+          const title = documentNode.createElement("b");
+          title.textContent = item.title || "";
+          span.append(icon, title);
+          return span;
+        }),
+      );
+    setText(
+      ".hosmed-difference__cta small",
+      sections.difference?.cta_short_title,
+    );
+    setText(".hosmed-difference__cta h2", sections.difference?.cta_title);
+    const differenceButton = documentNode.querySelector(
+      ".hosmed-difference__cta a",
+    );
+    if (differenceButton) {
+      if (sections.difference?.button_text)
+        differenceButton.textContent = sections.difference.button_text;
+      if (sections.difference?.button_link)
+        differenceButton.href = sections.difference.button_link;
+    }
+    setText(".hosmed-faq__heading p", sections.faq_heading?.short_title);
+    setText(".hosmed-faq__heading h2", sections.faq_heading?.title);
     applyFaqs(sections.faqs);
   }
 

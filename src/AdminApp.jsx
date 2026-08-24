@@ -673,7 +673,35 @@ function GeneralSettings() {
 
 const structuredDefaults = {
   home: {
-    banners: [],
+    banners: [
+      {
+        image: "/assets/images/backgrounds/slider-1-1.webp",
+        short_title: "Integrated Healthcare Solutions",
+        title: "Build Better Hospitals. Run Them Smarter.",
+        subtitle:
+          "From Hospital Planning to Digital Healthcare — We Do It All. HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance, accreditation and technology together through one integrated platform.",
+        button_text: "Explore Solutions",
+        button_link: "/services",
+      },
+      {
+        image: "/assets/images/backgrounds/slider-2.webp",
+        short_title: "Plan. Build. Commission.",
+        title: "From Concept to a Fully Operational Hospital",
+        subtitle:
+          "Feasibility, planning, design, construction support, equipment, compliance, accreditation, software and operations through one integrated platform.",
+        button_text: "Explore Solutions",
+        button_link: "/services",
+      },
+      {
+        image: "/assets/images/backgrounds/slider-3.webp",
+        short_title: "Connected Digital Hospitals",
+        title: "Hospital Software & AI for Smarter Healthcare",
+        subtitle:
+          "Turn your hospital into a connected digital ecosystem. Hospital ERP • HIS • EMR • Billing • Pharmacy • Laboratory • Radiology • Inventory • HR • Finance • Analytics • AI-powered workflows.",
+        button_text: "Explore Solutions",
+        button_link: "/services",
+      },
+    ],
     service_cards: [
       {
         background_image: "/assets/images/charity/charity-1-1.jpg",
@@ -705,6 +733,82 @@ const structuredDefaults = {
       ],
     },
     contact: { image: "/assets/images/resources/contact-us.webp" },
+    showcase: {
+      short_title: "Integrated Healthcare Solutions",
+      title: "Everything Your Hospital Needs",
+      cards: [
+        {
+          image: "/assets/images/charity/charity-2-1.jpg",
+          icon: "fas fa-drafting-compass",
+          title: "Hospital Planning",
+          description:
+            "From feasibility and clinical planning to commissioning support.",
+          button_text: "Learn More",
+          button_link: "/hospital-planning",
+        },
+        {
+          image: "/assets/images/charity/charity-2-2.jpg",
+          icon: "fas fa-award",
+          title: "Quality & Accreditation",
+          description:
+            "Practical NABH and NABL systems built for lasting quality.",
+          button_text: "Learn More",
+          button_link: "/nabh-nabl",
+        },
+        {
+          image: "/assets/images/charity/charity-2-3.jpg",
+          icon: "fas fa-laptop-medical",
+          title: "Hospital Technology",
+          description: "Connected ERP, HIS, EMR and operational intelligence.",
+          button_text: "Learn More",
+          button_link: "/hospital-software",
+        },
+        {
+          image: "/assets/images/about/about-1-2.jpg",
+          icon: "fas fa-brain",
+          title: "Healthcare AI",
+          description: "Turn hospital data into faster, smarter decisions.",
+          button_text: "Learn More",
+          button_link: "/ai-healthcare",
+        },
+      ],
+    },
+    testimonials: {
+      short_title: "Client Experiences",
+      title: "What Healthcare Leaders Say",
+      items: [
+        {
+          quote:
+            "HosmedAI brought planning, compliance and technology together with a practical understanding of hospital operations.",
+          name: "Hospital Leadership Team",
+          role: "Integrated Healthcare Project",
+        },
+        {
+          quote:
+            "Their structured approach helped our team improve workflows, documentation and accreditation readiness.",
+          name: "Quality Management Team",
+          role: "NABH Readiness Programme",
+        },
+      ],
+      rating: "4.9",
+      rating_title: "Client Satisfaction",
+      rating_text: "End-to-end support",
+    },
+    difference: {
+      short_title: "Why HosmedAI",
+      title: "What Makes Us Different",
+      features: [
+        { icon: "fas fa-hospital", title: "Healthcare Focused" },
+        { icon: "fas fa-link", title: "Fully Integrated" },
+        { icon: "fas fa-user-md", title: "Expert Led" },
+        { icon: "fas fa-chart-line", title: "Outcome Driven" },
+      ],
+      cta_short_title: "Start Your Hospital Journey",
+      cta_title: "Build a Smarter, Safer and Future-Ready Hospital.",
+      button_text: "Book a Consultation",
+      button_link: "/contact",
+    },
+    faq_heading: { short_title: "FAQ", title: "Frequently Asked Questions" },
     faqs: [
       {
         question:
@@ -719,6 +823,11 @@ const structuredDefaults = {
           "Yes. We support feasibility studies, service planning, departmental planning, clinical workflows, architecture coordination, infrastructure and equipment planning from concept through commissioning.",
       },
       {
+        question: "Do you provide NABH and NABL accreditation consultancy?",
+        answer:
+          "Yes. Our team supports gap assessment, SOP development, quality systems, documentation, staff training, internal audits and accreditation readiness for NABH and NABL.",
+      },
+      {
         question: "Can HosmedAI digitise an existing hospital?",
         answer:
           "Yes. We help hospitals implement connected ERP, HIS, EMR, billing, pharmacy, laboratory, radiology, inventory, finance, analytics and AI-enabled workflows.",
@@ -728,6 +837,11 @@ const structuredDefaults = {
           "Does HosmedAI work with small hospitals as well as large healthcare groups?",
         answer:
           "Yes. Our solutions are tailored for clinics, diagnostic centres, small and mid-sized hospitals, medical colleges, specialty hospitals and multi-location healthcare groups.",
+      },
+      {
+        question: "Can we engage HosmedAI for only one specific service?",
+        answer:
+          "Yes. You can engage us for a focused requirement or use HosmedAI as an end-to-end partner across the complete hospital development and operations journey.",
       },
     ],
   },
@@ -1284,6 +1398,12 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
                 (value) => change({ subtitle: value }),
                 true,
               )}
+              {text("Button text", item.button_text, (value) =>
+                change({ button_text: value }),
+              )}
+              {text("Button link", item.button_link, (value) =>
+                change({ button_link: value }),
+              )}
             </div>
           )}
         </RepeatEditor>
@@ -1361,6 +1481,141 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
             onChange={(value) => group("contact", { image: value })}
             upload={upload}
           />
+        </fieldset>
+        <fieldset className="admin-section">
+          <legend>Service showcase</legend>
+          {text("Short title", sections.showcase?.short_title, (value) =>
+            group("showcase", { short_title: value }),
+          )}
+          {text("Title", sections.showcase?.title, (value) =>
+            group("showcase", { title: value }),
+          )}
+          <RepeatEditor
+            title="Showcase cards"
+            items={sections.showcase?.cards || []}
+            blank={{
+              image: "",
+              icon: "fas fa-hospital",
+              title: "",
+              description: "",
+              button_text: "Learn More",
+              button_link: "",
+            }}
+            onChange={(value) => group("showcase", { cards: value })}
+          >
+            {(item, _index, change) => (
+              <div className="admin-card-fields">
+                <ImageField
+                  label="Card image"
+                  value={item.image}
+                  onChange={(value) => change({ image: value })}
+                  upload={upload}
+                />
+                {text("Icon class", item.icon, (value) =>
+                  change({ icon: value }),
+                )}
+                {text("Title", item.title, (value) => change({ title: value }))}
+                {text(
+                  "Description",
+                  item.description,
+                  (value) => change({ description: value }),
+                  true,
+                )}
+                {text("Button text", item.button_text, (value) =>
+                  change({ button_text: value }),
+                )}
+                {text("Button link", item.button_link, (value) =>
+                  change({ button_link: value }),
+                )}
+              </div>
+            )}
+          </RepeatEditor>
+        </fieldset>
+        <fieldset className="admin-section">
+          <legend>Testimonials</legend>
+          {text("Short title", sections.testimonials?.short_title, (value) =>
+            group("testimonials", { short_title: value }),
+          )}
+          {text("Title", sections.testimonials?.title, (value) =>
+            group("testimonials", { title: value }),
+          )}
+          <RepeatEditor
+            title="Testimonials"
+            items={sections.testimonials?.items || []}
+            blank={{ quote: "", name: "", role: "" }}
+            onChange={(value) => group("testimonials", { items: value })}
+          >
+            {(item, _index, change) => (
+              <div className="admin-card-fields">
+                {text(
+                  "Quote",
+                  item.quote,
+                  (value) => change({ quote: value }),
+                  true,
+                )}
+                {text("Name", item.name, (value) => change({ name: value }))}
+                {text("Role / project", item.role, (value) =>
+                  change({ role: value }),
+                )}
+              </div>
+            )}
+          </RepeatEditor>
+          {text("Rating", sections.testimonials?.rating, (value) =>
+            group("testimonials", { rating: value }),
+          )}
+          {text("Rating title", sections.testimonials?.rating_title, (value) =>
+            group("testimonials", { rating_title: value }),
+          )}
+          {text("Rating text", sections.testimonials?.rating_text, (value) =>
+            group("testimonials", { rating_text: value }),
+          )}
+        </fieldset>
+        <fieldset className="admin-section">
+          <legend>What Makes Us Different</legend>
+          {text("Short title", sections.difference?.short_title, (value) =>
+            group("difference", { short_title: value }),
+          )}
+          {text("Title", sections.difference?.title, (value) =>
+            group("difference", { title: value }),
+          )}
+          <RepeatEditor
+            title="Features"
+            items={sections.difference?.features || []}
+            blank={{ icon: "fas fa-check", title: "" }}
+            onChange={(value) => group("difference", { features: value })}
+          >
+            {(item, _index, change) => (
+              <div className="admin-card-fields">
+                {text("Icon class", item.icon, (value) =>
+                  change({ icon: value }),
+                )}
+                {text("Title", item.title, (value) => change({ title: value }))}
+              </div>
+            )}
+          </RepeatEditor>
+          {text(
+            "CTA short title",
+            sections.difference?.cta_short_title,
+            (value) => group("difference", { cta_short_title: value }),
+          )}
+          {text("CTA title", sections.difference?.cta_title, (value) =>
+            group("difference", { cta_title: value }),
+          )}
+          {text("Button text", sections.difference?.button_text, (value) =>
+            group("difference", { button_text: value }),
+          )}
+          {text("Button link", sections.difference?.button_link, (value) =>
+            group("difference", { button_link: value }),
+          )}
+        </fieldset>
+        <fieldset className="admin-section">
+          <legend>FAQ heading</legend>
+          {text("Short title", sections.faq_heading?.short_title, (value) =>
+            group("faq_heading", { short_title: value }),
+          )}
+          {text("Title", sections.faq_heading?.title, (value) =>
+            group("faq_heading", { title: value }),
+          )}
         </fieldset>
         <RepeatEditor
           title="FAQs"
