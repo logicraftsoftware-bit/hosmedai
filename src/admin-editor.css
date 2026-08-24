@@ -9,6 +9,9 @@
 }
 .admin-ckeditor .ck.ck-editor {
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
 }
 .admin-ckeditor .ck.ck-toolbar {
   border-color: #cfdde2;
@@ -82,14 +85,50 @@
   margin-left: 5px;
 }
 .admin-ckeditor .ck.ck-editor__main > .ck-editor__editable {
-  min-height: 360px;
-  max-height: 650px;
+  width: 100%;
+  min-height: 440px;
+  height: 440px;
+  max-height: 440px;
   padding: 18px 24px;
   border-color: #cfdde2;
   border-radius: 0 0 10px 10px;
   box-shadow: none;
   color: #183b4e;
   line-height: 1.7;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+.admin-ckeditor .ck-editor__main,
+.admin-ckeditor .ck-source-editing-area {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 440px;
+  max-height: 440px;
+  overflow: hidden;
+  position: relative;
+}
+.admin-shell .admin-ckeditor .ck-source-editing-area textarea {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0;
+  max-height: 100%;
+  margin: 0;
+  padding: 18px 24px;
+  overflow: auto;
+  resize: none;
+  border-radius: 0 0 10px 10px;
+}
+.admin-page-fields > .admin-primary,
+.admin-editor > .admin-primary {
+  position: relative;
+  z-index: 1;
+  margin-top: 8px;
+  clear: both;
 }
 .admin-ckeditor
   .ck.ck-editor__editable.ck-focused:not(.ck-editor__nested-editable) {
@@ -122,7 +161,14 @@
 }
 @media (max-width: 600px) {
   .admin-ckeditor .ck.ck-editor__main > .ck-editor__editable {
-    min-height: 280px;
+    min-height: 320px;
+    height: 320px;
+    max-height: 320px;
     padding: 14px;
+  }
+  .admin-ckeditor .ck-editor__main,
+  .admin-ckeditor .ck-source-editing-area {
+    height: 320px;
+    max-height: 320px;
   }
 }
