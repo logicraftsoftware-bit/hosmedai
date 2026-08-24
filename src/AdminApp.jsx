@@ -6,6 +6,11 @@ const empty = {
   excerpt: "",
   body: "",
   image_url: "",
+  category: "",
+  author: "",
+  published_at: "",
+  seo_title: "",
+  seo_description: "",
   status: "draft",
 };
 const websitePages = [
@@ -2330,6 +2335,235 @@ function GalleryManager() {
   );
 }
 
+const emptyTestimonial = {
+  project_name: "",
+  client_name: "",
+  star_rating: 5,
+  review: "",
+  status: "published",
+};
+
+function TestimonialManager() {
+  const [items, setItems] = useState([]);
+  const [form, setForm] = useState(emptyTestimonial);
+  const [editing, setEditing] = useState(null);
+  const [message, setMessage] = useState("");
+  const load = () =>
+    api("/api/admin/testimonials")
+      .then(setItems)
+      .catch((error) => setMessage(error.message));
+  useEffect(() => {
+    load();
+  }, []);
+  const save = async (event) => {
+    event.preventDefault();
+    setMessage("Saving…");
+    try {
+      await api(
+        editing
+          ? `/api/admin/testimonials/${editing}`
+          : "/api/admin/testimonials",
+        {
+          method: editing ? "PUT" : "POST",
+          body: JSON.stringify(form),
+        },
+      );
+      setForm(emptyTestimonial);
+      setEditing(null);
+      setMessage("Testimonial saved.");
+      await load();
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+  const choose = (item) => {
+    setEditing(item.id);
+    setForm({
+      project_name: item.project_name,
+      client_name: item.client_name,
+      star_rating: item.star_rating,
+      review: item.review,
+      status: item.status,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const remove = async (item) => {
+    if (!confirm(`Delete testimonial from “${item.client_name}”?`)) return;
+    await api(`/api/admin/testimonials/${item.id}`, { method: "DELETE" });
+    if (editing === item.id) {
+      setEditing(null);
+      setForm(emptyTestimonial);
+    }
+    await load();
+  };
+  return (
+    <section className="admin-layout admin-content-manager">
+      <form className="admin-editor" onSubmit={save}>
+        <div className="admin-title">
+          <h1>{editing ? "Edit testimonial" : "Testimonial Entry"}</h1>
+          {editing && (
+            <button
+              type="button"
+              onClick={() => {
+                setEditing(null);
+                setForm(emptyTestimonial);
+              }}
+            >
+              New
+            </button>
+          )}
+        </div>
+        <label>
+          Project Name
+          <input
+            required
+            value={form.project_name}
+            onChange={(e) => setForm({ ...form, project_name: e.target.value })}
+          />
+        </label>
+        <label>
+          Client Name
+          <input
+            required
+            value={form.client_name}
+            onChange={(e) => setForm({ ...form, client_name: e.target.value })}
+          />
+        </label>
+        <label>
+          Star Rating
+          <select
+            value={form.star_rating}
+            onChange={(e) =>
+              setForm({ ...form, star_rating: Number(e.target.value) })
+            }
+          >
+            {[5, 4, 3, 2, 1].map((rating) => (
+              <option key={rating} value={rating}>
+                {rating} Star{rating === 1 ? "" : "s"}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Review
+          <textarea
+            required
+            rows="7"
+            value={form.review}
+            onChange={(e) => setForm({ ...form, review: e.target.value })}
+          />
+        </label>
+        <label>
+          Status
+          <select
+            value={form.status}
+            onChange={(e) => setForm({ ...form, status: e.target.value })}
+          >
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </label>
+        {message && (
+          <p
+            className={
+              message.includes("saved") ? "admin-success" : "admin-error"
+            }
+          >
+            {message}
+          </p>
+        )}
+        <button className="admin-primary">
+          {editing ? "Update testimonial" : "Add testimonial"}
+        </button>
+      </form>
+      <section className="admin-list">
+        <h2>
+          All testimonials <span>{items.length}</span>
+        </h2>
+        {!items.length && <p>No testimonials yet.</p>}
+        {items.map((item) => (
+          <article className="admin-list-text" key={item.id}>
+            <div>
+              <span className={`admin-status ${item.status}`}>
+                {item.status}
+              </span>
+              <h3>{item.client_name}</h3>
+              <small>
+                {item.project_name} · {"★".repeat(item.star_rating)}
+              </small>
+              <p>{item.review}</p>
+              <button onClick={() => choose(item)}>Edit</button>
+              <button className="admin-delete" onClick={() => remove(item)}>
+                Delete
+              </button>
+            </div>
+          </article>
+        ))}
+      </section>
+    </section>
+  );
+}
+
+function PolicyEditor({ policyKey, title }) {
+  const [body, setBody] = useState("");
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    setMessage("");
+    api(`/api/admin/policies/${policyKey}`)
+      .then((data) => setBody(data.body || ""))
+      .catch((error) => setMessage(error.message));
+  }, [policyKey]);
+  const save = async (event) => {
+    event.preventDefault();
+    setMessage("Saving…");
+    try {
+      await api(`/api/admin/policies/${policyKey}`, {
+        method: "PUT",
+        body: JSON.stringify({ body }),
+      });
+      setMessage(`${title} saved.`);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+  return (
+    <section className="admin-page-editor">
+      <div className="admin-page-heading">
+        <div>
+          <small>Content</small>
+          <h1>{title}</h1>
+          <p>Manage the content displayed on the {title.toLowerCase()} page.</p>
+        </div>
+      </div>
+      <form className="admin-page-fields" onSubmit={save}>
+        <fieldset>
+          <legend>{title} (Editor)</legend>
+          <label>
+            Page Content
+            <textarea
+              className="admin-policy-editor"
+              rows="22"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder={`Write the ${title.toLowerCase()} here…`}
+            />
+          </label>
+        </fieldset>
+        {message && (
+          <p
+            className={
+              message.includes("saved") ? "admin-success" : "admin-error"
+            }
+          >
+            {message}
+          </p>
+        )}
+        <button className="admin-primary">Save {title}</button>
+      </form>
+    </section>
+  );
+}
+
 export default function AdminApp() {
   const [user, setUser] = useState(null);
   const [checking, setChecking] = useState(true);
@@ -2417,6 +2651,13 @@ export default function AdminApp() {
       excerpt: item.excerpt || "",
       body: item.body || "",
       image_url: item.image_url || "",
+      category: item.category || "",
+      author: item.author || "",
+      published_at: item.published_at
+        ? new Date(item.published_at).toISOString().slice(0, 16)
+        : "",
+      seo_title: item.seo_title || "",
+      seo_description: item.seo_description || "",
       status: item.status,
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2476,7 +2717,7 @@ export default function AdminApp() {
     <section className="admin-layout">
       <form className="admin-editor" onSubmit={save}>
         <div className="admin-title">
-          <h1>{editing ? "Edit content" : "Create content"}</h1>
+          <h1>{editing ? "Edit blog" : "Blog Entry"}</h1>
           {editing && (
             <button
               type="button"
@@ -2524,8 +2765,32 @@ export default function AdminApp() {
             onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
           />
         </label>
+        <div className="admin-field-row">
+          <label>
+            Category
+            <input
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            />
+          </label>
+          <label>
+            Author
+            <input
+              value={form.author}
+              onChange={(e) => setForm({ ...form, author: e.target.value })}
+            />
+          </label>
+        </div>
         <label>
-          Content
+          Publish date
+          <input
+            type="datetime-local"
+            value={form.published_at}
+            onChange={(e) => setForm({ ...form, published_at: e.target.value })}
+          />
+        </label>
+        <label>
+          Blog Content (Editor)
           <textarea
             rows="10"
             value={form.body}
@@ -2543,6 +2808,27 @@ export default function AdminApp() {
           </label>
           {form.image_url && <img src={form.image_url} alt="Preview" />}
         </div>
+        <fieldset>
+          <legend>Search &amp; publishing</legend>
+          <label>
+            SEO title
+            <input
+              value={form.seo_title}
+              onChange={(e) => setForm({ ...form, seo_title: e.target.value })}
+            />
+          </label>
+          <label>
+            SEO description
+            <textarea
+              rows="3"
+              maxLength="500"
+              value={form.seo_description}
+              onChange={(e) =>
+                setForm({ ...form, seo_description: e.target.value })
+              }
+            />
+          </label>
+        </fieldset>
         <label>
           Status
           <select
@@ -2565,14 +2851,14 @@ export default function AdminApp() {
           </p>
         )}
         <button className="admin-primary">
-          {editing ? "Update content" : "Create content"}
+          {editing ? "Update blog" : "Create blog"}
         </button>
       </form>
       <section className="admin-list">
         <h2>
-          All content <span>{items.length}</span>
+          All blogs <span>{items.length}</span>
         </h2>
-        {items.length === 0 && <p>No content yet. Create your first item.</p>}
+        {items.length === 0 && <p>No blogs yet. Create your first entry.</p>}
         {items.map((item) => (
           <article key={item.id}>
             {item.image_url ? (
@@ -2586,6 +2872,11 @@ export default function AdminApp() {
               </span>
               <h3>{item.title}</h3>
               <small>/{item.slug}</small>
+              {(item.category || item.author) && (
+                <small>
+                  {[item.category, item.author].filter(Boolean).join(" · ")}
+                </small>
+              )}
               <p>{item.excerpt}</p>
               <button onClick={() => choose(item)}>Edit</button>
               <button className="admin-delete" onClick={() => remove(item)}>
@@ -2657,14 +2948,59 @@ export default function AdminApp() {
             <i className="fas fa-images" />
             <span>Gallery</span>
           </button>
+          <button
+            className={`admin-library-link ${section === "blogs" ? "active" : ""}`}
+            onClick={() => setSection("blogs")}
+          >
+            <i className="fas fa-newspaper" />
+            <span>Blog Entry</span>
+          </button>
+          <button
+            className={`admin-library-link ${section === "testimonials" ? "active" : ""}`}
+            onClick={() => setSection("testimonials")}
+          >
+            <i className="fas fa-star" />
+            <span>Testimonial Entry</span>
+          </button>
+          <button
+            className={`admin-library-link ${section === "terms" ? "active" : ""}`}
+            onClick={() => setSection("terms")}
+          >
+            <i className="fas fa-file-contract" />
+            <span>Terms &amp; Condition</span>
+          </button>
+          <button
+            className={`admin-library-link ${section === "privacy" ? "active" : ""}`}
+            onClick={() => setSection("privacy")}
+          >
+            <i className="fas fa-user-shield" />
+            <span>Privacy Policy</span>
+          </button>
+          <button
+            className={`admin-library-link ${section === "cookie" ? "active" : ""}`}
+            onClick={() => setSection("cookie")}
+          >
+            <i className="fas fa-cookie-bite" />
+            <span>Cookie Policy</span>
+          </button>
         </aside>
         <section className="admin-workspace">
           {section === "general" ? (
             <GeneralSettings />
           ) : section === "page" ? (
             <PageEditor pageKey={pageKey} />
-          ) : (
+          ) : section === "content" ? (
             <GalleryManager />
+          ) : section === "blogs" ? (
+            contentLibrary
+          ) : section === "testimonials" ? (
+            <TestimonialManager />
+          ) : section === "terms" ? (
+            <PolicyEditor policyKey="terms" title="Terms & Conditions" />
+          ) : section === "privacy" ? (
+            <PolicyEditor policyKey="privacy" title="Privacy Policy" />
+          ) : (
+            <PolicyEditor policyKey="cookie" title="Cookie Policy" />
           )}
         </section>
       </div>

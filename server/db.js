@@ -31,6 +31,22 @@ export async function ensureSchema() {
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_status_updated (status, updated_at)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  const blogColumns = {
+    category: "VARCHAR(120) NULL AFTER image_url",
+    author: "VARCHAR(160) NULL AFTER category",
+    published_at: "DATETIME NULL AFTER author",
+    seo_title: "VARCHAR(255) NULL AFTER published_at",
+    seo_description: "VARCHAR(500) NULL AFTER seo_title",
+  };
+  for (const [column, definition] of Object.entries(blogColumns)) {
+    const [columns] = await pool.query(
+      `SHOW COLUMNS FROM content_items LIKE '${column}'`,
+    );
+    if (!columns.length)
+      await pool.query(
+        `ALTER TABLE content_items ADD COLUMN ${column} ${definition}`,
+      );
+  }
   await pool.query(`CREATE TABLE IF NOT EXISTS page_settings (
     page_key VARCHAR(80) PRIMARY KEY,
     page_name VARCHAR(120) NOT NULL,
@@ -77,5 +93,22 @@ export async function ensureSchema() {
     image_url VARCHAR(500) NOT NULL,
     original_name VARCHAR(255) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS testimonials (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    project_name VARCHAR(255) NOT NULL,
+    client_name VARCHAR(255) NOT NULL,
+    star_rating TINYINT UNSIGNED NOT NULL DEFAULT 5,
+    review TEXT NOT NULL,
+    status ENUM('draft','published') NOT NULL DEFAULT 'published',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_testimonial_status (status, updated_at)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS policy_pages (
+    policy_key VARCHAR(40) PRIMARY KEY,
+    title VARCHAR(160) NOT NULL,
+    body LONGTEXT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
 }

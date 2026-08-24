@@ -295,6 +295,19 @@ function contentValues(body) {
     String(body.excerpt || ""),
     String(body.body || ""),
     String(body.image_url || ""),
+    String(body.category || "")
+      .trim()
+      .slice(0, 120),
+    String(body.author || "")
+      .trim()
+      .slice(0, 160),
+    body.published_at ? new Date(body.published_at) : null,
+    String(body.seo_title || "")
+      .trim()
+      .slice(0, 255),
+    String(body.seo_description || "")
+      .trim()
+      .slice(0, 500),
     body.status === "published" ? "published" : "draft",
   ];
 }
@@ -308,7 +321,7 @@ const contentError = (error, res) =>
 app.post("/api/admin/content", requireAdmin, async (req, res) => {
   try {
     const [result] = await pool.execute(
-      "INSERT INTO content_items (title, slug, excerpt, body, image_url, status) VALUES (?, ?, ?, ?, ?, ?)",
+      "INSERT INTO content_items (title, slug, excerpt, body, image_url, category, author, published_at, seo_title, seo_description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       contentValues(req.body),
     );
     const [rows] = await pool.execute(
@@ -323,7 +336,7 @@ app.post("/api/admin/content", requireAdmin, async (req, res) => {
 app.put("/api/admin/content/:id", requireAdmin, async (req, res) => {
   try {
     await pool.execute(
-      "UPDATE content_items SET title=?, slug=?, excerpt=?, body=?, image_url=?, status=? WHERE id=?",
+      "UPDATE content_items SET title=?, slug=?, excerpt=?, body=?, image_url=?, category=?, author=?, published_at=?, seo_title=?, seo_description=?, status=? WHERE id=?",
       [...contentValues(req.body), req.params.id],
     );
     const [rows] = await pool.execute(
@@ -343,6 +356,101 @@ app.delete("/api/admin/content/:id", requireAdmin, async (req, res) => {
     [req.params.id],
   );
   res.status(result.affectedRows ? 204 : 404).end();
+});
+
+const testimonialValues = (body) => {
+  const projectName = String(body.project_name || "").trim();
+  const clientName = String(body.client_name || "").trim();
+  const review = String(body.review || "").trim();
+  if (!projectName || !clientName || !review)
+    throw new Error("Project name, client name and review are required.");
+  return [
+    projectName.slice(0, 255),
+    clientName.slice(0, 255),
+    Math.min(5, Math.max(1, Number(body.star_rating) || 5)),
+    review,
+    body.status === "draft" ? "draft" : "published",
+  ];
+};
+app.get("/api/admin/testimonials", requireAdmin, async (_req, res) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM testimonials ORDER BY updated_at DESC, id DESC",
+  );
+  res.json(rows);
+});
+app.post("/api/admin/testimonials", requireAdmin, async (req, res) => {
+  try {
+    const [result] = await pool.execute(
+      "INSERT INTO testimonials (project_name,client_name,star_rating,review,status) VALUES (?,?,?,?,?)",
+      testimonialValues(req.body),
+    );
+    const [rows] = await pool.execute("SELECT * FROM testimonials WHERE id=?", [
+      result.insertId,
+    ]);
+    res.status(201).json(rows[0]);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+app.put("/api/admin/testimonials/:id", requireAdmin, async (req, res) => {
+  try {
+    const [result] = await pool.execute(
+      "UPDATE testimonials SET project_name=?,client_name=?,star_rating=?,review=?,status=? WHERE id=?",
+      [...testimonialValues(req.body), req.params.id],
+    );
+    if (!result.affectedRows)
+      return res.status(404).json({ error: "Testimonial not found." });
+    const [rows] = await pool.execute("SELECT * FROM testimonials WHERE id=?", [
+      req.params.id,
+    ]);
+    res.json(rows[0]);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+app.delete("/api/admin/testimonials/:id", requireAdmin, async (req, res) => {
+  const [result] = await pool.execute("DELETE FROM testimonials WHERE id=?", [
+    req.params.id,
+  ]);
+  res.status(result.affectedRows ? 204 : 404).end();
+});
+
+const policyTitles = {
+  terms: "Terms & Conditions",
+  privacy: "Privacy Policy",
+  cookie: "Cookie Policy",
+};
+app.get("/api/admin/policies/:key", requireAdmin, async (req, res) => {
+  if (!policyTitles[req.params.key])
+    return res.status(404).json({ error: "Policy not found." });
+  const [rows] = await pool.execute(
+    "SELECT * FROM policy_pages WHERE policy_key=?",
+    [req.params.key],
+  );
+  res.json(
+    rows[0] || {
+      policy_key: req.params.key,
+      title: policyTitles[req.params.key],
+      body: "",
+    },
+  );
+});
+app.put("/api/admin/policies/:key", requireAdmin, async (req, res) => {
+  const key = req.params.key;
+  if (!policyTitles[key])
+    return res.status(404).json({ error: "Policy not found." });
+  const body = String(req.body.body || "");
+  if (body.length > 750000)
+    return res.status(413).json({ error: "Policy content is too large." });
+  await pool.execute(
+    "INSERT INTO policy_pages (policy_key,title,body) VALUES (?,?,?) ON DUPLICATE KEY UPDATE title=VALUES(title),body=VALUES(body)",
+    [key, policyTitles[key], body],
+  );
+  const [rows] = await pool.execute(
+    "SELECT * FROM policy_pages WHERE policy_key=?",
+    [key],
+  );
+  res.json(rows[0]);
 });
 app.get("/api/content", async (_req, res) => {
   const [rows] = await pool.query(
