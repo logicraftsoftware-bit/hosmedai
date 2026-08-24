@@ -287,6 +287,39 @@
 .donation-one__carousel {
   margin-top: -105px !important;
 }
+.donation-one__item__image {
+  overflow: hidden;
+}
+.hosmed-gallery-popup {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: zoom-in;
+}
+.hosmed-gallery-popup i {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  background: rgba(13, 52, 79, 0.82);
+  font-size: 21px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 0.25s ease;
+}
+.donation-one__item__image:hover .hosmed-gallery-popup i,
+.hosmed-gallery-popup:focus-visible i {
+  opacity: 1;
+  transform: scale(1);
+}
+.donation-one__item__btn-group {
+  z-index: 2;
+}
 @media (max-width: 767px) {
   .about-one {
     padding-bottom: 40px !important;

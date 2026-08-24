@@ -173,6 +173,20 @@ function applyStructuredSections(html, routeName, rawSections) {
           }),
         );
     }
+    documentNode
+      .querySelectorAll(".donation-one__item__image")
+      .forEach((galleryImage) => {
+        const background = galleryImage.style.backgroundImage || "";
+        const match = background.match(/url\(["']?([^"')]+)["']?\)/i);
+        if (!match?.[1]) return;
+        const link = documentNode.createElement("a");
+        link.className = "img-popup hosmed-gallery-popup";
+        link.href = match[1];
+        link.dataset.group = "1";
+        link.setAttribute("aria-label", "Open gallery image");
+        link.innerHTML = '<i class="fas fa-search-plus"></i>';
+        galleryImage.prepend(link);
+      });
     const aboutCards = Array.isArray(sections.about?.cards)
       ? sections.about.cards
       : [];
@@ -759,7 +773,7 @@ export default function SiteApp() {
           "Send a Gift for <br> Children's",
           "Send a Gift for <br> Doctor's",
         )
-        .replace("Our Core Solutions", "Our 3 Core Solutions")
+        .replace("Our Core Solutions", "Our Gallery")
         .replace(
           "From hospital planning to digital healthcare, HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance and technology together.",
           "From Hospital Planning to Digital Healthcare — We Do It All. HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance, accreditation and technology together through one integrated platform.",
