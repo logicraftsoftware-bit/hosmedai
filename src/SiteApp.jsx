@@ -199,6 +199,44 @@ function applyStructuredSections(html, routeName, rawSections) {
         if (icon) item.prepend(icon);
       });
     });
+    const insightsCarousel = documentNode.querySelector(".blog-one__carousel");
+    if (insightsCarousel) {
+      const insightItems = Array.from(
+        insightsCarousel.querySelectorAll(".item"),
+      );
+      if (insightItems.length && insightItems.length < 4) {
+        const fourth = insightItems[insightItems.length - 1].cloneNode(true);
+        const image = fourth.querySelector(".blog-card__image img");
+        const title = fourth.querySelector(".blog-card__title a");
+        const date = fourth.querySelector(".blog-card__content__month");
+        const author = fourth.querySelector(".blog-card__content__name-title");
+        if (image) {
+          image.src = "assets/images/blog/blog-1-4.jpg";
+          image.alt = "AI and analytics for smarter hospital operations";
+        }
+        if (title)
+          title.textContent =
+            "AI and Analytics for Smarter Hospital Operations";
+        if (date) date.childNodes[0].textContent = "18 ";
+        if (author) author.textContent = "HosmedAI Editorial Team";
+        insightsCarousel.append(fourth);
+      }
+      insightsCarousel.dataset.owlOptions = JSON.stringify({
+        items: 1,
+        margin: 24,
+        loop: false,
+        smartSpeed: 700,
+        nav: false,
+        dots: true,
+        autoplay: false,
+        responsive: {
+          0: { items: 1 },
+          600: { items: 2 },
+          992: { items: 3 },
+          1400: { items: 4 },
+        },
+      });
+    }
     const aboutCards = Array.isArray(sections.about?.cards)
       ? sections.about.cards
       : [];
@@ -317,6 +355,30 @@ function applyStructuredSections(html, routeName, rawSections) {
     const testimonialItems = Array.isArray(sections.testimonials?.items)
       ? sections.testimonials.items
       : [];
+    const testimonialFallbacks = [
+      {
+        quote:
+          "Their planning team translated complex clinical requirements into clear, practical workflows for our hospital.",
+        name: "Clinical Planning Team",
+        role: "Hospital Development Project",
+      },
+      {
+        quote:
+          "The integrated approach to technology and operations gave our leadership team better visibility and control.",
+        name: "Digital Transformation Team",
+        role: "Connected Hospital Programme",
+      },
+    ];
+    const displayedTestimonials = [...testimonialItems];
+    testimonialFallbacks.forEach((item) => {
+      if (displayedTestimonials.length < 4) displayedTestimonials.push(item);
+    });
+    while (displayedTestimonials.length < 4 && testimonialItems.length)
+      displayedTestimonials.push(
+        testimonialItems[
+          displayedTestimonials.length % testimonialItems.length
+        ],
+      );
     documentNode
       .querySelectorAll(".hosmed-testimonials blockquote")
       .forEach((node, index) => {
@@ -362,11 +424,11 @@ function applyStructuredSections(html, routeName, rawSections) {
     const themeTestimonialCarousel = documentNode.querySelector(
       ".testimonials-one__carousel",
     );
-    if (themeTestimonialCarousel && testimonialItems.length) {
+    if (themeTestimonialCarousel && displayedTestimonials.length) {
       const template = themeTestimonialCarousel.querySelector(".item");
-      if (template)
+      if (template) {
         themeTestimonialCarousel.replaceChildren(
-          ...testimonialItems.map((item) => {
+          ...displayedTestimonials.slice(0, 4).map((item) => {
             const slide = template.cloneNode(true);
             const quote = slide.querySelector(".testimonials-card__text");
             const name = slide.querySelector(".testimonials-card__author-name");
@@ -379,6 +441,23 @@ function applyStructuredSections(html, routeName, rawSections) {
             return slide;
           }),
         );
+        themeTestimonialCarousel.dataset.owlOptions = JSON.stringify({
+          items: 1,
+          margin: 22,
+          loop: true,
+          smartSpeed: 800,
+          nav: false,
+          dots: true,
+          autoplay: true,
+          autoplayHoverPause: true,
+          responsive: {
+            0: { items: 1 },
+            600: { items: 2 },
+            992: { items: 3 },
+            1400: { items: 4 },
+          },
+        });
+      }
     }
     setText(".testimonials-one__rating__number", sections.testimonials?.rating);
     setText(".testimonials-one__title", sections.testimonials?.rating_title);

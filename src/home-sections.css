@@ -855,6 +855,63 @@
 .donate-now + .blog-one.section-space {
   padding-top: 48px !important;
 }
+.testimonials-one .container,
+.blog-one .container,
+.hosmed-service-showcase .container {
+  width: 100%;
+  max-width: none;
+  padding-right: clamp(24px, 4vw, 76px);
+  padding-left: clamp(24px, 4vw, 76px);
+}
+.testimonials-one .row > .col-lg-8 {
+  width: 100%;
+}
+.testimonials-one .row > .col-lg-4 {
+  display: none;
+}
+.testimonials-one__carousel .owl-stage {
+  display: flex;
+}
+.testimonials-one__carousel .owl-item,
+.testimonials-one__carousel .owl-item > .item,
+.testimonials-one__carousel .testimonials-card {
+  display: flex;
+  height: auto;
+}
+.testimonials-one__carousel .testimonials-card {
+  width: 100%;
+  flex-direction: column;
+}
+.testimonials-one__carousel .testimonials-card__top {
+  flex: 1;
+}
+.blog-one__carousel .owl-stage {
+  display: flex;
+}
+.blog-one__carousel .owl-item,
+.blog-one__carousel .owl-item > .item,
+.blog-one__carousel .blog-card {
+  display: flex;
+  height: auto;
+}
+.blog-one__carousel .blog-card {
+  width: 100%;
+  flex-direction: column;
+}
+.blog-one__carousel .blog-card__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.blog-one__carousel .blog-card__content__bottom {
+  margin-top: auto;
+}
+.hosmed-service-showcase__grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.hosmed-service-showcase article {
+  height: 100%;
+}
 @media (max-width: 1199px) {
   .hospital-journey__inner {
     grid-template-columns: 280px 1fr;
@@ -894,5 +951,21 @@
   }
   .donate-now + .blog-one.section-space {
     padding-top: 36px !important;
+  }
+}
+@media (max-width: 991px) {
+  .hosmed-service-showcase__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 575px) {
+  .testimonials-one .container,
+  .blog-one .container,
+  .hosmed-service-showcase .container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .hosmed-service-showcase__grid {
+    grid-template-columns: 1fr;
   }
 }

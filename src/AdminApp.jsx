@@ -794,6 +794,18 @@ const structuredDefaults = {
           name: "Quality Management Team",
           role: "NABH Readiness Programme",
         },
+        {
+          quote:
+            "Their planning team translated complex clinical requirements into clear, practical workflows for our hospital.",
+          name: "Clinical Planning Team",
+          role: "Hospital Development Project",
+        },
+        {
+          quote:
+            "The integrated approach to technology and operations gave our leadership team better visibility and control.",
+          name: "Digital Transformation Team",
+          role: "Connected Hospital Programme",
+        },
       ],
       rating: "4.9",
       rating_title: "Client Satisfaction",
