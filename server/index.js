@@ -11,6 +11,7 @@ import rateLimit from 'express-rate-limit';
 import multer from 'multer';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import sharp from 'sharp';
 import { ensureSchema, pool } from './db.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -27,7 +28,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static(uploadDir, { maxAge: '1d', index: false }));
 
 const upload = multer({
-  storage: multer.diskStorage({ destination: uploadDir, filename: (_req, file, done) => done(null, `${Date.now()}-${crypto.randomUUID()}${path.extname(file.originalname).toLowerCase()}`) }),
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, file, done) => done(null, ['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.mimetype))
 });
@@ -80,9 +81,13 @@ app.put('/api/admin/pages/:key', requireAdmin, async (req, res) => {
     VALUES (?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE page_name=VALUES(page_name),page_title=VALUES(page_title),seo_description=VALUES(seo_description),hero_title=VALUES(hero_title),hero_subtitle=VALUES(hero_subtitle),body=VALUES(body),image_url=VALUES(image_url),sections=VALUES(sections),status=VALUES(status)`, values);
   const [rows] = await pool.execute('SELECT * FROM page_settings WHERE page_key=?', [key]); res.json(rows[0]);
 });
-app.post('/api/admin/upload', requireAdmin, upload.single('image'), (req, res) => {
+app.post('/api/admin/upload', requireAdmin, upload.single('image'), async (req, res, next) => {
   if (!req.file) return res.status(400).json({ error: 'Choose a JPG, PNG, WebP, or GIF image under 5 MB.' });
-  res.status(201).json({ url: `/uploads/${req.file.filename}` });
+  try {
+    const filename = `${Date.now()}-${crypto.randomUUID()}.webp`;
+    await sharp(req.file.buffer, { animated: true }).rotate().webp({ quality: 82, effort: 4 }).toFile(path.join(uploadDir, filename));
+    res.status(201).json({ url: `/uploads/${filename}` });
+  } catch (error) { next(error); }
 });
 
 function contentValues(body) {

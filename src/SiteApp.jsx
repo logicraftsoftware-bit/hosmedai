@@ -722,10 +722,11 @@ export default function SiteApp() {
       .replace(/(<img\b[^>]*\bsrc=["'][^"']*\/shapes\/shield\.png["'])(?![^>]*\bwidth=)([^>]*>)/gi, '$1 width="24" height="24"$2');
 
     // Keep below-the-fold template images out of the critical network path.
-    html = html.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async"');
+    html = html.replace(/<img(?![^>]*\bloading=)/gi, '<img loading="lazy" decoding="async" fetchpriority="low"');
+    html = html.replace(/<img(?![^>]*\bfetchpriority=)/gi, '<img fetchpriority="low"');
     html = html.replace(
-      /(<header class="main-header[\s\S]*?<img) loading="lazy" decoding="async"/,
-      '$1 loading="eager" decoding="async" fetchpriority="high"'
+      /(<header class="main-header[\s\S]*?<img)([^>]*?)fetchpriority="low"/,
+      '$1$2fetchpriority="high"'
     );
 
     if (pageSettings && !['index', 'about', 'why-hosmedai', 'hospital-planning'].includes(routeName)) {

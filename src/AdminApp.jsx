@@ -192,6 +192,14 @@ export default function AdminApp() {
   const [section, setSection] = useState('general');
   const [pageKey, setPageKey] = useState('home');
 
+  useEffect(() => {
+    const optimizeImages = root => root.querySelectorAll?.('img').forEach(image => { image.loading = 'lazy'; image.fetchPriority = image.closest('header, .admin-login') ? 'high' : 'low'; });
+    optimizeImages(document);
+    const observer = new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(node => { if (node.nodeType === 1) { if (node.matches?.('img')) { node.loading = 'lazy'; node.fetchPriority = node.closest('header, .admin-login') ? 'high' : 'low'; } optimizeImages(node); } })));
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   const load = async () => setItems(await api('/api/admin/content'));
   useEffect(() => { api('/api/admin/me').then(data => { setUser(data); return load(); }).catch(() => {}).finally(() => setChecking(false)); }, []);
   const login = async event => {
