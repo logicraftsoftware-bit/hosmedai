@@ -1553,10 +1553,7 @@ export default function SiteApp() {
           /<section class="hosmed-visual-solutions">[\s\S]*?<\/section>/,
         );
         if (visualCardsMatch) {
-          const visualCards = visualCardsMatch[0].replace(
-            '<div class="hosmed-visual-solutions__grid">',
-            '<div class="hosmed-visual-solutions__controls"><button type="button" data-solution-scroll="prev" aria-label="Previous solution"><i class="fas fa-chevron-left"></i></button><button type="button" data-solution-scroll="next" aria-label="Next solution"><i class="fas fa-chevron-right"></i></button></div><div class="hosmed-visual-solutions__grid">',
-          );
+          const visualCards = visualCardsMatch[0];
           html = html.replace(visualCardsMatch[0], "");
           html = html.replace(
             "<!-- main-slider-end -->",
@@ -1897,24 +1894,6 @@ export default function SiteApp() {
       active = false;
     };
   }, [page, routeName, pageSettings]);
-
-  useEffect(() => {
-    const scrollSolutions = (event) => {
-      const button = event.target.closest("[data-solution-scroll]");
-      if (!button) return;
-      const track = button
-        .closest(".hosmed-visual-solutions")
-        ?.querySelector(".hosmed-visual-solutions__grid");
-      if (!track) return;
-      const direction = button.dataset.solutionScroll === "prev" ? -1 : 1;
-      track.scrollBy({
-        left: track.clientWidth * 0.9 * direction,
-        behavior: "smooth",
-      });
-    };
-    document.addEventListener("click", scrollSolutions);
-    return () => document.removeEventListener("click", scrollSolutions);
-  }, []);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
