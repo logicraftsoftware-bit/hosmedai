@@ -236,4 +236,120 @@ export async function ensureSchema() {
   } catch (error) {
     console.error("Optional home content seed skipped:", error.message);
   }
+
+  try {
+    const seedRows = async (countSql, insertSql, rows) => {
+      const [[count]] = await pool.query(countSql);
+      if (Number(count.total)) return;
+      for (const row of rows) await pool.execute(insertSql, row);
+    };
+
+    await seedRows(
+      "SELECT COUNT(*) AS total FROM gallery_images",
+      "INSERT INTO gallery_images (image_url, original_name) VALUES (?, ?)",
+      [
+        ["/assets/images/donations/donation-1-1.jpg", "HosmedAI gallery 1"],
+        ["/assets/images/donations/donation-1-2.jpg", "HosmedAI gallery 2"],
+        ["/assets/images/donations/donation-1-3.jpg", "HosmedAI gallery 3"],
+        ["/assets/images/donations/donation-1-4.jpg", "HosmedAI gallery 4"],
+        ["/assets/images/donations/donation-1-5.jpg", "HosmedAI gallery 5"],
+      ],
+    );
+
+    await seedRows(
+      "SELECT COUNT(*) AS total FROM testimonials",
+      "INSERT INTO testimonials (project_name, client_name, star_rating, review, status) VALUES (?, ?, ?, ?, ?)",
+      [
+        [
+          "Integrated Healthcare Project",
+          "Hospital Leadership Team",
+          5,
+          "HosmedAI brought planning, compliance and technology together with a practical understanding of hospital operations.",
+          "published",
+        ],
+        [
+          "NABH Readiness Programme",
+          "Quality Management Team",
+          5,
+          "Their structured approach helped our team improve workflows, documentation and accreditation readiness.",
+          "published",
+        ],
+        [
+          "Hospital Development Project",
+          "Clinical Planning Team",
+          5,
+          "Their planning team translated complex clinical requirements into clear, practical workflows for our hospital.",
+          "published",
+        ],
+        [
+          "Connected Hospital Programme",
+          "Digital Transformation Team",
+          5,
+          "The integrated approach to technology and operations gave our leadership team better visibility and control.",
+          "published",
+        ],
+      ],
+    );
+
+    await seedRows(
+      "SELECT COUNT(*) AS total FROM content_items",
+      "INSERT INTO content_items (title, slug, excerpt, body, image_url, category, author, published_at, seo_title, seo_description, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        [
+          "Preparing Your Hospital for NABH Accreditation",
+          "preparing-your-hospital-for-nabh-accreditation",
+          "A practical roadmap for building quality systems and accreditation readiness.",
+          "Learn how structured planning, documentation, training and internal audits prepare hospitals for NABH accreditation.",
+          "/assets/images/blog/blog-1-1.jpg",
+          "Healthcare",
+          "HosmedAI Editorial Team",
+          "2026-08-26 09:00:00",
+          "Preparing Your Hospital for NABH Accreditation",
+          "A practical NABH accreditation readiness guide for hospitals.",
+          "published",
+        ],
+        [
+          "Building a Connected Hospital with ERP, HIS and AI",
+          "building-a-connected-hospital-with-erp-his-and-ai",
+          "Connect hospital workflows, teams and decisions through one digital ecosystem.",
+          "Explore how ERP, HIS, EMR and AI can work together to improve visibility, efficiency and patient care.",
+          "/assets/images/blog/blog-1-2.jpg",
+          "Healthcare",
+          "HosmedAI Editorial Team",
+          "2026-03-27 09:00:00",
+          "Building a Connected Hospital with ERP, HIS and AI",
+          "How integrated hospital technology supports smarter healthcare operations.",
+          "published",
+        ],
+        [
+          "Planning Future-Ready Hospitals",
+          "planning-future-ready-hospitals",
+          "Design hospital infrastructure and workflows for safety, efficiency and growth.",
+          "Future-ready hospitals begin with coordinated clinical planning, infrastructure, equipment and operational workflows.",
+          "/assets/images/blog/blog-1-3.jpg",
+          "Hospital Planning",
+          "HosmedAI Editorial Team",
+          "2026-06-03 09:00:00",
+          "Planning Future-Ready Hospitals",
+          "Key principles for planning efficient and scalable hospitals.",
+          "published",
+        ],
+        [
+          "AI and Analytics for Smarter Hospital Operations",
+          "ai-and-analytics-for-smarter-hospital-operations",
+          "Turn hospital data into timely operational intelligence and better decisions.",
+          "Discover how dashboards, analytics and purposeful AI help healthcare leaders improve hospital performance.",
+          "/assets/images/blog/blog-1-4.jpg",
+          "Healthcare AI",
+          "HosmedAI Editorial Team",
+          "2026-07-18 09:00:00",
+          "AI and Analytics for Smarter Hospital Operations",
+          "Using healthcare AI and analytics to improve hospital operations.",
+          "published",
+        ],
+      ],
+    );
+  } catch (error) {
+    console.error("Fallback home content seed skipped:", error.message);
+  }
 }
