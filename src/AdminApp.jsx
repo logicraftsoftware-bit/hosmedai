@@ -38,13 +38,97 @@ async function api(url, options = {}) {
   return response.status === 204 ? null : response.json();
 }
 
+const fillMissing = (defaults, saved) =>
+  Object.fromEntries(
+    Object.entries({ ...defaults, ...(saved || {}) }).map(([key, value]) => [
+      key,
+      value === "" ||
+      value === null ||
+      value === undefined ||
+      (Array.isArray(value) && !value.length)
+        ? defaults[key]
+        : value,
+    ]),
+  );
+const fillMissingDeep = (defaults, saved) => {
+  if (!defaults || typeof defaults !== "object" || Array.isArray(defaults))
+    return saved === "" ||
+      saved === null ||
+      saved === undefined ||
+      (Array.isArray(saved) && !saved.length)
+      ? defaults
+      : saved;
+  return Object.fromEntries(
+    Object.keys({ ...defaults, ...(saved || {}) }).map((key) => [
+      key,
+      fillMissingDeep(defaults[key], saved?.[key]),
+    ]),
+  );
+};
+
+const pageMetadataDefaults = {
+  home: {
+    page_title: "HosmedAI | Integrated Healthcare Solutions",
+    seo_description:
+      "HosmedAI delivers integrated hospital planning, accreditation, software and AI solutions.",
+  },
+  about: {
+    page_title: "About HosmedAI | Smarter Hospitals, Better Care",
+    seo_description:
+      "Learn how HosmedAI combines healthcare expertise, management consulting and technology.",
+  },
+  "why-hosmedai": {
+    page_title: "Why HosmedAI | One Integrated Healthcare Ecosystem",
+    seo_description:
+      "Discover why healthcare organisations choose HosmedAI for end-to-end expertise and long-term partnership.",
+  },
+  "hospital-planning": {
+    page_title: "Hospital Planning and Design | HosmedAI",
+    seo_description:
+      "Plan efficient, compliant and future-ready hospitals with HosmedAI.",
+  },
+  "nabh-nabl": {
+    page_title: "NABH and NABL Accreditation Consultancy | HosmedAI",
+    seo_description:
+      "Build quality-driven, patient-centric and accreditation-ready healthcare systems.",
+  },
+  "hospital-software": {
+    page_title: "Hospital Software, HIS and ERP | HosmedAI",
+    seo_description:
+      "Connect every critical hospital function through one intelligent digital ecosystem.",
+  },
+  "ai-healthcare": {
+    page_title: "AI for Healthcare and Hospital Analytics | HosmedAI",
+    seo_description:
+      "Transform hospital data into operational intelligence and better decisions.",
+  },
+  solutions: {
+    page_title: "Integrated Hospital Solutions | HosmedAI",
+    seo_description:
+      "End-to-end solutions for hospital planning, projects, accreditation, operations, software and AI.",
+  },
+  projects: {
+    page_title: "Healthcare Projects | HosmedAI",
+    seo_description:
+      "Explore HosmedAI healthcare planning, design and consultancy projects.",
+    hero_title: "Projects That Shape Better Healthcare.",
+    hero_subtitle: "From Vision to Reality.",
+    body: "Every healthcare project has a unique vision, challenge and story. HosmedAI brings planning, clinical expertise, technology and execution support together to turn that vision into reality.",
+  },
+  contact: {
+    page_title: "Contact HosmedAI | Build Better Healthcare Together",
+    seo_description:
+      "Contact HosmedAI for hospital planning, accreditation, software and healthcare AI solutions.",
+  },
+};
+
 function GeneralSettings() {
   const blank = {
-    header_logo: "",
-    footer_logo: "",
-    email: "",
-    phones: [""],
-    address: "",
+    header_logo: "/assets/images/hosmed-ai-logo.png",
+    footer_logo: "/assets/images/footer_logo.png",
+    email: "hello@hosmedai.com",
+    phones: ["+91 3800 8060", "+91 9555 0114"],
+    address: "Healthcare Solutions\nIndia",
     social_links: [{ icon: "fab fa-facebook-f", link: "" }],
   };
   const [settings, setSettings] = useState(blank);
@@ -52,13 +136,7 @@ function GeneralSettings() {
   useEffect(() => {
     api("/api/admin/website-settings")
       .then((data) => {
-        if (data)
-          setSettings({
-            ...blank,
-            ...data,
-            phones: data.phones || [""],
-            social_links: data.social_links || blank.social_links,
-          });
+        if (data) setSettings(fillMissing(blank, data));
       })
       .catch((error) => setMessage(error.message));
   }, []);
@@ -295,54 +373,439 @@ function GeneralSettings() {
 const structuredDefaults = {
   home: {
     banners: [],
-    service_cards: [],
+    service_cards: [
+      {
+        background_image: "/assets/images/charity/charity-1-1.jpg",
+        short_title: "Plan Better",
+        title: "Hospital Planning & Design",
+        button_link: "/hospital-planning",
+      },
+      {
+        background_image: "/assets/images/charity/charity-1-2.jpg",
+        short_title: "Build Quality",
+        title: "NABH / NABL Compliance",
+        button_link: "/nabh-nabl",
+      },
+      {
+        background_image: "/assets/images/charity/charity-1-3.jpg",
+        short_title: "Transform Digitally",
+        title: "Hospital Software & AI",
+        button_link: "/hospital-software",
+      },
+    ],
     about: {
-      title: "",
-      description: "",
-      image: "",
+      title: "From Hospital Planning to Digital Healthcare — We Do It All.",
+      description:
+        "HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance, accreditation and technology together through one integrated platform.",
+      image: "/assets/images/about/about-001.webp",
       cards: [
         { title: "", description: "" },
         { title: "", description: "" },
       ],
     },
-    contact: { image: "" },
-    faqs: [],
+    contact: { image: "/assets/images/resources/contact-us.webp" },
+    faqs: [
+      {
+        question:
+          "How does HosmedAI support a hospital from planning to operations?",
+        answer:
+          "HosmedAI works as one integrated healthcare partner across feasibility, clinical planning, architecture, equipment, accreditation, hospital software and operational support.",
+      },
+      {
+        question:
+          "Can HosmedAI help us plan a new hospital from the concept stage?",
+        answer:
+          "Yes. We support feasibility studies, service planning, departmental planning, clinical workflows, architecture coordination, infrastructure and equipment planning from concept through commissioning.",
+      },
+      {
+        question: "Can HosmedAI digitise an existing hospital?",
+        answer:
+          "Yes. We help hospitals implement connected ERP, HIS, EMR, billing, pharmacy, laboratory, radiology, inventory, finance, analytics and AI-enabled workflows.",
+      },
+      {
+        question:
+          "Does HosmedAI work with small hospitals as well as large healthcare groups?",
+        answer:
+          "Yes. Our solutions are tailored for clinics, diagnostic centres, small and mid-sized hospitals, medical colleges, specialty hospitals and multi-location healthcare groups.",
+      },
+    ],
   },
   about: {
-    banner: { image: "", title: "", description: "" },
-    vision: { heading: "", small_heading: "", description: "" },
-    mission: { heading: "", small_heading: "", description: "" },
-    what_we_do: { heading: "", subheading: "", cards: [] },
+    banner: {
+      image: "",
+      title: "We Understand Hospitals Because We Understand Healthcare.",
+      description:
+        "HosmedAI brings hospital planning, design, compliance, accreditation, technology and operations together through one integrated healthcare platform.",
+    },
+    vision: {
+      heading: "HosmedAI was created with a simple vision:",
+      small_heading: "Our Vision",
+      description:
+        "Healthcare organisations often work with multiple consultants for planning, architecture, compliance, accreditation, technology and operations. HosmedAI brings these capabilities together.",
+    },
+    mission: {
+      heading: "Healthcare First. Technology With Purpose. Quality By Design.",
+      small_heading: "Our Philosophy",
+      description:
+        "We believe the best hospitals are created when clinical expertise, engineering, management, compliance and technology work together.",
+    },
+    what_we_do: {
+      heading: "Everything Required to Plan, Build and Run Better Hospitals.",
+      subheading:
+        "One coordinated team connects every stage of hospital development, reducing complexity and helping healthcare organisations make better decisions.",
+      cards: [
+        {
+          icon: "fas fa-drafting-compass",
+          title: "Hospital Planning",
+          description:
+            "Feasibility, clinical planning, architecture, infrastructure and equipment planning.",
+        },
+        {
+          icon: "fas fa-award",
+          title: "Quality & Accreditation",
+          description:
+            "NABH, NABL, quality systems, SOPs, documentation, training and audit readiness.",
+        },
+        {
+          icon: "fas fa-laptop-medical",
+          title: "Hospital Technology",
+          description:
+            "ERP, HIS, EMR, analytics, connected workflows and purposeful healthcare AI.",
+        },
+        {
+          icon: "fas fa-hospital-user",
+          title: "Hospital Operations",
+          description:
+            "Operational planning, process design, performance improvement and ongoing support.",
+        },
+        {
+          icon: "fas fa-shield-alt",
+          title: "Compliance & Legal",
+          description:
+            "Regulatory approvals, policies, legal compliance and risk management.",
+        },
+        {
+          icon: "fas fa-headset",
+          title: "Training & Support",
+          description:
+            "Staff training, change management and continuous operational support.",
+        },
+      ],
+    },
     faqs: [],
   },
   "why-hosmedai": {
-    hero: { title: "", subtitle: "", description: "" },
-    cards: [],
+    hero: {
+      title: "Why Choose HosmedAI?",
+      subtitle: "One Ecosystem. Multiple Capabilities.",
+      description:
+        "We bring together healthcare expertise, management consulting and technology to deliver better hospitals and better outcomes.",
+    },
+    cards: [
+      {
+        icon: "fas fa-route",
+        title: "End-to-End Expertise",
+        description: "From hospital concept to digital operations.",
+      },
+      {
+        icon: "fas fa-heartbeat",
+        title: "Healthcare-Focused",
+        description:
+          "Solutions designed specifically around healthcare workflows.",
+      },
+      {
+        icon: "fas fa-puzzle-piece",
+        title: "Integrated Approach",
+        description:
+          "Planning, compliance and technology designed to work together.",
+      },
+      {
+        icon: "fas fa-microchip",
+        title: "Technology Driven",
+        description:
+          "Modern hospital management powered by cloud technology and AI.",
+      },
+      {
+        icon: "fas fa-chart-line",
+        title: "Scalable",
+        description:
+          "Designed for clinics, nursing homes, diagnostic centres and multi-specialty hospitals.",
+      },
+      {
+        icon: "fas fa-handshake",
+        title: "Long-Term Partnership",
+        description: "We help you build and evolve beyond implementation.",
+      },
+    ],
   },
   "hospital-planning": {
-    hero: { title: "", subtitle: "", description: "" },
-    what_we_do: { cards: [] },
+    hero: {
+      title: "Your Hospital Starts With the Right Plan.",
+      subtitle:
+        "Design for Patients. Plan for Efficiency. Build for the Future.",
+      description:
+        "A successful hospital is a carefully engineered healthcare ecosystem where patients, doctors, nurses, technology, equipment and information move efficiently.",
+    },
+    what_we_do: {
+      cards: [
+        {
+          icon: "fas fa-file-medical-alt",
+          title: "Hospital feasibility studies",
+          description:
+            "Evaluate opportunities, risks and viability to ensure the right start.",
+        },
+        {
+          icon: "fas fa-chart-line",
+          title: "Business & project planning",
+          description:
+            "Comprehensive business models and project roadmaps for success.",
+        },
+        {
+          icon: "fas fa-bed",
+          title: "Bed-capacity planning",
+          description:
+            "Optimal bed mix and capacity planning for current and future demand.",
+        },
+        {
+          icon: "fas fa-stethoscope",
+          title: "Clinical department planning",
+          description: "Designing efficient, connected clinical departments.",
+        },
+        {
+          icon: "fas fa-hospital",
+          title: "Hospital master planning",
+          description:
+            "Strategic master plans that align growth, infrastructure and vision.",
+        },
+        {
+          icon: "fas fa-ruler-combined",
+          title: "Architectural planning",
+          description:
+            "Functional, aesthetic and sustainable architectural designs.",
+        },
+        {
+          icon: "fas fa-project-diagram",
+          title: "Functional & workflow planning",
+          description:
+            "Smart workflows that improve efficiency and patient experience.",
+        },
+        {
+          icon: "fas fa-procedures",
+          title: "OT & ICU planning",
+          description:
+            "Specialized planning for OT suites, ICU and critical care areas.",
+        },
+        {
+          icon: "fas fa-ambulance",
+          title: "Emergency department planning",
+          description:
+            "Designing high-performance emergency departments for faster care.",
+        },
+        {
+          icon: "fas fa-user-md",
+          title: "OPD planning",
+          description:
+            "Patient-friendly OPD layouts that reduce wait times and crowding.",
+        },
+        {
+          icon: "fas fa-microscope",
+          title: "Diagnostic department planning",
+          description:
+            "Efficient layouts for labs, radiology and advanced diagnostics.",
+        },
+        {
+          icon: "fas fa-clipboard-list",
+          title: "Equipment planning",
+          description: "Right equipment, right quantity and right placement.",
+        },
+      ],
+    },
   },
   "nabh-nabl": {
-    hero: { title: "", subtitle: "", description: "" },
+    hero: {
+      title: "Accreditation Is More Than a Certificate.",
+      subtitle: "It’s a Culture of Quality.",
+      description:
+        "HosmedAI helps hospitals and diagnostic laboratories build systems that are quality-driven, patient-centric and accreditation-ready.",
+    },
     page_content: "",
   },
   "hospital-software": {
-    hero: { title: "", subtitle: "", description: "" },
+    hero: {
+      title: "Your Hospital. One Intelligent Digital Ecosystem.",
+      subtitle: "Replace Fragmented Systems With One Connected Platform.",
+      description:
+        "HosmedAI Hospital Software is designed to connect the critical functions of a modern hospital through a single digital ecosystem.",
+    },
     page_content: "",
-    core_modules: [],
+    core_modules: [
+      {
+        icon: "fas fa-user-injured",
+        title: "Patient Management",
+        points: "Registration, Appointment, OPD, IPD, Emergency, Discharge",
+      },
+      {
+        icon: "fas fa-stethoscope",
+        title: "Clinical",
+        points:
+          "EMR, Doctor Dashboard, Nursing, OT Management, ICU, Clinical Documentation",
+      },
+      {
+        icon: "fas fa-flask",
+        title: "Diagnostics",
+        points: "Laboratory, Radiology, PACS Integration, Pathology, Reporting",
+      },
+      {
+        icon: "fas fa-cogs",
+        title: "Hospital Operations",
+        points:
+          "Pharmacy, Inventory, Purchase, Stores, Biomedical Equipment, Housekeeping",
+      },
+      {
+        icon: "fas fa-chart-bar",
+        title: "Business",
+        points: "Billing, Insurance, TPA, Finance, HR & Payroll, MIS",
+      },
+    ],
   },
   "ai-healthcare": {
-    hero: { title: "", subtitle: "", description: "" },
+    hero: {
+      title: "Intelligence Behind Every Hospital Decision.",
+      subtitle: "The Future of Hospital Management Is Intelligent.",
+      description:
+        "HosmedAI combines hospital data, workflows and artificial intelligence to help healthcare organisations operate more efficiently.",
+    },
     page_content: "",
-    possibilities: [],
+    possibilities: [
+      {
+        icon: "fas fa-tachometer-alt",
+        title: "Management Dashboards",
+        description:
+          "Real-time overview of key hospital metrics in one intelligent dashboard.",
+      },
+      {
+        icon: "fas fa-chart-pie",
+        title: "Operational Analytics",
+        description:
+          "Deep insights into daily operations to improve efficiency and outcomes.",
+      },
+      {
+        icon: "fas fa-chart-line",
+        title: "Predictive Insights",
+        description:
+          "AI models predict trends and help you stay ahead of challenges.",
+      },
+      {
+        icon: "fas fa-file-medical-alt",
+        title: "Automated Reporting",
+        description:
+          "Reduce manual work with smart, automated and accurate reports.",
+      },
+      {
+        icon: "fas fa-project-diagram",
+        title: "Workflow Optimisation",
+        description:
+          "Identify bottlenecks and optimise processes across departments.",
+      },
+      {
+        icon: "fas fa-rupee-sign",
+        title: "Revenue Intelligence",
+        description:
+          "Track performance, detect opportunities and improve financial outcomes.",
+      },
+      {
+        icon: "fas fa-users-cog",
+        title: "Resource Utilisation",
+        description:
+          "Optimise the use of beds, staff, OT, equipment and other resources.",
+      },
+      {
+        icon: "fas fa-procedures",
+        title: "Patient-Flow Analytics",
+        description:
+          "Monitor patient journeys and improve flow from admission to discharge.",
+      },
+      {
+        icon: "fas fa-shield-alt",
+        title: "Quality Monitoring",
+        description:
+          "Track quality indicators and ensure compliance with standards.",
+      },
+      {
+        icon: "fas fa-brain",
+        title: "Decision-Support Tools",
+        description:
+          "AI-driven recommendations to support smarter clinical and operational decisions.",
+      },
+    ],
   },
   solutions: {
-    hero: { title: "", subtitle: "", description: "" },
+    hero: {
+      title: "Solutions for Every Stage of Your Healthcare Journey.",
+      subtitle: "Our Solutions",
+      description:
+        "From planning to operations, our complete end-to-end solutions help you build smarter, compliant and future-ready hospitals.",
+    },
     page_content: "",
-    what_we_serve: [],
+    what_we_serve: [
+      {
+        icon: "fas fa-hospital",
+        short_title: "STARTING A HOSPITAL?",
+        title: "Hospital Planning & Design",
+        description:
+          "Feasibility studies, architectural master planning, clinical layouts, equipment planning and functional design.",
+        button_link: "/contact",
+      },
+      {
+        icon: "fas fa-users-cog",
+        short_title: "BUILDING A HOSPITAL?",
+        title: "Project & Clinical Consultancy",
+        description:
+          "End-to-end project management, clinical workflow planning, vendor coordination and quality assurance.",
+        button_link: "/contact",
+      },
+      {
+        icon: "fas fa-award",
+        short_title: "SEEKING ACCREDITATION?",
+        title: "NABH / NABL Consultancy",
+        description:
+          "Complete support for NABH, NABL accreditation, documentation, training and compliance readiness.",
+        button_link: "/contact",
+      },
+      {
+        icon: "fas fa-cogs",
+        short_title: "RUNNING A HOSPITAL?",
+        title: "Hospital Management Solutions",
+        description:
+          "Operations management, HR, finance, supply chain, patient experience and performance improvement.",
+        button_link: "/contact",
+      },
+      {
+        icon: "fas fa-desktop",
+        short_title: "DIGITISING YOUR HOSPITAL?",
+        title: "Hospital ERP / HIS",
+        description:
+          "Integrated Hospital Information Systems, EMR, billing, inventory, pharmacy and reporting.",
+        button_link: "/contact",
+      },
+      {
+        icon: "fas fa-brain",
+        short_title: "WANT SMARTER OPERATIONS?",
+        title: "AI & Healthcare Analytics",
+        description:
+          "AI-powered insights, predictive analytics, dashboards and decision support for better outcomes.",
+        button_link: "/contact",
+      },
+    ],
   },
-  contact: { hero: { title: "", description: "" }, page_content: "" },
+  contact: {
+    hero: {
+      title: "Let’s Build Better Healthcare Together.",
+      description:
+        "Whether you are planning a new hospital, improving an existing facility or exploring digital healthcare solutions, our team is ready to help.",
+    },
+    page_content: "",
+  },
 };
 
 const parseSections = (pageKey, value) => {
@@ -355,10 +818,10 @@ const parseSections = (pageKey, value) => {
     }
   }
   const defaults = structuredDefaults[pageKey] || {};
-  return {
-    ...defaults,
-    ...(parsed && typeof parsed === "object" ? parsed : {}),
-  };
+  return fillMissingDeep(
+    defaults,
+    parsed && typeof parsed === "object" ? parsed : {},
+  );
 };
 
 const sectionsFromPage = (pageKey, page = {}) => {
@@ -831,13 +1294,14 @@ function LegacyPageEditor({ pageKey }) {
     websitePages.find(([key]) => key === pageKey)?.[1] || pageKey;
   const blank = {
     page_name: pageName,
-    page_title: "",
-    seo_description: "",
-    hero_title: "",
-    hero_subtitle: "",
-    body: "",
+    ...(pageMetadataDefaults[pageKey] || {}),
+    page_title: pageMetadataDefaults[pageKey]?.page_title || "",
+    seo_description: pageMetadataDefaults[pageKey]?.seo_description || "",
+    hero_title: pageMetadataDefaults[pageKey]?.hero_title || "",
+    hero_subtitle: pageMetadataDefaults[pageKey]?.hero_subtitle || "",
+    body: pageMetadataDefaults[pageKey]?.body || "",
     image_url: "",
-    status: "draft",
+    status: "published",
   };
   const [page, setPage] = useState(blank);
   const [sections, setSections] = useState(parseSections(pageKey, {}));
@@ -848,7 +1312,7 @@ function LegacyPageEditor({ pageKey }) {
     setMessage("");
     api(`/api/admin/pages/${pageKey}`)
       .then((data) => {
-        const next = data || blank;
+        const next = fillMissing(blank, data);
         setPage(next);
         setSections(parseSections(pageKey, next.sections));
       })
@@ -1022,9 +1486,9 @@ function StructuredPageEditor({ pageKey }) {
     websitePages.find(([key]) => key === pageKey)?.[1] || pageKey;
   const blank = {
     page_name: pageName,
-    page_title: "",
-    seo_description: "",
-    status: "draft",
+    page_title: pageMetadataDefaults[pageKey]?.page_title || "",
+    seo_description: pageMetadataDefaults[pageKey]?.seo_description || "",
+    status: "published",
   };
   const [page, setPage] = useState(blank);
   const [sections, setSections] = useState(parseSections(pageKey, {}));
@@ -1035,7 +1499,7 @@ function StructuredPageEditor({ pageKey }) {
     setMessage("");
     api(`/api/admin/pages/${pageKey}`)
       .then((data) => {
-        const next = data || blank;
+        const next = fillMissing(blank, data);
         setPage(next);
         setSections(sectionsFromPage(pageKey, next));
       })
