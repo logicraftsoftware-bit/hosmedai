@@ -452,6 +452,22 @@ app.put("/api/admin/policies/:key", requireAdmin, async (req, res) => {
   );
   res.json(rows[0]);
 });
+app.get("/api/policies/:key", async (req, res) => {
+  if (!policyTitles[req.params.key])
+    return res.status(404).json({ error: "Policy not found." });
+  const [rows] = await pool.execute(
+    "SELECT policy_key,title,body,updated_at FROM policy_pages WHERE policy_key=? LIMIT 1",
+    [req.params.key],
+  );
+  res.json(
+    rows[0] || {
+      policy_key: req.params.key,
+      title: policyTitles[req.params.key],
+      body: "",
+      updated_at: null,
+    },
+  );
+});
 app.get("/api/content", async (_req, res) => {
   const [rows] = await pool.query(
     "SELECT id,title,slug,excerpt,body,image_url,updated_at FROM content_items WHERE status='published' ORDER BY updated_at DESC",

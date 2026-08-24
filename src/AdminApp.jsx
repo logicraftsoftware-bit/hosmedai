@@ -418,9 +418,9 @@ function GeneralSettings() {
         "Stay updated with our latest news, insights and healthcare solutions.",
       copyright: "© 2026 HosmedAI. All Rights Reserved.",
       policy_links: [
-        { label: "Privacy Policy", link: "#" },
-        { label: "Terms of Use", link: "#" },
-        { label: "Cookie Policy", link: "#" },
+        { label: "Privacy Policy", link: "/privacy-policy" },
+        { label: "Terms & Conditions", link: "/terms-and-conditions" },
+        { label: "Cookie Policy", link: "/cookie-policy" },
       ],
     },
   };

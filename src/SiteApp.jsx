@@ -3,6 +3,7 @@ import pages from "./pages.runtime.generated.js";
 import "./cms-page.css";
 import "./home-sections.css";
 import "./home-carousel.css";
+import "./policy-page.css";
 
 const scripts = [
   "/assets/vendors/jquery/jquery-3.7.1.min.js",
@@ -764,10 +765,17 @@ function applyStructuredSections(html, routeName, rawSections) {
 export default function SiteApp() {
   const [pageSettings, setPageSettings] = useState(null);
   const [websiteSettings, setWebsiteSettings] = useState(null);
+  const [policyPage, setPolicyPage] = useState(null);
   const routeName = useMemo(() => {
     const route = location.pathname.split("/").filter(Boolean).pop() || "index";
     return route.replace(/\.html$/i, "");
   }, []);
+  const policyRoutes = {
+    "terms-and-conditions": "terms",
+    "privacy-policy": "privacy",
+    "cookie-policy": "cookie",
+  };
+  const policyKey = policyRoutes[routeName] || null;
 
   const page = useMemo(() => {
     const requested = `${routeName}.html`;
@@ -781,8 +789,29 @@ export default function SiteApp() {
     if (routeName === "hospital-software") return pages["about.html"];
     if (routeName === "nabh-nabl") return pages["about.html"];
     if (routeName === "hospital-planning") return pages["about.html"];
+    if (policyKey) return pages["about.html"];
     return pages[requested] || pages["404.html"] || pages["index.html"];
-  }, [routeName]);
+  }, [routeName, policyKey]);
+
+  useEffect(() => {
+    if (!policyKey) {
+      setPolicyPage(null);
+      return;
+    }
+    let active = true;
+    setPolicyPage(null);
+    fetch(`/api/policies/${policyKey}`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (active) setPolicyPage(data || { title: "Policy", body: "" });
+      })
+      .catch(() => {
+        if (active) setPolicyPage({ title: "Policy", body: "" });
+      });
+    return () => {
+      active = false;
+    };
+  }, [policyKey]);
 
   useEffect(() => {
     const pageKey =
@@ -1838,7 +1867,7 @@ export default function SiteApp() {
           <form action="#"><input type="email" aria-label="Email Address" placeholder="Email Address" required><button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button></form>
         </div>
       </div>
-      <div class="hosmed-footer__bottom"><div class="container"><p><i class="fas fa-shield-alt"></i> © 2026 HosmedAI. All Rights Reserved.</p><nav><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Cookie Policy</a></nav></div></div>
+      <div class="hosmed-footer__bottom"><div class="container"><p><i class="fas fa-shield-alt"></i> © 2026 HosmedAI. All Rights Reserved.</p><nav><a href="/privacy-policy">Privacy Policy</a><a href="/terms-and-conditions">Terms &amp; Conditions</a><a href="/cookie-policy">Cookie Policy</a></nav></div></div>
     </footer>`;
 
     html = html.replace(
@@ -1991,15 +2020,56 @@ export default function SiteApp() {
           /(<div class="hosmed-footer__bottom">[\s\S]*?<nav>)[\s\S]*?(<\/nav>)/,
           `$1${footerSettings.policy_links
             .filter((item) => item?.label && item?.link)
-            .map(
-              (item) => `<a href="${safe(item.link)}">${safe(item.label)}</a>`,
-            )
+            .map((item) => {
+              const fallback = /privacy/i.test(item.label)
+                ? "/privacy-policy"
+                : /terms/i.test(item.label)
+                  ? "/terms-and-conditions"
+                  : /cookie/i.test(item.label)
+                    ? "/cookie-policy"
+                    : "#";
+              const link =
+                item.link && item.link !== "#" ? item.link : fallback;
+              return `<a href="${safe(link)}">${safe(item.label)}</a>`;
+            })
             .join("")}$2`,
         );
     }
 
     if (pageSettings?.sections)
       html = applyStructuredSections(html, routeName, pageSettings.sections);
+
+    if (policyKey) {
+      const title = escapeValue(policyPage?.title || "Loading…");
+      const source = String(policyPage?.body || "");
+      const policyDocument = new DOMParser().parseFromString(
+        source,
+        "text/html",
+      );
+      policyDocument
+        .querySelectorAll("script,style,iframe,object,embed")
+        .forEach((node) => node.remove());
+      policyDocument.querySelectorAll("*").forEach((node) => {
+        [...node.attributes].forEach((attribute) => {
+          if (
+            /^on/i.test(attribute.name) ||
+            (/^(href|src)$/i.test(attribute.name) &&
+              /^javascript:/i.test(attribute.value.trim()))
+          )
+            node.removeAttribute(attribute.name);
+        });
+      });
+      const content =
+        policyDocument.body.innerHTML ||
+        (policyPage
+          ? '<p class="hosmed-policy__empty">Content will be available soon.</p>'
+          : '<p class="hosmed-policy__empty">Loading content…</p>');
+      const policyMarkup = `<main class="hosmed-policy"><section class="hosmed-policy__hero"><div class="container"><p><i class="fas fa-shield-alt"></i> Legal Information</p><h1>${title}</h1><nav aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span>${title}</span></nav></div></section><section class="hosmed-policy__content"><div class="container"><article>${content}</article></div></section></main>`;
+      html = html.replace(
+        /(<\/header>)[\s\S]*?(?=<footer class=)/,
+        `$1${policyMarkup}`,
+      );
+    }
 
     html = html.replace(/\$/g, "₹");
     html = html.replace(/href=(['"])contact\.html\1/gi, 'href="/contact"');
@@ -2071,34 +2141,35 @@ export default function SiteApp() {
         return `href=${quote}${path}${hash}${quote}`;
       },
     );
-  }, [page, routeName, pageSettings, websiteSettings]);
+  }, [page, routeName, pageSettings, websiteSettings, policyKey, policyPage]);
 
   useEffect(() => {
     // Defensive cleanup for cached or newly imported template markup.
     document
       .querySelectorAll(".preloader")
       .forEach((element) => element.remove());
-    document.title =
-      pageSettings?.page_title ||
-      (routeName === "about"
-        ? "About HosmedAI | Integrated Hospital Development"
-        : routeName === "contact"
-          ? "Contact HosmedAI | Book a Hospital Consultation"
-          : routeName === "projects" || routeName === "portfolio"
-            ? "Projects & Case Studies | HosmedAI"
-            : routeName === "services"
-              ? "Healthcare Solutions | HosmedAI"
-              : routeName === "why-hosmedai"
-                ? "Why HosmedAI | Integrated Healthcare Expertise"
-                : routeName === "ai-healthcare"
-                  ? "AI for Healthcare | HosmedAI"
-                  : routeName === "hospital-software"
-                    ? "Hospital Software & HIS | HosmedAI"
-                    : routeName === "nabh-nabl"
-                      ? "NABH / NABL Accreditation Consultancy | HosmedAI"
-                      : routeName === "hospital-planning"
-                        ? "Hospital Planning & Design | HosmedAI"
-                        : page.title || "Hosmed AI");
+    document.title = policyKey
+      ? `${policyPage?.title || "Legal Information"} | HosmedAI`
+      : pageSettings?.page_title ||
+        (routeName === "about"
+          ? "About HosmedAI | Integrated Hospital Development"
+          : routeName === "contact"
+            ? "Contact HosmedAI | Book a Hospital Consultation"
+            : routeName === "projects" || routeName === "portfolio"
+              ? "Projects & Case Studies | HosmedAI"
+              : routeName === "services"
+                ? "Healthcare Solutions | HosmedAI"
+                : routeName === "why-hosmedai"
+                  ? "Why HosmedAI | Integrated Healthcare Expertise"
+                  : routeName === "ai-healthcare"
+                    ? "AI for Healthcare | HosmedAI"
+                    : routeName === "hospital-software"
+                      ? "Hospital Software & HIS | HosmedAI"
+                      : routeName === "nabh-nabl"
+                        ? "NABH / NABL Accreditation Consultancy | HosmedAI"
+                        : routeName === "hospital-planning"
+                          ? "Hospital Planning & Design | HosmedAI"
+                          : page.title || "Hosmed AI");
     if (pageSettings?.seo_description) {
       let description = document.querySelector('meta[name="description"]');
       if (description)
@@ -2127,7 +2198,7 @@ export default function SiteApp() {
     return () => {
       active = false;
     };
-  }, [page, routeName, pageSettings]);
+  }, [page, routeName, pageSettings, policyKey, policyPage]);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
