@@ -10,7 +10,6 @@ const websitePages = [
   ['hospital-software', 'Hospital Software Page', 'fas fa-laptop-medical'],
   ['ai-healthcare', 'AI Healthcare Page', 'fas fa-brain'],
   ['solutions', 'Solutions Page', 'fas fa-th-large'],
-  ['who-we-serve', 'Who We Serve Page', 'fas fa-users'],
   ['projects', 'Projects Page', 'fas fa-briefcase-medical'],
   ['contact', 'Contact Page', 'fas fa-envelope']
 ];
@@ -43,7 +42,12 @@ const structuredDefaults = {
   home: { banners: [], service_cards: [], about: { title: '', description: '', image: '', cards: [{ title: '', description: '' }, { title: '', description: '' }] }, contact: { image: '' }, faqs: [] },
   about: { banner: { image: '', title: '', description: '' }, vision: { heading: '', small_heading: '', description: '' }, mission: { heading: '', small_heading: '', description: '' }, what_we_do: { heading: '', subheading: '', cards: [] }, faqs: [] },
   'why-hosmedai': { hero: { title: '', subtitle: '', description: '' }, cards: [] },
-  'hospital-planning': { hero: { title: '', subtitle: '', description: '' }, what_we_do: { cards: [] } }
+  'hospital-planning': { hero: { title: '', subtitle: '', description: '' }, what_we_do: { cards: [] } },
+  'nabh-nabl': { hero: { title: '', subtitle: '', description: '' }, page_content: '' },
+  'hospital-software': { hero: { title: '', subtitle: '', description: '' }, page_content: '', core_modules: [] },
+  'ai-healthcare': { hero: { title: '', subtitle: '', description: '' }, page_content: '', possibilities: [] },
+  solutions: { hero: { title: '', subtitle: '', description: '' }, page_content: '', what_we_serve: [] },
+  contact: { hero: { title: '', description: '' }, page_content: '' }
 };
 
 const parseSections = (pageKey, value) => {
@@ -51,6 +55,21 @@ const parseSections = (pageKey, value) => {
   if (typeof parsed === 'string') { try { parsed = JSON.parse(parsed); } catch { parsed = {}; } }
   const defaults = structuredDefaults[pageKey] || {};
   return { ...defaults, ...(parsed && typeof parsed === 'object' ? parsed : {}) };
+};
+
+const sectionsFromPage = (pageKey, page = {}) => {
+  const sections = parseSections(pageKey, page.sections);
+  if (!['nabh-nabl', 'hospital-software', 'ai-healthcare', 'solutions', 'contact'].includes(pageKey)) return sections;
+  return {
+    ...sections,
+    hero: {
+      ...(sections.hero || {}),
+      title: sections.hero?.title || page.hero_title || '',
+      subtitle: sections.hero?.subtitle || page.hero_subtitle || '',
+      description: sections.hero?.description || page.seo_description || ''
+    },
+    page_content: sections.page_content || page.body || ''
+  };
 };
 
 function ImageField({ label, value, onChange, upload }) {
@@ -83,6 +102,17 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
     <fieldset className="admin-section"><legend>What We Do</legend>{text('Heading', sections.what_we_do?.heading, value => group('what_we_do', { heading: value }))}{text('Sub heading', sections.what_we_do?.subheading, value => group('what_we_do', { subheading: value }))}<RepeatEditor title="Cards" items={sections.what_we_do?.cards || []} blank={{ icon: 'fas fa-hospital', title: '', description: '' }} onChange={value => group('what_we_do', { cards: value })}>{iconCard}</RepeatEditor></fieldset>
     <RepeatEditor title="FAQs" items={sections.faqs} blank={{ question: '', answer: '' }} onChange={value => set('faqs', value)}>{faq}</RepeatEditor>
   </div>;
+
+  if (['nabh-nabl', 'hospital-software', 'ai-healthcare', 'solutions', 'contact'].includes(pageKey)) {
+    const hero = sections.hero || {};
+    return <div className="admin-structured-fields">
+      <fieldset className="admin-section"><legend>Page introduction</legend>{text('Title', hero.title, value => group('hero', { title: value }))}{pageKey !== 'contact' && text('Sub-title', hero.subtitle, value => group('hero', { subtitle: value }))}{text('Description', hero.description, value => group('hero', { description: value }), true)}</fieldset>
+      <fieldset className="admin-section"><legend>Page Content (Editor)</legend><label>Page content<textarea rows="12" value={sections.page_content || ''} onChange={event => set('page_content', event.target.value)} placeholder="Add the main page content here…" /></label></fieldset>
+      {pageKey === 'hospital-software' && <RepeatEditor title="Core Modules" items={sections.core_modules} blank={{ icon: 'fas fa-hospital', title: '', points: '' }} onChange={value => set('core_modules', value)}>{(item, _index, change) => <div className="admin-card-fields">{text('Icon class', item.icon, value => change({ icon: value }))}{text('Title', item.title, value => change({ title: value }))}{text('Points (separate with commas)', item.points, value => change({ points: value }), true)}</div>}</RepeatEditor>}
+      {pageKey === 'ai-healthcare' && <RepeatEditor title="AI-Powered Possibilities" items={sections.possibilities} blank={{ icon: 'fas fa-brain', title: '', description: '' }} onChange={value => set('possibilities', value)}>{iconCard}</RepeatEditor>}
+      {pageKey === 'solutions' && <RepeatEditor title="What We Serve" items={sections.what_we_serve} blank={{ icon: 'fas fa-hospital', short_title: '', title: '', description: '', button_link: '' }} onChange={value => set('what_we_serve', value)}>{(item, _index, change) => <div className="admin-card-fields">{text('Icon class', item.icon, value => change({ icon: value }))}{text('Short title', item.short_title, value => change({ short_title: value }))}{text('Title', item.title, value => change({ title: value }))}{text('Description', item.description, value => change({ description: value }), true)}{text('Button link', item.button_link, value => change({ button_link: value }))}</div>}</RepeatEditor>}
+    </div>;
+  }
 
   const hero = sections.hero || {};
   return <div className="admin-structured-fields"><fieldset className="admin-section"><legend>Page introduction</legend>{text('Title', hero.title, value => group('hero', { title: value }))}{text('Subtitle', hero.subtitle, value => group('hero', { subtitle: value }))}{text('Description', hero.description, value => group('hero', { description: value }), true)}</fieldset>{pageKey === 'why-hosmedai' ? <RepeatEditor title="Zig-zag cards" items={sections.cards} blank={{ icon: 'fas fa-hospital', title: '', description: '' }} onChange={value => set('cards', value)}>{iconCard}</RepeatEditor> : <RepeatEditor title="What We Do cards" items={sections.what_we_do?.cards || []} blank={{ icon: 'fas fa-hospital', title: '', description: '' }} onChange={value => group('what_we_do', { cards: value })}>{iconCard}</RepeatEditor>}</div>;
@@ -130,12 +160,12 @@ function StructuredPageEditor({ pageKey }) {
   const [message, setMessage] = useState('');
   useEffect(() => {
     setLoading(true); setMessage('');
-    api(`/api/admin/pages/${pageKey}`).then(data => { const next = data || blank; setPage(next); setSections(parseSections(pageKey, next.sections)); }).catch(error => setMessage(error.message)).finally(() => setLoading(false));
+    api(`/api/admin/pages/${pageKey}`).then(data => { const next = data || blank; setPage(next); setSections(sectionsFromPage(pageKey, next)); }).catch(error => setMessage(error.message)).finally(() => setLoading(false));
   }, [pageKey]);
   const change = event => setPage(current => ({ ...current, [event.target.name]: event.target.value }));
   const save = async event => {
     event.preventDefault(); setMessage('Savingâ€¦');
-    try { const saved = await api(`/api/admin/pages/${pageKey}`, { method: 'PUT', body: JSON.stringify({ ...page, page_name: pageName, sections }) }); setPage(saved); setSections(parseSections(pageKey, saved.sections)); setMessage('Page settings saved.'); }
+    try { const saved = await api(`/api/admin/pages/${pageKey}`, { method: 'PUT', body: JSON.stringify({ ...page, page_name: pageName, sections }) }); setPage(saved); setSections(sectionsFromPage(pageKey, saved)); setMessage('Page settings saved.'); }
     catch (error) { setMessage(error.message); }
   };
   const upload = async (event, onChange) => {
