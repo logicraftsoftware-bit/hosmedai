@@ -266,6 +266,14 @@
   visibility: visible !important;
 }
 
+.banner-one {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+.main-slider-one + .banner-one {
+  margin-top: 0 !important;
+}
+
 /* Keep the homepage About media and copy in a stable two-column layout. */
 .about-one .row {
   display: grid !important;

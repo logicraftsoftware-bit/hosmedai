@@ -148,30 +148,31 @@ function applyStructuredSections(html, routeName, rawSections) {
           (item) => item.title || item.background_image,
         )
       : [];
-    const serviceGrid = documentNode.querySelector(
-      ".hosmed-visual-solutions__grid",
-    );
-    if (serviceGrid && serviceCards.length)
-      serviceGrid.replaceChildren(
-        ...serviceCards.map((item) => {
-          const link = documentNode.createElement("a");
-          link.href = item.button_link || "#";
-          if (item.background_image)
-            link.style.setProperty(
-              "--card-image",
-              `url('${item.background_image}')`,
+    const serviceGrid = documentNode.querySelector(".banner-one__inner");
+    if (serviceGrid && serviceCards.length) {
+      const template = serviceGrid.querySelector(".item");
+      if (template)
+        serviceGrid.replaceChildren(
+          ...serviceCards.map((item) => {
+            const card = template.cloneNode(true);
+            const background = card.querySelector(".banner-one__item__bg");
+            if (background && item.background_image)
+              background.style.backgroundImage = `url('${item.background_image}')`;
+            const shortTitle = card.querySelector(
+              ".banner-one__item__sub-title",
             );
-          const small = documentNode.createElement("small");
-          small.textContent = item.short_title || "";
-          const title = documentNode.createElement("h2");
-          title.textContent = item.title || "";
-          const action = documentNode.createElement("span");
-          action.innerHTML =
-            'Explore Solution <i class="fas fa-arrow-right"></i>';
-          link.append(small, title, action);
-          return link;
-        }),
-      );
+            if (shortTitle) shortTitle.textContent = item.short_title || "";
+            const title = card.querySelector(".banner-one__item__main-title");
+            if (title) title.textContent = item.title || "";
+            const link = card.querySelector(".banner-one__item__btn");
+            if (link) {
+              link.href = item.button_link || "#";
+              link.textContent = item.button_text || "Explore Solutions";
+            }
+            return card;
+          }),
+        );
+    }
     setText(".about-one .sec-title__title", sections.about?.title);
     setText(".about-one__text", sections.about?.description);
     setImage(".about-one img", sections.about?.image);
@@ -1553,12 +1554,7 @@ export default function SiteApp() {
           /<section class="hosmed-visual-solutions">[\s\S]*?<\/section>/,
         );
         if (visualCardsMatch) {
-          const visualCards = visualCardsMatch[0];
           html = html.replace(visualCardsMatch[0], "");
-          html = html.replace(
-            "<!-- main-slider-end -->",
-            `<!-- main-slider-end -->${visualCards}`,
-          );
         }
 
         // These template carousels depend on the original demo's runtime and

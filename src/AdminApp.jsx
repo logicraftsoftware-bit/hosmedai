@@ -1414,6 +1414,7 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
             background_image: "",
             short_title: "",
             title: "",
+            button_text: "Explore Solutions",
             button_link: "",
           }}
           onChange={(value) => set("service_cards", value)}
@@ -1430,6 +1431,9 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
                 change({ short_title: value }),
               )}
               {text("Title", item.title, (value) => change({ title: value }))}
+              {text("Button text", item.button_text, (value) =>
+                change({ button_text: value }),
+              )}
               {text("Button link", item.button_link, (value) =>
                 change({ button_link: value }),
               )}
