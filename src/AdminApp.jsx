@@ -2557,6 +2557,8 @@ function TestimonialManager() {
   const [form, setForm] = useState(emptyTestimonial);
   const [editing, setEditing] = useState(null);
   const [message, setMessage] = useState("");
+  const [view, setView] = useState("list");
+  const [query, setQuery] = useState("");
   const load = () =>
     api("/api/admin/testimonials")
       .then(setItems)
@@ -2581,6 +2583,7 @@ function TestimonialManager() {
       setEditing(null);
       setMessage("Testimonial saved.");
       await load();
+      setView("list");
     } catch (error) {
       setMessage(error.message);
     }
@@ -2594,6 +2597,7 @@ function TestimonialManager() {
       review: item.review,
       status: item.status,
     });
+    setView("editor");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const remove = async (item) => {
@@ -2606,21 +2610,19 @@ function TestimonialManager() {
     await load();
   };
   return (
-    <section className="admin-layout admin-content-manager">
+    <section
+      className={`admin-layout admin-content-manager admin-entry-manager testimonial-${view}-view`}
+    >
       <form className="admin-editor" onSubmit={save}>
         <div className="admin-title">
           <h1>{editing ? "Edit testimonial" : "Testimonial Entry"}</h1>
-          {editing && (
-            <button
-              type="button"
-              onClick={() => {
-                setEditing(null);
-                setForm(emptyTestimonial);
-              }}
-            >
-              New
-            </button>
-          )}
+          <button
+            type="button"
+            className="admin-entry-back"
+            onClick={() => setView("list")}
+          >
+            <i className="fas fa-arrow-left" /> Back to list
+          </button>
         </div>
         <label>
           Project Name
@@ -2686,28 +2688,60 @@ function TestimonialManager() {
         </button>
       </form>
       <section className="admin-list">
-        <h2>
-          All testimonials <span>{items.length}</span>
-        </h2>
+        <div className="admin-entry-list-heading">
+          <div>
+            <small>Content</small>
+            <h2>
+              Testimonials <span>{items.length}</span>
+            </h2>
+            <p>Manage client reviews and project testimonials.</p>
+          </div>
+          <button
+            type="button"
+            className="admin-entry-add"
+            onClick={() => {
+              setEditing(null);
+              setForm(emptyTestimonial);
+              setMessage("");
+              setView("editor");
+            }}
+          >
+            <i className="fas fa-plus" /> Add Testimonial
+          </button>
+        </div>
+        <label className="admin-entry-search">
+          <i className="fas fa-search" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search by client or project…"
+          />
+        </label>
         {!items.length && <p>No testimonials yet.</p>}
-        {items.map((item) => (
-          <article className="admin-list-text" key={item.id}>
-            <div>
-              <span className={`admin-status ${item.status}`}>
-                {item.status}
-              </span>
-              <h3>{item.client_name}</h3>
-              <small>
-                {item.project_name} · {"★".repeat(item.star_rating)}
-              </small>
-              <p>{item.review}</p>
-              <button onClick={() => choose(item)}>Edit</button>
-              <button className="admin-delete" onClick={() => remove(item)}>
-                Delete
-              </button>
-            </div>
-          </article>
-        ))}
+        {items
+          .filter((item) =>
+            `${item.client_name} ${item.project_name} ${item.review}`
+              .toLowerCase()
+              .includes(query.toLowerCase()),
+          )
+          .map((item) => (
+            <article className="admin-list-text" key={item.id}>
+              <div>
+                <span className={`admin-status ${item.status}`}>
+                  {item.status}
+                </span>
+                <h3>{item.client_name}</h3>
+                <small>
+                  {item.project_name} · {"★".repeat(item.star_rating)}
+                </small>
+                <p>{item.review}</p>
+                <button onClick={() => choose(item)}>Edit</button>
+                <button className="admin-delete" onClick={() => remove(item)}>
+                  Delete
+                </button>
+              </div>
+            </article>
+          ))}
       </section>
     </section>
   );
@@ -2780,6 +2814,8 @@ export default function AdminApp() {
   const [message, setMessage] = useState("");
   const [section, setSection] = useState("general");
   const [pageKey, setPageKey] = useState("home");
+  const [blogView, setBlogView] = useState("list");
+  const [blogQuery, setBlogQuery] = useState("");
 
   useEffect(() => {
     const optimizeImages = (root) =>
@@ -2846,6 +2882,7 @@ export default function AdminApp() {
       setEditing(null);
       setMessage("Content saved.");
       await load();
+      setBlogView("list");
     } catch (error) {
       setMessage(error.message);
     }
@@ -2867,6 +2904,7 @@ export default function AdminApp() {
       seo_description: item.seo_description || "",
       status: item.status,
     });
+    setBlogView("editor");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const remove = async (item) => {
@@ -2921,21 +2959,19 @@ export default function AdminApp() {
       </main>
     );
   const contentLibrary = (
-    <section className="admin-layout">
+    <section
+      className={`admin-layout admin-entry-manager blog-${blogView}-view`}
+    >
       <form className="admin-editor" onSubmit={save}>
         <div className="admin-title">
           <h1>{editing ? "Edit blog" : "Blog Entry"}</h1>
-          {editing && (
-            <button
-              type="button"
-              onClick={() => {
-                setEditing(null);
-                setForm(empty);
-              }}
-            >
-              New
-            </button>
-          )}
+          <button
+            type="button"
+            className="admin-entry-back"
+            onClick={() => setBlogView("list")}
+          >
+            <i className="fas fa-arrow-left" /> Back to blogs
+          </button>
         </div>
         <label>
           Title
@@ -3061,36 +3097,68 @@ export default function AdminApp() {
         </button>
       </form>
       <section className="admin-list">
-        <h2>
-          All blogs <span>{items.length}</span>
-        </h2>
+        <div className="admin-entry-list-heading">
+          <div>
+            <small>Content</small>
+            <h2>
+              Blogs <span>{items.length}</span>
+            </h2>
+            <p>Manage your website's blog posts.</p>
+          </div>
+          <button
+            type="button"
+            className="admin-entry-add"
+            onClick={() => {
+              setEditing(null);
+              setForm(empty);
+              setMessage("");
+              setBlogView("editor");
+            }}
+          >
+            <i className="fas fa-plus" /> Add Blog
+          </button>
+        </div>
+        <label className="admin-entry-search">
+          <i className="fas fa-search" />
+          <input
+            value={blogQuery}
+            onChange={(event) => setBlogQuery(event.target.value)}
+            placeholder="Search by heading, category or author…"
+          />
+        </label>
         {items.length === 0 && <p>No blogs yet. Create your first entry.</p>}
-        {items.map((item) => (
-          <article key={item.id}>
-            {item.image_url ? (
-              <img src={item.image_url} alt="" />
-            ) : (
-              <div className="admin-placeholder">No image</div>
-            )}
-            <div>
-              <span className={`admin-status ${item.status}`}>
-                {item.status}
-              </span>
-              <h3>{item.title}</h3>
-              <small>/{item.slug}</small>
-              {(item.category || item.author) && (
-                <small>
-                  {[item.category, item.author].filter(Boolean).join(" · ")}
-                </small>
+        {items
+          .filter((item) =>
+            `${item.title} ${item.category || ""} ${item.author || ""}`
+              .toLowerCase()
+              .includes(blogQuery.toLowerCase()),
+          )
+          .map((item) => (
+            <article key={item.id}>
+              {item.image_url ? (
+                <img src={item.image_url} alt="" />
+              ) : (
+                <div className="admin-placeholder">No image</div>
               )}
-              <p>{item.excerpt}</p>
-              <button onClick={() => choose(item)}>Edit</button>
-              <button className="admin-delete" onClick={() => remove(item)}>
-                Delete
-              </button>
-            </div>
-          </article>
-        ))}
+              <div>
+                <span className={`admin-status ${item.status}`}>
+                  {item.status}
+                </span>
+                <h3>{item.title}</h3>
+                <small>/{item.slug}</small>
+                {(item.category || item.author) && (
+                  <small>
+                    {[item.category, item.author].filter(Boolean).join(" · ")}
+                  </small>
+                )}
+                <p>{item.excerpt}</p>
+                <button onClick={() => choose(item)}>Edit</button>
+                <button className="admin-delete" onClick={() => remove(item)}>
+                  Delete
+                </button>
+              </div>
+            </article>
+          ))}
       </section>
     </section>
   );
@@ -3156,7 +3224,10 @@ export default function AdminApp() {
           </button>
           <button
             className={`admin-library-link ${section === "blogs" ? "active" : ""}`}
-            onClick={() => setSection("blogs")}
+            onClick={() => {
+              setSection("blogs");
+              setBlogView("list");
+            }}
           >
             <i className="fas fa-newspaper" />
             <span>Blog Entry</span>

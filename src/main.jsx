@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./admin.css";
 import "./admin-menu.css";
 import "./admin-editor.css";
+import "./admin-entry.css";
 
 const isAdmin = location.pathname.replace(/\/$/, "") === "/admin";
 const Application = lazy(() =>
