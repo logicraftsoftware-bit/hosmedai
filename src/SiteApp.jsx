@@ -330,6 +330,51 @@ function applyStructuredSections(html, routeName, rawSections) {
       sections.testimonials?.rating_text,
     );
     setText(
+      ".testimonials-one .sec-title__tagline",
+      sections.testimonials?.short_title,
+    );
+    const themeTestimonialTagline = documentNode.querySelector(
+      ".testimonials-one .sec-title__tagline",
+    );
+    if (themeTestimonialTagline) {
+      const shield = documentNode.createElement("img");
+      shield.src = "assets/images/shapes/shield.png";
+      shield.alt = "";
+      shield.loading = "lazy";
+      themeTestimonialTagline.prepend(shield);
+    }
+    setText(
+      ".testimonials-one .sec-title__title",
+      sections.testimonials?.title,
+    );
+    const themeTestimonialCarousel = documentNode.querySelector(
+      ".testimonials-one__carousel",
+    );
+    if (themeTestimonialCarousel && testimonialItems.length) {
+      const template = themeTestimonialCarousel.querySelector(".item");
+      if (template)
+        themeTestimonialCarousel.replaceChildren(
+          ...testimonialItems.map((item) => {
+            const slide = template.cloneNode(true);
+            const quote = slide.querySelector(".testimonials-card__text");
+            const name = slide.querySelector(".testimonials-card__author-name");
+            const role = slide.querySelector(
+              ".testimonials-card__author-position",
+            );
+            if (quote) quote.textContent = item.quote || "";
+            if (name) name.textContent = item.name || "";
+            if (role) role.textContent = item.role || "";
+            return slide;
+          }),
+        );
+    }
+    setText(".testimonials-one__rating__number", sections.testimonials?.rating);
+    setText(".testimonials-one__title", sections.testimonials?.rating_title);
+    setText(
+      ".testimonials-one__rating-text",
+      sections.testimonials?.rating_text,
+    );
+    setText(
       ".hosmed-difference__top > div:first-child > p",
       sections.difference?.short_title,
     );
@@ -1613,6 +1658,10 @@ export default function SiteApp() {
       if (routeName === "index") {
         const homeVisualSections = `<section class="hosmed-visual-solutions"><div class="container-fluid"><div class="hosmed-visual-solutions__grid"><a href="/hospital-planning" style="--card-image:url('/assets/images/charity/charity-1-1.jpg')"><small>Plan Better</small><h2>Hospital Planning<br>&amp; Design</h2><span>Explore Solution <i class="fas fa-arrow-right"></i></span></a><a href="/nabh-nabl" style="--card-image:url('/assets/images/charity/charity-1-2.jpg')"><small>Build Quality</small><h2>NABH / NABL<br>Compliance</h2><span>Explore Solution <i class="fas fa-arrow-right"></i></span></a><a href="/hospital-software" style="--card-image:url('/assets/images/charity/charity-1-3.jpg')"><small>Transform Digitally</small><h2>Hospital Software<br>&amp; AI</h2><span>Explore Solution <i class="fas fa-arrow-right"></i></span></a></div></div></section><section class="hosmed-service-showcase section-space"><div class="container"><div class="hosmed-section-heading"><p><i class="fas fa-shield-alt"></i> Integrated Healthcare Solutions</p><h2>Everything Your Hospital Needs</h2></div><div class="hosmed-service-showcase__grid"><article><img src="/assets/images/charity/charity-2-1.jpg" alt="Hospital planning"><i class="fas fa-drafting-compass"></i><h3>Hospital Planning</h3><p>From feasibility and clinical planning to commissioning support.</p><a href="/hospital-planning">Learn More</a></article><article><img src="/assets/images/charity/charity-2-2.jpg" alt="Hospital accreditation"><i class="fas fa-award"></i><h3>Quality &amp; Accreditation</h3><p>Practical NABH and NABL systems built for lasting quality.</p><a href="/nabh-nabl">Learn More</a></article><article><img src="/assets/images/charity/charity-2-3.jpg" alt="Hospital software"><i class="fas fa-laptop-medical"></i><h3>Hospital Technology</h3><p>Connected ERP, HIS, EMR and operational intelligence.</p><a href="/hospital-software">Learn More</a></article><article><img src="/assets/images/about/about-1-2.jpg" alt="Healthcare artificial intelligence"><i class="fas fa-brain"></i><h3>Healthcare AI</h3><p>Turn hospital data into faster, smarter decisions.</p><a href="/ai-healthcare">Learn More</a></article></div></div></section><section class="hosmed-testimonials section-space"><div class="container"><div class="hosmed-section-heading"><p><i class="fas fa-comments"></i> Client Experiences</p><h2>What Healthcare Leaders Say</h2></div><div class="hosmed-testimonials__grid"><blockquote><div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>HosmedAI brought planning, compliance and technology together with a practical understanding of hospital operations.</p><footer><strong>Hospital Leadership Team</strong><span>Integrated Healthcare Project</span></footer></blockquote><blockquote><div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>Their structured approach helped our team improve workflows, documentation and accreditation readiness.</p><footer><strong>Quality Management Team</strong><span>NABH Readiness Programme</span></footer></blockquote><aside><strong>4.9</strong><div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><b>Client Satisfaction</b><span>End-to-end support</span></aside></div></div></section><section class="hosmed-difference"><div class="container"><div class="hosmed-difference__top"><div><p><i class="fas fa-shield-alt"></i> Why HosmedAI</p><h2>What Makes Us<br>Different</h2></div><div class="hosmed-difference__features"><span><i class="fas fa-hospital"></i><b>Healthcare<br>Focused</b></span><span><i class="fas fa-link"></i><b>Fully<br>Integrated</b></span><span><i class="fas fa-user-md"></i><b>Expert<br>Led</b></span><span><i class="fas fa-chart-line"></i><b>Outcome<br>Driven</b></span></div></div><div class="hosmed-difference__cta"><div><small>Start Your Hospital Journey</small><h2>Build a Smarter, Safer and Future-Ready Hospital.</h2></div><a href="/contact" class="heartox-btn">Book a Consultation</a></div></div></section>`;
         html = html.replace(/(?=<footer class=)/, homeVisualSections);
+        html = html.replace(
+          /<section class="hosmed-testimonials[\s\S]*?<\/section>/,
+          "",
+        );
 
         // Keep the solution cards immediately below the homepage banner. The
         // rest of the custom homepage sections remain near the footer.
@@ -1623,13 +1672,8 @@ export default function SiteApp() {
           html = html.replace(visualCardsMatch[0], "");
         }
 
-        // These template carousels depend on the original demo's runtime and
-        // rendered as isolated cards with large empty gaps. Custom equivalents
-        // are rendered below, so remove the broken duplicate sections.
-        html = html.replace(
-          /<section class="testimonials-one[\s\S]*?<\/section><!-- \/\.testimonials-one -->/,
-          "",
-        );
+        // The original testimonial carousel is retained and populated from
+        // the Home Page admin fields now that the shared carousel runtime is active.
         html = html.replace(
           /<section class="charity-cause[\s\S]*?<\/section><!-- \/\.charity-cause -->/,
           "",
