@@ -4,6 +4,7 @@ import "./cms-page.css";
 import "./home-sections.css";
 import "./home-carousel.css";
 import "./policy-page.css";
+import "./blog-pages.css";
 
 const scripts = [
   "/assets/vendors/jquery/jquery-3.7.1.min.js",
@@ -246,6 +247,10 @@ function applyStructuredSections(
     });
     const insightsCarousel = documentNode.querySelector(".blog-one__carousel");
     if (insightsCarousel) {
+      const viewAll = documentNode.querySelector(
+        ".blog-one__btn, .blog-one__btn a, .blog-one .heartox-btn",
+      );
+      if (viewAll) viewAll.href = "/blog";
       const managedBlogs = Array.isArray(managedHomeContent.blogs)
         ? managedHomeContent.blogs.filter((item) => item.title)
         : [];
@@ -857,8 +862,16 @@ export default function SiteApp() {
     testimonials: [],
     blogs: [],
   });
+  const [blogEntries, setBlogEntries] = useState([]);
+  const blogSlug = useMemo(() => {
+    const parts = location.pathname.split("/").filter(Boolean);
+    return parts[0] === "blog" && parts[1] ? parts[1] : "";
+  }, []);
   const routeName = useMemo(() => {
-    const route = location.pathname.split("/").filter(Boolean).pop() || "index";
+    const parts = location.pathname.split("/").filter(Boolean);
+    if (parts[0] === "blog" && parts[1]) return "blog-detail";
+    if (parts[0] === "blog" || parts[0] === "blog-grid") return "blog";
+    const route = parts.pop() || "index";
     return route.replace(/\.html$/i, "");
   }, []);
   const policyRoutes = {
@@ -880,6 +893,8 @@ export default function SiteApp() {
     if (routeName === "hospital-software") return pages["about.html"];
     if (routeName === "nabh-nabl") return pages["about.html"];
     if (routeName === "hospital-planning") return pages["about.html"];
+    if (routeName === "blog" || routeName === "blog-detail")
+      return pages["about.html"];
     if (policyKey) return pages["about.html"];
     return pages[requested] || pages["404.html"] || pages["index.html"];
   }, [routeName, policyKey]);
@@ -919,6 +934,22 @@ export default function SiteApp() {
       })
       .catch(() => {
         if (active) setPageSettings(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [routeName]);
+
+  useEffect(() => {
+    if (routeName !== "blog" && routeName !== "blog-detail") return;
+    let active = true;
+    fetch("/api/content")
+      .then((response) => (response.ok ? response.json() : []))
+      .then((entries) => {
+        if (active) setBlogEntries(Array.isArray(entries) ? entries : []);
+      })
+      .catch(() => {
+        if (active) setBlogEntries([]);
       });
     return () => {
       active = false;
@@ -2189,6 +2220,79 @@ export default function SiteApp() {
       html = projectDocument.body.innerHTML;
     }
 
+    if (routeName === "blog" || routeName === "blog-detail") {
+      const safe = escapeValue;
+      const formatDate = (entry) => {
+        const date = new Date(entry.published_at || entry.updated_at);
+        return Number.isNaN(date.getTime())
+          ? ""
+          : date.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
+      };
+      const blogCard = (entry) => `<article class="hosmed-blog-card">
+        <a class="hosmed-blog-card__image" href="/blog/${safe(entry.slug)}"><img src="${safe(entry.image_url || "/assets/images/blog/blog-1-1.jpg")}" alt="${safe(entry.title)}" loading="lazy" decoding="async" fetchpriority="low"></a>
+        <div class="hosmed-blog-card__content"><div class="hosmed-blog-card__meta"><span>${safe(entry.category || "Healthcare")}</span><time>${safe(formatDate(entry))}</time></div><h2><a href="/blog/${safe(entry.slug)}">${safe(entry.title)}</a></h2><p>${safe(entry.excerpt || "Read the latest healthcare insight from HosmedAI.")}</p><div class="hosmed-blog-card__footer"><strong>${safe(entry.author || "HosmedAI Editorial Team")}</strong><a href="/blog/${safe(entry.slug)}">Read More <i class="fas fa-arrow-right"></i></a></div></div>
+      </article>`;
+      let blogMarkup = "";
+      if (routeName === "blog") {
+        blogMarkup = `<main class="hosmed-blog"><section class="hosmed-blog__hero"><div class="container"><p><i class="fas fa-shield-alt"></i> Healthcare Insights</p><h1>Ideas for Smarter,<br>Better Healthcare.</h1><span>Practical insights on hospital planning, accreditation, technology, operations and healthcare AI.</span></div></section><section class="hosmed-blog__listing"><div class="container"><div class="hosmed-blog__heading"><div><p>Latest Articles</p><h2>Explore Our Healthcare Insights</h2></div><span>${blogEntries.length} published insight${blogEntries.length === 1 ? "" : "s"}</span></div><div class="hosmed-blog__grid">${blogEntries.map(blogCard).join("")}</div>${blogEntries.length ? "" : '<p class="hosmed-blog__empty">No published insights are available yet.</p>'}</div></section></main>`;
+      } else {
+        const current = blogEntries.find((entry) => entry.slug === blogSlug);
+        if (current) {
+          const source = String(current.body || "");
+          const richDocument = new DOMParser().parseFromString(
+            source,
+            "text/html",
+          );
+          richDocument
+            .querySelectorAll("script,style,iframe,object,embed")
+            .forEach((node) => node.remove());
+          richDocument.querySelectorAll("*").forEach((node) => {
+            [...node.attributes].forEach((attribute) => {
+              if (
+                /^on/i.test(attribute.name) ||
+                (/^(href|src)$/i.test(attribute.name) &&
+                  /^javascript:/i.test(attribute.value.trim()))
+              )
+                node.removeAttribute(attribute.name);
+            });
+          });
+          const articleBody = /<[a-z][\s\S]*>/i.test(source)
+            ? richDocument.body.innerHTML
+            : source
+                .split(/\r?\n\r?\n/)
+                .filter(Boolean)
+                .map((paragraph) => `<p>${safe(paragraph)}</p>`)
+                .join("");
+          const related = blogEntries
+            .filter(
+              (entry) =>
+                entry.slug !== current.slug &&
+                entry.category === current.category,
+            )
+            .concat(
+              blogEntries.filter(
+                (entry) =>
+                  entry.slug !== current.slug &&
+                  entry.category !== current.category,
+              ),
+            )
+            .slice(0, 3);
+          blogMarkup = `<main class="hosmed-article"><section class="hosmed-article__hero"><div class="container"><a href="/blog"><i class="fas fa-arrow-left"></i> All Insights</a><div><span>${safe(current.category || "Healthcare")}</span><time>${safe(formatDate(current))}</time></div><h1>${safe(current.title)}</h1><p>${safe(current.excerpt || "")}</p></div></section><article class="hosmed-article__content"><div class="container"><img class="hosmed-article__cover" src="${safe(current.image_url || "/assets/images/blog/blog-1-1.jpg")}" alt="${safe(current.title)}" fetchpriority="high" decoding="async"><div class="hosmed-article__byline"><span>Written by</span><strong>${safe(current.author || "HosmedAI Editorial Team")}</strong></div><div class="hosmed-article__body">${articleBody}</div></div></article><section class="hosmed-article__related"><div class="container"><div class="hosmed-blog__heading"><div><p>Continue Reading</p><h2>Related Healthcare Insights</h2></div><a href="/blog">View All Insights</a></div><div class="hosmed-blog__grid">${related.map(blogCard).join("")}</div></div></section></main>`;
+        } else if (blogEntries.length) {
+          blogMarkup = `<main class="hosmed-blog"><section class="hosmed-blog__hero"><div class="container"><p>Insight Not Found</p><h1>This article is not available.</h1><a class="heartox-btn" href="/blog">View All Insights</a></div></section></main>`;
+        }
+      }
+      if (blogMarkup)
+        html = html.replace(
+          /<section class="page-header[\s\S]*?(?=<footer class=)/,
+          blogMarkup,
+        );
+    }
+
     if (policyKey) {
       const title = escapeValue(policyPage?.title || "Loading…");
       const source = String(policyPage?.body || "");
@@ -2312,6 +2416,8 @@ export default function SiteApp() {
     policyKey,
     policyPage,
     managedHomeContent,
+    blogEntries,
+    blogSlug,
   ]);
 
   useEffect(() => {
@@ -2321,26 +2427,30 @@ export default function SiteApp() {
       .forEach((element) => element.remove());
     document.title = policyKey
       ? `${policyPage?.title || "Legal Information"} | HosmedAI`
-      : pageSettings?.page_title ||
-        (routeName === "about"
-          ? "About HosmedAI | Integrated Hospital Development"
-          : routeName === "contact"
-            ? "Contact HosmedAI | Book a Hospital Consultation"
-            : routeName === "projects" || routeName === "portfolio"
-              ? "Projects & Case Studies | HosmedAI"
-              : routeName === "services"
-                ? "Healthcare Solutions | HosmedAI"
-                : routeName === "why-hosmedai"
-                  ? "Why HosmedAI | Integrated Healthcare Expertise"
-                  : routeName === "ai-healthcare"
-                    ? "AI for Healthcare | HosmedAI"
-                    : routeName === "hospital-software"
-                      ? "Hospital Software & HIS | HosmedAI"
-                      : routeName === "nabh-nabl"
-                        ? "NABH / NABL Accreditation Consultancy | HosmedAI"
-                        : routeName === "hospital-planning"
-                          ? "Hospital Planning & Design | HosmedAI"
-                          : page.title || "Hosmed AI");
+      : routeName === "blog"
+        ? "Healthcare Insights & Articles | HosmedAI"
+        : routeName === "blog-detail"
+          ? `${blogEntries.find((entry) => entry.slug === blogSlug)?.seo_title || blogEntries.find((entry) => entry.slug === blogSlug)?.title || "Healthcare Insight"} | HosmedAI`
+          : pageSettings?.page_title ||
+            (routeName === "about"
+              ? "About HosmedAI | Integrated Hospital Development"
+              : routeName === "contact"
+                ? "Contact HosmedAI | Book a Hospital Consultation"
+                : routeName === "projects" || routeName === "portfolio"
+                  ? "Projects & Case Studies | HosmedAI"
+                  : routeName === "services"
+                    ? "Healthcare Solutions | HosmedAI"
+                    : routeName === "why-hosmedai"
+                      ? "Why HosmedAI | Integrated Healthcare Expertise"
+                      : routeName === "ai-healthcare"
+                        ? "AI for Healthcare | HosmedAI"
+                        : routeName === "hospital-software"
+                          ? "Hospital Software & HIS | HosmedAI"
+                          : routeName === "nabh-nabl"
+                            ? "NABH / NABL Accreditation Consultancy | HosmedAI"
+                            : routeName === "hospital-planning"
+                              ? "Hospital Planning & Design | HosmedAI"
+                              : page.title || "Hosmed AI");
     if (pageSettings?.seo_description) {
       let description = document.querySelector('meta[name="description"]');
       if (description)
@@ -2369,7 +2479,15 @@ export default function SiteApp() {
     return () => {
       active = false;
     };
-  }, [page, routeName, pageSettings, policyKey, policyPage]);
+  }, [
+    page,
+    routeName,
+    pageSettings,
+    policyKey,
+    policyPage,
+    blogEntries,
+    blogSlug,
+  ]);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }

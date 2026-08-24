@@ -1,0 +1,286 @@
+.hosmed-blog,
+.hosmed-article {
+  background: #fff;
+  color: #637889;
+}
+
+.hosmed-blog__hero,
+.hosmed-article__hero {
+  padding: 110px 0 100px;
+  background: linear-gradient(120deg, #082f4d 0%, #0b6171 100%);
+  color: #fff;
+}
+
+.hosmed-blog__hero p,
+.hosmed-article__hero > .container > a,
+.hosmed-blog__heading p {
+  color: #efaf39;
+  font-weight: 700;
+}
+
+.hosmed-blog__hero h1,
+.hosmed-article__hero h1 {
+  max-width: 940px;
+  margin: 18px 0;
+  color: #fff;
+  font-size: clamp(44px, 6vw, 78px);
+  line-height: 1.08;
+}
+
+.hosmed-blog__hero span,
+.hosmed-article__hero p {
+  display: block;
+  max-width: 820px;
+  color: #d4e4e9;
+  font-size: 19px;
+  line-height: 1.75;
+}
+
+.hosmed-blog__listing,
+.hosmed-article__related {
+  padding: 90px 0;
+}
+
+.hosmed-blog__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.hosmed-blog__heading p {
+  margin-bottom: 7px;
+}
+
+.hosmed-blog__heading h2 {
+  margin: 0;
+  color: #123c50;
+  font-size: clamp(32px, 4vw, 48px);
+}
+
+.hosmed-blog__heading > span,
+.hosmed-blog__heading > a {
+  color: #087f8c;
+  font-weight: 700;
+}
+
+.hosmed-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.hosmed-blog-card {
+  overflow: hidden;
+  border: 1px solid #dce5e9;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(18, 60, 80, 0.09);
+  transition: transform 0.25s ease;
+}
+
+.hosmed-blog-card:hover {
+  transform: translateY(-6px);
+}
+
+.hosmed-blog-card__image {
+  display: block;
+  height: 260px;
+  overflow: hidden;
+}
+
+.hosmed-blog-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.hosmed-blog-card:hover .hosmed-blog-card__image img {
+  transform: scale(1.04);
+}
+
+.hosmed-blog-card__content {
+  padding: 28px;
+}
+
+.hosmed-blog-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: #758c98;
+  font-size: 13px;
+}
+
+.hosmed-blog-card__meta span {
+  padding: 7px 13px;
+  border-radius: 20px;
+  background: #eaf6f7;
+  color: #087f8c;
+  font-weight: 700;
+}
+
+.hosmed-blog-card h2 {
+  margin: 22px 0 12px;
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+.hosmed-blog-card h2 a {
+  color: #123c50;
+}
+
+.hosmed-blog-card p {
+  min-height: 78px;
+  color: #637889;
+  line-height: 1.7;
+}
+
+.hosmed-blog-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-top: 20px;
+  border-top: 1px solid #e3eaed;
+}
+
+.hosmed-blog-card__footer strong {
+  color: #123c50;
+  font-size: 14px;
+}
+
+.hosmed-blog-card__footer a {
+  color: #087f8c;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.hosmed-article__hero > .container > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 35px;
+}
+
+.hosmed-article__hero div > span {
+  display: inline-block;
+  margin-right: 20px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: #efaf39;
+  color: #123c50;
+  font-weight: 700;
+}
+
+.hosmed-article__hero time {
+  color: #d4e4e9;
+}
+
+.hosmed-article__content {
+  padding: 70px 0 90px;
+}
+
+.hosmed-article__content > .container {
+  max-width: 1060px;
+}
+
+.hosmed-article__cover {
+  width: 100%;
+  max-height: 590px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.hosmed-article__byline {
+  display: flex;
+  gap: 10px;
+  margin: 28px 0 45px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #dce5e9;
+}
+
+.hosmed-article__byline strong,
+.hosmed-article__body h2,
+.hosmed-article__body h3,
+.hosmed-article__body h4 {
+  color: #123c50;
+}
+
+.hosmed-article__body {
+  color: #637889;
+  font-size: 18px;
+  line-height: 1.85;
+}
+
+.hosmed-article__body p,
+.hosmed-article__body li {
+  color: #637889;
+}
+
+.hosmed-article__body h2 {
+  margin: 42px 0 16px;
+  font-size: 34px;
+}
+
+.hosmed-article__related {
+  background: #f3f7f8;
+}
+
+.hosmed-blog__empty {
+  padding: 40px;
+  border-radius: 15px;
+  background: #f3f7f8;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .hosmed-blog__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .hosmed-blog__hero,
+  .hosmed-article__hero {
+    padding: 75px 0 65px;
+  }
+
+  .hosmed-blog__hero h1,
+  .hosmed-article__hero h1 {
+    font-size: 42px;
+  }
+
+  .hosmed-blog__listing,
+  .hosmed-article__related {
+    padding: 60px 0;
+  }
+
+  .hosmed-blog__heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hosmed-blog__grid {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .hosmed-blog-card {
+    min-width: 86%;
+    scroll-snap-align: start;
+  }
+
+  .hosmed-blog-card__image {
+    height: 220px;
+  }
+
+  .hosmed-article__content {
+    padding: 45px 0 65px;
+  }
+}

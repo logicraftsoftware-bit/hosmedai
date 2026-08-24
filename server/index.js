@@ -482,7 +482,7 @@ app.get("/api/testimonials", async (_req, res) => {
 });
 app.get("/api/content", async (_req, res) => {
   const [rows] = await pool.query(
-    "SELECT id,title,slug,excerpt,body,image_url,category,author,published_at,updated_at FROM content_items WHERE status='published' ORDER BY COALESCE(published_at, updated_at) DESC",
+    "SELECT id,title,slug,excerpt,body,image_url,category,author,published_at,seo_title,seo_description,updated_at FROM content_items WHERE status='published' ORDER BY COALESCE(published_at, updated_at) DESC",
   );
   res.json(rows);
 });
