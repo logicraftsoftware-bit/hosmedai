@@ -1,0 +1,121 @@
+.admin-rich-editor {
+  border: 1px solid #cfdde2;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.admin-rich-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 8px;
+  background: #f6f9fa;
+  border-bottom: 1px solid #dce7eb;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.admin-rich-toolbar button,
+.admin-rich-toolbar select,
+.admin-rich-color {
+  width: auto !important;
+  min-height: 34px;
+  margin: 0;
+  padding: 7px 9px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: #294d5c;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.admin-rich-toolbar button:hover,
+.admin-rich-toolbar button.active,
+.admin-rich-toolbar select:hover {
+  background: #e5f1f3;
+  border-color: #c7dce1;
+}
+.admin-rich-toolbar select {
+  background: #fff;
+  border-color: #d8e2e7;
+}
+.admin-rich-color {
+  cursor: pointer;
+}
+.admin-rich-color input {
+  position: absolute;
+  opacity: 0;
+  width: 1px !important;
+  height: 1px;
+  padding: 0;
+}
+.admin-rich-content,
+.admin-rich-source {
+  display: block;
+  width: 100%;
+  min-height: 330px;
+  padding: 20px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0;
+  line-height: 1.7;
+  font-family: inherit;
+  font-size: 15px;
+  overflow: auto;
+}
+.admin-rich-content:empty::before {
+  content: attr(data-placeholder);
+  color: #91a4ac;
+  pointer-events: none;
+}
+.admin-rich-content h2,
+.admin-rich-content h3,
+.admin-rich-content h4 {
+  margin: 0.7em 0;
+}
+.admin-rich-content blockquote {
+  border-left: 4px solid #0a929b;
+  margin: 18px 0;
+  padding: 8px 18px;
+  background: #f3f9fa;
+}
+.admin-rich-content img {
+  max-width: 100%;
+  height: auto;
+}
+.admin-rich-source {
+  resize: vertical;
+  min-height: 400px;
+  font-family: Consolas, monospace;
+  color: #163c4e;
+  background: #f8fbfc;
+}
+.admin-rich-editor--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+.admin-rich-editor--fullscreen .admin-rich-content,
+.admin-rich-editor--fullscreen .admin-rich-source {
+  flex: 1;
+  min-height: 0;
+}
+.admin-rich-editor--fullscreen .admin-rich-toolbar {
+  position: static;
+}
+@media (max-width: 600px) {
+  .admin-rich-content,
+  .admin-rich-source {
+    min-height: 260px;
+    padding: 14px !important;
+  }
+  .admin-rich-toolbar button {
+    padding: 7px;
+  }
+}

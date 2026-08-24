@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const empty = {
   title: "",
@@ -41,6 +41,159 @@ async function api(url, options = {}) {
     throw new Error(data.error || "Something went wrong.");
   }
   return response.status === 204 ? null : response.json();
+}
+
+function RichTextEditor({
+  value = "",
+  onChange,
+  placeholder = "Write content here…",
+}) {
+  const editorRef = useRef(null);
+  const [sourceMode, setSourceMode] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  useEffect(() => {
+    if (
+      !sourceMode &&
+      editorRef.current &&
+      editorRef.current.innerHTML !== value
+    )
+      editorRef.current.innerHTML = value || "";
+  }, [value, sourceMode]);
+  const run = (command, commandValue = null) => {
+    editorRef.current?.focus();
+    document.execCommand(command, false, commandValue);
+    onChange(editorRef.current?.innerHTML || "");
+  };
+  const ask = (command, label, fallback = "") => {
+    const result = window.prompt(label, fallback);
+    if (result) run(command, result);
+  };
+  const tools = [
+    ["undo", "fa-undo", "Undo"],
+    ["redo", "fa-redo", "Redo"],
+    ["bold", "fa-bold", "Bold"],
+    ["italic", "fa-italic", "Italic"],
+    ["underline", "fa-underline", "Underline"],
+    ["strikeThrough", "fa-strikethrough", "Strike through"],
+    ["justifyLeft", "fa-align-left", "Align left"],
+    ["justifyCenter", "fa-align-center", "Align center"],
+    ["justifyRight", "fa-align-right", "Align right"],
+    ["justifyFull", "fa-align-justify", "Justify"],
+    ["insertUnorderedList", "fa-list-ul", "Bulleted list"],
+    ["insertOrderedList", "fa-list-ol", "Numbered list"],
+    ["outdent", "fa-outdent", "Outdent"],
+    ["indent", "fa-indent", "Indent"],
+    ["removeFormat", "fa-eraser", "Remove formatting"],
+  ];
+  return (
+    <div
+      className={`admin-rich-editor${fullscreen ? " admin-rich-editor--fullscreen" : ""}`}
+    >
+      <div className="admin-rich-toolbar">
+        <button
+          type="button"
+          className={sourceMode ? "active" : ""}
+          title="HTML source"
+          onClick={() => setSourceMode((current) => !current)}
+        >
+          <i className="fas fa-code" /> Source
+        </button>
+        {!sourceMode && (
+          <>
+            <select
+              title="Text style"
+              defaultValue="p"
+              onChange={(e) => run("formatBlock", e.target.value)}
+            >
+              <option value="p">Paragraph</option>
+              <option value="h2">Heading 2</option>
+              <option value="h3">Heading 3</option>
+              <option value="h4">Heading 4</option>
+              <option value="blockquote">Quote</option>
+            </select>
+            <select
+              title="Font size"
+              defaultValue="3"
+              onChange={(e) => run("fontSize", e.target.value)}
+            >
+              <option value="2">Small</option>
+              <option value="3">Normal</option>
+              <option value="4">Large</option>
+              <option value="5">Extra large</option>
+            </select>
+            {tools.map(([command, icon, title]) => (
+              <button
+                type="button"
+                key={command}
+                title={title}
+                onClick={() => run(command)}
+              >
+                <i className={`fas ${icon}`} />
+              </button>
+            ))}
+            <label className="admin-rich-color" title="Text colour">
+              <i className="fas fa-palette" />
+              <input
+                type="color"
+                onChange={(e) => run("foreColor", e.target.value)}
+              />
+            </label>
+            <button
+              type="button"
+              title="Add link"
+              onClick={() => ask("createLink", "Enter link URL", "https://")}
+            >
+              <i className="fas fa-link" />
+            </button>
+            <button
+              type="button"
+              title="Remove link"
+              onClick={() => run("unlink")}
+            >
+              <i className="fas fa-unlink" />
+            </button>
+            <button
+              type="button"
+              title="Add image"
+              onClick={() => ask("insertImage", "Enter image URL", "/uploads/")}
+            >
+              <i className="fas fa-image" />
+            </button>
+            <button
+              type="button"
+              title="Insert horizontal line"
+              onClick={() => run("insertHorizontalRule")}
+            >
+              <i className="fas fa-minus" />
+            </button>
+          </>
+        )}
+        <button
+          type="button"
+          title="Fullscreen"
+          onClick={() => setFullscreen((current) => !current)}
+        >
+          <i className={`fas ${fullscreen ? "fa-compress" : "fa-expand"}`} />
+        </button>
+      </div>
+      {sourceMode ? (
+        <textarea
+          className="admin-rich-source"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : (
+        <div
+          ref={editorRef}
+          className="admin-rich-content"
+          contentEditable
+          suppressContentEditableWarning
+          data-placeholder={placeholder}
+          onInput={(e) => onChange(e.currentTarget.innerHTML)}
+        />
+      )}
+    </div>
+  );
 }
 
 const fillMissing = (defaults, saved) =>
@@ -1769,10 +1922,9 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
           <legend>Page Content (Editor)</legend>
           <label>
             Page content
-            <textarea
-              rows="12"
+            <RichTextEditor
               value={sections.page_content || ""}
-              onChange={(event) => set("page_content", event.target.value)}
+              onChange={(value) => set("page_content", value)}
               placeholder="Add the main page content here…"
             />
           </label>
@@ -2033,11 +2185,11 @@ function LegacyPageEditor({ pageKey }) {
         </label>
         <label>
           Page content
-          <textarea
-            name="body"
-            rows="12"
+          <RichTextEditor
             value={page.body || ""}
-            onChange={change}
+            onChange={(value) =>
+              setPage((current) => ({ ...current, body: value }))
+            }
             placeholder="Add the main page content here…"
           />
         </label>
@@ -2540,11 +2692,9 @@ function PolicyEditor({ policyKey, title }) {
           <legend>{title} (Editor)</legend>
           <label>
             Page Content
-            <textarea
-              className="admin-policy-editor"
-              rows="22"
+            <RichTextEditor
               value={body}
-              onChange={(e) => setBody(e.target.value)}
+              onChange={setBody}
               placeholder={`Write the ${title.toLowerCase()} here…`}
             />
           </label>
@@ -2791,10 +2941,9 @@ export default function AdminApp() {
         </label>
         <label>
           Blog Content (Editor)
-          <textarea
-            rows="10"
+          <RichTextEditor
             value={form.body}
-            onChange={(e) => setForm({ ...form, body: e.target.value })}
+            onChange={(value) => setForm({ ...form, body: value })}
           />
         </label>
         <div className="admin-upload">

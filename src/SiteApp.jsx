@@ -74,14 +74,36 @@ function applyStructuredSections(html, routeName, rawSections) {
     section.className = "cms-page";
     const container = documentNode.createElement("div");
     container.className = "container cms-page__inner";
-    String(sections.page_content)
-      .split(/\r?\n\r?\n/)
-      .filter(Boolean)
-      .forEach((value) => {
-        const paragraph = documentNode.createElement("p");
-        paragraph.textContent = value;
-        container.append(paragraph);
+    const content = String(sections.page_content);
+    if (/<[a-z][\s\S]*>/i.test(content)) {
+      const richDocument = new DOMParser().parseFromString(
+        content,
+        "text/html",
+      );
+      richDocument
+        .querySelectorAll("script,style,iframe,object,embed")
+        .forEach((node) => node.remove());
+      richDocument.querySelectorAll("*").forEach((node) => {
+        [...node.attributes].forEach((attribute) => {
+          if (
+            /^on/i.test(attribute.name) ||
+            (/^(href|src)$/i.test(attribute.name) &&
+              /^javascript:/i.test(attribute.value.trim()))
+          )
+            node.removeAttribute(attribute.name);
+        });
       });
+      container.innerHTML = richDocument.body.innerHTML;
+    } else {
+      content
+        .split(/\r?\n\r?\n/)
+        .filter(Boolean)
+        .forEach((value) => {
+          const paragraph = documentNode.createElement("p");
+          paragraph.textContent = value;
+          container.append(paragraph);
+        });
+    }
     section.append(container);
     hero.after(section);
   };
