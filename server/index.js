@@ -12,12 +12,25 @@ import multer from "multer";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sharp from "sharp";
+import nodemailer from "nodemailer";
 import { ensureSchema, pool } from "./db.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const uploadDir = path.join(root, "uploads");
 fs.mkdirSync(uploadDir, { recursive: true });
 const app = express();
+const enquiryRecipient = "hosmedai@gmail.com";
+const mailTransport = process.env.SMTP_PASS
+  ? nodemailer.createTransport({
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
+      port: Number(process.env.SMTP_PORT || 465),
+      secure: String(process.env.SMTP_SECURE || "true") !== "false",
+      auth: {
+        user: process.env.SMTP_USER || enquiryRecipient,
+        pass: process.env.SMTP_PASS,
+      },
+    })
+  : null;
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret || jwtSecret.length < 32)
   throw new Error("JWT_SECRET must contain at least 32 characters.");
@@ -96,6 +109,33 @@ app.post("/api/admin/logout", (_req, res) => {
 app.get("/api/admin/me", requireAdmin, (req, res) =>
   res.json({ username: req.admin.username }),
 );
+app.get("/api/admin/enquiries", requireAdmin, async (_req, res) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM enquiries ORDER BY created_at DESC, id DESC",
+  );
+  res.json(rows);
+});
+app.patch("/api/admin/enquiries/:id", requireAdmin, async (req, res) => {
+  const status = ["new", "contacted", "closed"].includes(req.body.status)
+    ? req.body.status
+    : "new";
+  const [result] = await pool.execute(
+    "UPDATE enquiries SET status=? WHERE id=?",
+    [status, req.params.id],
+  );
+  if (!result.affectedRows)
+    return res.status(404).json({ error: "Enquiry not found." });
+  const [rows] = await pool.execute("SELECT * FROM enquiries WHERE id=?", [
+    req.params.id,
+  ]);
+  res.json(rows[0]);
+});
+app.delete("/api/admin/enquiries/:id", requireAdmin, async (req, res) => {
+  const [result] = await pool.execute("DELETE FROM enquiries WHERE id=?", [
+    req.params.id,
+  ]);
+  res.status(result.affectedRows ? 204 : 404).end();
+});
 app.get("/api/admin/content", requireAdmin, async (_req, res) => {
   const [rows] = await pool.query(
     "SELECT * FROM content_items ORDER BY updated_at DESC",
@@ -480,6 +520,97 @@ app.get("/api/testimonials", async (_req, res) => {
   );
   res.json(rows);
 });
+app.post(
+  "/api/enquiries",
+  rateLimit({ windowMs: 15 * 60 * 1000, limit: 12 }),
+  async (req, res, next) => {
+    const clean = (value, length = 1000) =>
+      String(value || "")
+        .trim()
+        .slice(0, length);
+    const enquiryType = [
+      "home_consultation",
+      "contact",
+      "newsletter",
+    ].includes(req.body.enquiry_type)
+      ? req.body.enquiry_type
+      : "contact";
+    const values = {
+      name: clean(req.body.name, 180),
+      organisation: clean(req.body.organisation, 255),
+      phone: clean(req.body.phone, 80),
+      email: clean(req.body.email, 255).toLowerCase(),
+      requirement: clean(req.body.requirement, 255),
+      address: clean(req.body.address, 5000),
+      message: clean(req.body.message, 10000),
+    };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
+      return res.status(400).json({ error: "Enter a valid email address." });
+    if (enquiryType !== "newsletter" && !values.name)
+      return res.status(400).json({ error: "Name is required." });
+    try {
+      const [result] = await pool.execute(
+        "INSERT INTO enquiries (enquiry_type,name,organisation,phone,email,requirement,address,message) VALUES (?,?,?,?,?,?,?,?)",
+        [
+          enquiryType,
+          values.name,
+          values.organisation,
+          values.phone,
+          values.email,
+          values.requirement,
+          values.address,
+          values.message,
+        ],
+      );
+      let emailStatus = "failed";
+      if (mailTransport) {
+        const labels = {
+          home_consultation: "Home Consultation",
+          contact: "Contact Page Enquiry",
+          newsletter: "Newsletter Subscription",
+        };
+        const emailText = [
+          `New ${labels[enquiryType]}`,
+          `Name: ${values.name || "-"}`,
+          `Organisation: ${values.organisation || "-"}`,
+          `Phone: ${values.phone || "-"}`,
+          `Email: ${values.email}`,
+          `Requirement: ${values.requirement || "-"}`,
+          `Address: ${values.address || "-"}`,
+          `Message: ${values.message || "-"}`,
+        ].join("\n");
+        try {
+          await mailTransport.sendMail({
+            from:
+              process.env.SMTP_FROM ||
+              process.env.SMTP_USER ||
+              enquiryRecipient,
+            to: enquiryRecipient,
+            replyTo: values.email,
+            subject: `HosmedAI: ${labels[enquiryType]}`,
+            text: emailText,
+          });
+          emailStatus = "sent";
+        } catch (error) {
+          console.error("Enquiry email failed:", error.message);
+        }
+      }
+      await pool.execute("UPDATE enquiries SET email_status=? WHERE id=?", [
+        emailStatus,
+        result.insertId,
+      ]);
+      res.status(201).json({
+        id: result.insertId,
+        message:
+          enquiryType === "newsletter"
+            ? "Thank you for subscribing."
+            : "Thank you. Our team will contact you shortly.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 app.get("/api/content", async (_req, res) => {
   const [rows] = await pool.query(
     "SELECT id,title,slug,excerpt,body,image_url,category,author,published_at,seo_title,seo_description,updated_at FROM content_items WHERE status='published' ORDER BY COALESCE(published_at, updated_at) DESC",

@@ -111,6 +111,23 @@ export async function ensureSchema() {
     body LONGTEXT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS enquiries (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    enquiry_type ENUM('home_consultation','contact','newsletter') NOT NULL,
+    name VARCHAR(180) NULL,
+    organisation VARCHAR(255) NULL,
+    phone VARCHAR(80) NULL,
+    email VARCHAR(255) NOT NULL,
+    requirement VARCHAR(255) NULL,
+    address TEXT NULL,
+    message TEXT NULL,
+    status ENUM('new','contacted','closed') NOT NULL DEFAULT 'new',
+    email_status ENUM('pending','sent','failed') NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_enquiry_status_created (status, created_at),
+    INDEX idx_enquiry_type_created (enquiry_type, created_at)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
 
   try {
     const [[galleryCount]] = await pool.query(

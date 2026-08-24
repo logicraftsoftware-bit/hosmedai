@@ -4,6 +4,7 @@ import "./admin.css";
 import "./admin-menu.css";
 import "./admin-editor.css";
 import "./admin-entry.css";
+import "./admin-reports.css";
 
 const isAdmin = location.pathname.replace(/\/$/, "") === "/admin";
 const Application = lazy(() =>

@@ -5,6 +5,7 @@ import "./home-sections.css";
 import "./home-carousel.css";
 import "./policy-page.css";
 import "./blog-pages.css";
+import "./form-feedback.css";
 
 const scripts = [
   "/assets/vendors/jquery/jquery-3.7.1.min.js",
@@ -1168,7 +1169,7 @@ export default function SiteApp() {
         )
         .replace(
           /<form action="#" class="donate-now-form[\s\S]*?<\/form><!-- \/.donate-form -->/,
-          `<form action="#" class="donate-now-form consultation-form wow fadeInUp" data-wow-duration="1500ms">
+          `<form action="#" class="donate-now-form consultation-form wow fadeInUp" data-enquiry-form="home_consultation" data-wow-duration="1500ms">
             <div class="consultation-form__grid">
               <div class="consultation-form__control">
                 <input type="text" name="contact_name" id="contact_name" placeholder="Contact Person Name" autocomplete="name" required>
@@ -1354,7 +1355,7 @@ export default function SiteApp() {
                 <div class="hosmed-contact__channel"><i class="fas fa-envelope"></i><div><span>Email Us</span><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a></div></div>
                 <div class="hosmed-contact__channel"><i class="fas fa-comments"></i><div><span>Consultation</span><strong>Hospital Planning &amp; Digital Healthcare</strong></div></div>
               </div>
-              <form class="hosmed-contact__form wow fadeInRight" data-wow-duration="1200ms" action="#">
+              <form class="hosmed-contact__form wow fadeInRight" data-enquiry-form="contact" data-wow-duration="1200ms" action="#">
                 <div class="hosmed-contact__form-grid">
                   <label><span>Your Name</span><input type="text" name="name" placeholder="Enter your name" autocomplete="name" required></label>
                   <label><span>Hospital / Organisation</span><input type="text" name="organisation" placeholder="Organisation name" autocomplete="organization" required></label>
@@ -2009,7 +2010,7 @@ export default function SiteApp() {
         <div class="hosmed-footer__subscribe">
           <div class="hosmed-footer__subscribe-icon"><i class="far fa-envelope"></i></div>
           <div><h3>Subscribe to Get Our <span>Important Updates</span></h3><p>Stay updated with our latest news, insights and healthcare solutions.</p></div>
-          <form action="#"><input type="email" aria-label="Email Address" placeholder="Email Address" required><button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button></form>
+          <form action="#" data-enquiry-form="newsletter"><input type="email" name="email" aria-label="Email Address" placeholder="Email Address" autocomplete="email" required><button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button></form>
         </div>
       </div>
       <div class="hosmed-footer__bottom"><div class="container"><p><i class="fas fa-shield-alt"></i> © 2026 HosmedAI. All Rights Reserved.</p><nav><a href="/privacy-policy">Privacy Policy</a><a href="/terms-and-conditions">Terms &amp; Conditions</a><a href="/cookie-policy">Cookie Policy</a></nav></div></div>
@@ -2488,6 +2489,55 @@ export default function SiteApp() {
     blogEntries,
     blogSlug,
   ]);
+
+  useEffect(() => {
+    const forms = [...document.querySelectorAll("[data-enquiry-form]")];
+    const submitEnquiry = async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = form.querySelector('button[type="submit"]');
+      let feedback = form.querySelector(".hosmed-form-feedback");
+      if (!feedback) {
+        feedback = document.createElement("p");
+        feedback.className = "hosmed-form-feedback";
+        feedback.setAttribute("aria-live", "polite");
+        form.appendChild(feedback);
+      }
+      const values = Object.fromEntries(new FormData(form));
+      const payload = {
+        ...values,
+        enquiry_type: form.dataset.enquiryForm,
+        name: values.name || values.contact_name || "",
+        organisation: values.organisation || values.hospital_name || "",
+      };
+      feedback.className = "hosmed-form-feedback is-pending";
+      feedback.textContent = "Sendingâ€¦";
+      if (button) button.disabled = true;
+      try {
+        const response = await fetch("/api/enquiries", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Unable to send enquiry.");
+        feedback.className = "hosmed-form-feedback is-success";
+        feedback.textContent =
+          form.dataset.enquiryForm === "newsletter"
+            ? "Thank you for subscribing."
+            : "Thank you. Our team will contact you shortly.";
+        form.reset();
+      } catch (error) {
+        feedback.className = "hosmed-form-feedback is-error";
+        feedback.textContent = error.message;
+      } finally {
+        if (button) button.disabled = false;
+      }
+    };
+    forms.forEach((form) => form.addEventListener("submit", submitEnquiry));
+    return () =>
+      forms.forEach((form) => form.removeEventListener("submit", submitEnquiry));
+  }, [markup]);
 
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }

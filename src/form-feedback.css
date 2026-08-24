@@ -1,0 +1,35 @@
+.hosmed-form-feedback {
+  width: 100%;
+  margin: 12px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.hosmed-form-feedback.is-pending {
+  color: #123c50;
+}
+
+.hosmed-form-feedback.is-success {
+  color: #146c43;
+}
+
+.hosmed-form-feedback.is-error {
+  color: #a61b1b;
+}
+
+.hosmed-footer__subscribe .hosmed-form-feedback {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.hosmed-footer__subscribe form {
+  position: relative;
+}
+
+[data-enquiry-form] button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}

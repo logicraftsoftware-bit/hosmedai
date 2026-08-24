@@ -2805,6 +2805,108 @@ function PolicyEditor({ policyKey, title }) {
   );
 }
 
+function ReportsManager() {
+  const [enquiries, setEnquiries] = useState([]);
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("all");
+  const [message, setMessage] = useState("");
+  const load = () =>
+    api("/api/admin/enquiries")
+      .then(setEnquiries)
+      .catch((error) => setMessage(error.message));
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const updateStatus = async (id, status) => {
+    try {
+      const updated = await api(`/api/admin/enquiries/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      });
+      setEnquiries((current) =>
+        current.map((item) => (item.id === id ? updated : item)),
+      );
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  const remove = async (item) => {
+    if (!confirm(`Delete enquiry from ${item.name || item.email}?`)) return;
+    await api(`/api/admin/enquiries/${item.id}`, { method: "DELETE" });
+    setEnquiries((current) => current.filter(({ id }) => id !== item.id));
+  };
+
+  const labels = {
+    home_consultation: "Home consultation",
+    contact: "Contact page",
+    newsletter: "Newsletter",
+  };
+  const filtered = enquiries.filter((item) => {
+    const matchesType = type === "all" || item.enquiry_type === type;
+    const haystack = `${item.name || ""} ${item.organisation || ""} ${item.email || ""} ${item.phone || ""} ${item.message || ""}`.toLowerCase();
+    return matchesType && haystack.includes(query.toLowerCase());
+  });
+
+  return (
+    <section className="admin-reports">
+      <div className="admin-reports__heading">
+        <div>
+          <small>Content</small>
+          <h1>Reports</h1>
+          <p>All website enquiries and newsletter subscriptions.</p>
+        </div>
+        <span>{enquiries.length} total</span>
+      </div>
+      <div className="admin-reports__filters">
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search name, email, phone or organisationâ€¦"
+        />
+        <select value={type} onChange={(event) => setType(event.target.value)}>
+          <option value="all">All enquiries</option>
+          <option value="home_consultation">Home consultation</option>
+          <option value="contact">Contact page</option>
+          <option value="newsletter">Newsletter</option>
+        </select>
+      </div>
+      {message && <p className="admin-error">{message}</p>}
+      {!filtered.length && <div className="admin-reports__empty">No enquiries found.</div>}
+      <div className="admin-reports__list">
+        {filtered.map((item) => (
+          <article key={item.id}>
+            <div className="admin-reports__meta">
+              <strong>{labels[item.enquiry_type] || item.enquiry_type}</strong>
+              <time>{new Date(item.created_at).toLocaleString()}</time>
+            </div>
+            <div className="admin-reports__details">
+              <div><small>Name</small><b>{item.name || "â€”"}</b></div>
+              <div><small>Organisation</small><b>{item.organisation || "â€”"}</b></div>
+              <div><small>Email</small><a href={`mailto:${item.email}`}>{item.email}</a></div>
+              <div><small>Phone</small>{item.phone ? <a href={`tel:${item.phone}`}>{item.phone}</a> : <b>â€”</b>}</div>
+              {item.requirement && <div><small>Requirement</small><b>{item.requirement}</b></div>}
+              {item.address && <div className="is-wide"><small>Address</small><p>{item.address}</p></div>}
+              {item.message && <div className="is-wide"><small>Message</small><p>{item.message}</p></div>}
+            </div>
+            <div className="admin-reports__actions">
+              <span className={`email-${item.email_status}`}>Email: {item.email_status}</span>
+              <select value={item.status} onChange={(event) => updateStatus(item.id, event.target.value)}>
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="closed">Closed</option>
+              </select>
+              <button className="admin-delete" onClick={() => remove(item)}>Delete</button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function AdminApp() {
   const [user, setUser] = useState(null);
   const [checking, setChecking] = useState(true);
@@ -3240,6 +3342,13 @@ export default function AdminApp() {
             <span>Testimonial Entry</span>
           </button>
           <button
+            className={`admin-library-link ${section === "reports" ? "active" : ""}`}
+            onClick={() => setSection("reports")}
+          >
+            <i className="fas fa-clipboard-list" />
+            <span>Reports</span>
+          </button>
+          <button
             className={`admin-library-link ${section === "terms" ? "active" : ""}`}
             onClick={() => setSection("terms")}
           >
@@ -3272,6 +3381,8 @@ export default function AdminApp() {
             contentLibrary
           ) : section === "testimonials" ? (
             <TestimonialManager />
+          ) : section === "reports" ? (
+            <ReportsManager />
           ) : section === "terms" ? (
             <PolicyEditor policyKey="terms" title="Terms & Conditions" />
           ) : section === "privacy" ? (
