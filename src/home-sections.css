@@ -274,6 +274,31 @@
   margin-top: 0 !important;
 }
 
+/* Keep every dynamic service slider card the same size. */
+.banner-one__inner .owl-stage {
+  display: flex;
+}
+.banner-one__inner .owl-item,
+.banner-one__inner .owl-item > .item {
+  display: flex;
+  height: auto;
+}
+.banner-one__inner .banner-one__item {
+  width: 100%;
+  min-height: 352px;
+}
+.banner-one__inner .banner-one__item__main-title {
+  min-height: 90px;
+}
+@media (max-width: 767px) {
+  .banner-one__inner .banner-one__item {
+    min-height: 320px;
+  }
+  .banner-one__inner .banner-one__item__main-title {
+    min-height: 0;
+  }
+}
+
 /* Keep the homepage About media and copy in a stable two-column layout. */
 .about-one .row {
   display: grid !important;
