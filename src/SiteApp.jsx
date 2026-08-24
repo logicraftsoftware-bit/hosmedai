@@ -1808,7 +1808,7 @@ export default function SiteApp() {
           </div>
           <nav class="hosmed-footer__column" aria-label="Footer links"><h3>Links</h3><ul><li><a href="/">Home</a></li><li><a href="/why-hosmedai">Why HosmedAI</a></li><li><a href="/about">About Us</a></li><li><a href="/hospital-planning">Hospital Planning</a></li><li><a href="/nabh-nabl">NABH / NABL</a></li><li><a href="/hospital-software">Hospital Software</a></li><li><a href="/ai-healthcare">AI Healthcare</a></li><li><a href="/services">Solutions</a></li><li><a href="/projects">Projects</a></li><li><a href="/contact">Contact</a></li></ul></nav>
           <nav class="hosmed-footer__column" aria-label="Explore"><h3>Explore</h3><ul><li><a href="/hospital-planning">Planning &amp; Design</a></li><li><a href="/nabh-nabl">Quality &amp; Accreditation</a></li><li><a href="/hospital-software">Hospital Technology</a></li><li><a href="/ai-healthcare">Healthcare AI</a></li><li><a href="/projects">Our Projects</a></li><li><a href="/contact">Book a Consultation</a></li></ul></nav>
-          <div class="hosmed-footer__contact"><h3>Contact</h3><div><i class="fas fa-phone-alt"></i><p><a href="tel:+9138008060">+91 3800 8060</a><a href="tel:+9195550114">+91 9555 0114</a></p></div><div><i class="fas fa-envelope"></i><p><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a><a href="https://hosmedai.vercel.app">hosmedai.vercel.app</a></p></div><div><i class="fas fa-map-marker-alt"></i><p><span>Healthcare Solutions</span><span>India</span></p></div></div>
+          <div class="hosmed-footer__contact"><h3>Contact</h3><div><i class="fas fa-phone-alt"></i><p><a href="tel:+9138008060">+91 3800 8060</a><a href="tel:+9195550114">+91 9555 0114</a></p></div><div><i class="fas fa-envelope"></i><p><a href="mailto:hello@hosmedai.com">hello@hosmedai.com</a></p></div><div><i class="fas fa-map-marker-alt"></i><p><span>Healthcare Solutions</span><span>India</span></p></div></div>
         </div>
         <div class="hosmed-footer__subscribe">
           <div class="hosmed-footer__subscribe-icon"><i class="far fa-envelope"></i></div>
@@ -1863,11 +1863,18 @@ export default function SiteApp() {
           safe(websiteSettings.email),
         );
       const phones = list(websiteSettings.phones).filter(Boolean);
-      if (phones.length)
+      if (phones.length) {
         html = html.replace(
           /<div><i class="fas fa-phone-alt"><\/i><p>[\s\S]*?<\/p><\/div>/,
           `<div><i class="fas fa-phone-alt"></i><p>${phones.map((phone) => `<a href="tel:${safe(phone).replace(/[^+0-9]/g, "")}">${safe(phone)}</a>`).join("")}</p></div>`,
         );
+        const mobilePhone = safe(phones[0]);
+        const mobilePhoneHref = mobilePhone.replace(/[^+0-9]/g, "");
+        html = html.replace(
+          /(<ul class="mobile-nav__contact[\s\S]*?<i class="fa fa-phone-alt"><\/i>\s*<a href="tel:)[^"]+("[^>]*>)[\s\S]*?(<\/a>)/,
+          `$1${mobilePhoneHref}$2${mobilePhone}$3`,
+        );
+      }
       if (websiteSettings.address) {
         const headerAddress = safe(websiteSettings.address)
           .split(/\r?\n/)
