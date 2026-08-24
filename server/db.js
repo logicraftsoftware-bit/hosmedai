@@ -1,14 +1,14 @@
-import mysql from 'mysql2/promise';
+import mysql from "mysql2/promise";
 
 export const pool = mysql.createPool({
-  host: process.env.DB_HOST || '127.0.0.1',
+  host: process.env.DB_HOST || "127.0.0.1",
   port: Number(process.env.DB_PORT || 3306),
   database: process.env.DB_DATABASE,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   waitForConnections: true,
   connectionLimit: 10,
-  charset: 'utf8mb4'
+  charset: "utf8mb4",
 });
 
 export async function ensureSchema() {
@@ -44,8 +44,13 @@ export async function ensureSchema() {
     status ENUM('draft','published') NOT NULL DEFAULT 'draft',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
-  const [pageColumns] = await pool.query("SHOW COLUMNS FROM page_settings LIKE 'sections'");
-  if (!pageColumns.length) await pool.query('ALTER TABLE page_settings ADD COLUMN sections JSON NULL AFTER image_url');
+  const [pageColumns] = await pool.query(
+    "SHOW COLUMNS FROM page_settings LIKE 'sections'",
+  );
+  if (!pageColumns.length)
+    await pool.query(
+      "ALTER TABLE page_settings ADD COLUMN sections JSON NULL AFTER image_url",
+    );
   await pool.query(`CREATE TABLE IF NOT EXISTS website_settings (
     id TINYINT UNSIGNED PRIMARY KEY DEFAULT 1,
     header_logo VARCHAR(500) NULL,
@@ -55,5 +60,11 @@ export async function ensureSchema() {
     address TEXT NULL,
     social_links JSON NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS gallery_images (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    image_url VARCHAR(500) NOT NULL,
+    original_name VARCHAR(255) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
 }
