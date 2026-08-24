@@ -279,20 +279,26 @@
   padding-bottom: 55px !important;
 }
 .donation-one.section-space-top {
-  padding-top: 65px !important;
+  padding-top: 25px !important;
 }
 .donation-one .sec-title {
-  padding-bottom: 30px;
+  padding-bottom: 12px !important;
+}
+.donation-one__carousel {
+  margin-top: -105px !important;
 }
 @media (max-width: 767px) {
   .about-one {
     padding-bottom: 40px !important;
   }
   .donation-one.section-space-top {
-    padding-top: 45px !important;
+    padding-top: 25px !important;
   }
   .donation-one .sec-title {
-    padding-bottom: 22px;
+    padding-bottom: 12px !important;
+  }
+  .donation-one__carousel {
+    margin-top: -35px !important;
   }
 }
 
