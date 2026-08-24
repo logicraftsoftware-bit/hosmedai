@@ -129,7 +129,13 @@ function GeneralSettings() {
     email: "hello@hosmedai.com",
     phones: ["+91 3800 8060", "+91 9555 0114"],
     address: "Healthcare Solutions\nIndia",
-    social_links: [{ icon: "fab fa-facebook-f", link: "" }],
+    social_links: [
+      { icon: "fab fa-facebook-f", link: "" },
+      { icon: "fab fa-x-twitter", link: "" },
+      { icon: "fab fa-linkedin-in", link: "" },
+      { icon: "fab fa-instagram", link: "" },
+      { icon: "fab fa-youtube", link: "" },
+    ],
     header_settings: {
       navigation: [
         { label: "Home", link: "/", icon: "fas fa-home" },
@@ -462,7 +468,7 @@ function GeneralSettings() {
           />
         </label>
         <fieldset className="admin-repeat">
-          <legend>Social media</legend>
+          <legend>Header &amp; footer social media</legend>
           {(settings.social_links || []).map((social, index) => (
             <div className="admin-social-row" key={index}>
               <select

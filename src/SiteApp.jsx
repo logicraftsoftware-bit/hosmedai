@@ -1563,11 +1563,19 @@ export default function SiteApp() {
       const socials = list(websiteSettings.social_links).filter(
         (item) => item?.link,
       );
-      if (socials.length)
+      if (socials.length) {
+        const socialItems = socials
+          .map(
+            (item) =>
+              `<a href="${safe(item.link)}" target="_blank" rel="noopener noreferrer" aria-label="Social media"><i class="${safe(item.icon)}"></i></a>`,
+          )
+          .join("");
         html = html.replace(
-          /<div class="hosmed-footer__social">[\s\S]*?<\/div>/,
-          `<div class="hosmed-footer__social">${socials.map((item) => `<a href="${safe(item.link)}" target="_blank" rel="noopener noreferrer" aria-label="Social media"><i class="${safe(item.icon)}"></i></a>`).join("")}</div>`,
+          /<div class="(topbar-one__social|mobile-nav__social|hosmed-footer__social)">[\s\S]*?<\/div>/g,
+          (_match, className) =>
+            `<div class="${className}">${socialItems}</div>`,
         );
+      }
       const footerLinks = (items = []) =>
         items
           .filter((item) => item?.label && item?.link)
