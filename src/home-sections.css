@@ -274,6 +274,28 @@
   margin-top: 16px !important;
 }
 
+/* Tighten the transition from About into the capabilities carousel. */
+.about-one {
+  padding-bottom: 55px !important;
+}
+.donation-one.section-space-top {
+  padding-top: 65px !important;
+}
+.donation-one .sec-title {
+  padding-bottom: 30px;
+}
+@media (max-width: 767px) {
+  .about-one {
+    padding-bottom: 40px !important;
+  }
+  .donation-one.section-space-top {
+    padding-top: 45px !important;
+  }
+  .donation-one .sec-title {
+    padding-bottom: 22px;
+  }
+}
+
 /* Keep every dynamic service slider card the same size. */
 .banner-one__inner .owl-stage {
   display: flex;
