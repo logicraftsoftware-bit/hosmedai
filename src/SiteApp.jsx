@@ -173,22 +173,74 @@ function applyStructuredSections(html, routeName, rawSections) {
           }),
         );
     }
-    setText(".about-one .sec-title__title", sections.about?.title);
-    setText(".about-one__text", sections.about?.description);
-    setImage(".about-one img", sections.about?.image);
     const aboutCards = Array.isArray(sections.about?.cards)
       ? sections.about.cards
       : [];
-    documentNode
-      .querySelectorAll(".about-one__feature, .about-one__item")
-      .forEach((node, index) => {
-        const item = aboutCards[index];
-        if (!item) return;
-        const title = node.querySelector("h3,h4");
-        const copy = node.querySelector("p");
-        if (title) title.textContent = item.title || "";
-        if (copy) copy.textContent = item.description || "";
+    const aboutSection = documentNode.querySelector(".about-one");
+    if (aboutSection && sections.about) {
+      const container = documentNode.createElement("div");
+      container.className = "container hosmed-home-about__grid";
+      const copy = documentNode.createElement("div");
+      copy.className = "hosmed-home-about__copy";
+      const eyebrow = documentNode.createElement("p");
+      eyebrow.className = "hosmed-home-about__eyebrow";
+      eyebrow.textContent = sections.about.short_title || "About HosmedAI";
+      const heading = documentNode.createElement("h2");
+      heading.textContent = sections.about.title || "";
+      const description = documentNode.createElement("p");
+      description.className = "hosmed-home-about__description";
+      description.textContent = sections.about.description || "";
+      const cards = documentNode.createElement("div");
+      cards.className = "hosmed-home-about__cards";
+      aboutCards.slice(0, 2).forEach((item, index) => {
+        const fallback =
+          index === 0
+            ? {
+                title: "End-to-End Planning",
+                description:
+                  "Clinical, architectural and operational planning under one roof.",
+              }
+            : {
+                title: "Smarter Operations",
+                description:
+                  "Technology and AI that connect teams, workflows and decisions.",
+              };
+        const card = documentNode.createElement("article");
+        const icon = documentNode.createElement("span");
+        icon.innerHTML =
+          index === 0
+            ? '<i class="fas fa-hospital"></i>'
+            : '<i class="fas fa-hand-holding-heart"></i>';
+        const title = documentNode.createElement("h3");
+        title.textContent = item.title || fallback.title;
+        const text = documentNode.createElement("p");
+        text.textContent = item.description || fallback.description;
+        card.append(icon, title, text);
+        cards.append(card);
       });
+      const button = documentNode.createElement("a");
+      button.className = "heartox-btn hosmed-home-about__button";
+      button.href = sections.about.button_link || "/about";
+      button.textContent = sections.about.button_text || "Discover More";
+      copy.append(eyebrow, heading, description, cards, button);
+      const media = documentNode.createElement("div");
+      media.className = "hosmed-home-about__media";
+      const image = documentNode.createElement("img");
+      image.src = sections.about.image || "";
+      image.alt = sections.about.title || "About HosmedAI";
+      image.loading = "lazy";
+      image.setAttribute("fetchpriority", "low");
+      const badge = documentNode.createElement("div");
+      badge.className = "hosmed-home-about__badge";
+      const number = documentNode.createElement("strong");
+      number.textContent = sections.about.stat_number || "360K";
+      const label = documentNode.createElement("span");
+      label.textContent = sections.about.stat_text || "Integrated Capabilities";
+      badge.append(number, label);
+      media.append(image, badge);
+      container.append(copy, media);
+      aboutSection.replaceChildren(container);
+    }
     setImage(
       ".donate-now__bg, .donate-now__left",
       sections.contact?.image,
@@ -1878,12 +1930,14 @@ export default function SiteApp() {
         await loadScript(src);
       }
       if (window.jQuery) {
-        window.jQuery(".main-slider-one__carousel").each(function () {
-          const slider = window.jQuery(this);
-          if (!slider.hasClass("owl-loaded") && slider.owlCarousel) {
-            slider.owlCarousel(slider.data("owl-options"));
-          }
-        });
+        window
+          .jQuery(".main-slider-one__carousel, .banner-one__inner")
+          .each(function () {
+            const slider = window.jQuery(this);
+            if (!slider.hasClass("owl-loaded") && slider.owlCarousel) {
+              slider.owlCarousel(slider.data("owl-options"));
+            }
+          });
       }
     })();
     return () => {

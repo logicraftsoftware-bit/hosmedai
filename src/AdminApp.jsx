@@ -723,10 +723,15 @@ const structuredDefaults = {
       },
     ],
     about: {
+      short_title: "About HosmedAI",
       title: "From Hospital Planning to Digital Healthcare — We Do It All.",
       description:
         "HosmedAI brings clinical planning, architecture, infrastructure, equipment, compliance, accreditation and technology together through one integrated platform.",
       image: "/assets/images/about/about-001.webp",
+      stat_number: "360K",
+      stat_text: "Integrated Capabilities",
+      button_text: "Discover More",
+      button_link: "/about",
       cards: [
         { title: "", description: "" },
         { title: "", description: "" },
@@ -1442,6 +1447,9 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
         </RepeatEditor>
         <fieldset className="admin-section">
           <legend>Home page about</legend>
+          {text("Short title", sections.about?.short_title, (value) =>
+            group("about", { short_title: value }),
+          )}
           {text("Title", sections.about?.title, (value) =>
             group("about", { title: value }),
           )}
@@ -1457,6 +1465,20 @@ function StructuredPageFields({ pageKey, sections, setSections, upload }) {
             onChange={(value) => group("about", { image: value })}
             upload={upload}
           />
+          <div className="admin-grid admin-grid--2">
+            {text("Stat number", sections.about?.stat_number, (value) =>
+              group("about", { stat_number: value }),
+            )}
+            {text("Stat text", sections.about?.stat_text, (value) =>
+              group("about", { stat_text: value }),
+            )}
+            {text("Button text", sections.about?.button_text, (value) =>
+              group("about", { button_text: value }),
+            )}
+            {text("Button link", sections.about?.button_link, (value) =>
+              group("about", { button_link: value }),
+            )}
+          </div>
           <RepeatEditor
             title="About cards"
             min={2}

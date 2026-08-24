@@ -338,3 +338,142 @@
     height: min(520px, 70vw);
   }
 }
+
+.hosmed-home-about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 560px);
+  gap: clamp(45px, 6vw, 90px);
+  align-items: center;
+}
+.hosmed-home-about__eyebrow {
+  margin: 0 0 10px;
+  color: #078d91;
+  font-size: 18px;
+  font-weight: 700;
+}
+.hosmed-home-about__copy > h2 {
+  margin: 0 0 18px;
+  color: #0d344f;
+  font-size: clamp(36px, 4vw, 54px);
+  line-height: 1.12;
+}
+.hosmed-home-about__description {
+  margin: 0 0 30px;
+  color: #687884;
+  font-size: 17px;
+  line-height: 1.8;
+}
+.hosmed-home-about__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 30px;
+  border: 1px solid #dce3e7;
+  border-radius: 14px;
+}
+.hosmed-home-about__cards article {
+  position: relative;
+  min-height: 190px;
+  padding: 48px 30px 25px;
+}
+.hosmed-home-about__cards article + article {
+  border-left: 1px solid #dce3e7;
+}
+.hosmed-home-about__cards article > span {
+  position: absolute;
+  top: -25px;
+  left: 28px;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 50%;
+  background: #078d91;
+  color: #fff;
+  font-size: 23px;
+}
+.hosmed-home-about__cards h3 {
+  margin: 10px 0 8px;
+  color: #0d344f;
+  font-size: 21px;
+}
+.hosmed-home-about__cards p {
+  margin: 0;
+  color: #687884;
+  line-height: 1.65;
+}
+.hosmed-home-about__media {
+  position: relative;
+  padding: 0 25px 34px 0;
+}
+.hosmed-home-about__media::after {
+  position: absolute;
+  z-index: 0;
+  top: 25px;
+  right: 0;
+  bottom: 0;
+  width: 55%;
+  border: 2px solid #f3b33d;
+  border-left: 0;
+  border-radius: 0 16px 16px 0;
+  content: "";
+}
+.hosmed-home-about__media img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 610px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+.hosmed-home-about__badge {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 18px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-height: 112px;
+  padding: 22px 34px;
+  border-radius: 55px 8px 55px 8px;
+  background: #0d344f;
+  color: #fff;
+}
+.hosmed-home-about__badge strong {
+  font-size: clamp(38px, 4vw, 55px);
+  line-height: 1;
+}
+.hosmed-home-about__badge span {
+  color: #f3b33d;
+  font-size: 21px;
+  font-weight: 700;
+}
+@media (max-width: 991px) {
+  .hosmed-home-about__grid {
+    grid-template-columns: 1fr;
+  }
+  .hosmed-home-about__media {
+    max-width: 620px;
+  }
+}
+@media (max-width: 575px) {
+  .hosmed-home-about__cards {
+    grid-template-columns: 1fr;
+  }
+  .hosmed-home-about__cards article + article {
+    border-top: 1px solid #dce3e7;
+    border-left: 0;
+  }
+  .hosmed-home-about__cards article + article > span {
+    top: 18px;
+  }
+  .hosmed-home-about__media img {
+    height: 480px;
+  }
+  .hosmed-home-about__badge {
+    gap: 12px;
+    padding: 18px 22px;
+  }
+}
