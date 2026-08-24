@@ -129,6 +129,10 @@ app.put("/api/admin/website-settings", requireAdmin, async (req, res) => {
         .filter((item) => item.icon || item.link)
         .slice(0, 20)
     : [];
+  const objectJson = (value) =>
+    JSON.stringify(
+      value && typeof value === "object" && !Array.isArray(value) ? value : {},
+    );
   const values = [
     String(req.body.header_logo || ""),
     String(req.body.footer_logo || ""),
@@ -136,10 +140,12 @@ app.put("/api/admin/website-settings", requireAdmin, async (req, res) => {
     JSON.stringify(cleanList(req.body.phones)),
     String(req.body.address || "").trim(),
     JSON.stringify(socialLinks),
+    objectJson(req.body.header_settings),
+    objectJson(req.body.footer_settings),
   ];
   await pool.execute(
-    `INSERT INTO website_settings (id,header_logo,footer_logo,email,phones,address,social_links) VALUES (1,?,?,?,?,?,?)
-    ON DUPLICATE KEY UPDATE header_logo=VALUES(header_logo),footer_logo=VALUES(footer_logo),email=VALUES(email),phones=VALUES(phones),address=VALUES(address),social_links=VALUES(social_links)`,
+    `INSERT INTO website_settings (id,header_logo,footer_logo,email,phones,address,social_links,header_settings,footer_settings) VALUES (1,?,?,?,?,?,?,?,?)
+    ON DUPLICATE KEY UPDATE header_logo=VALUES(header_logo),footer_logo=VALUES(footer_logo),email=VALUES(email),phones=VALUES(phones),address=VALUES(address),social_links=VALUES(social_links),header_settings=VALUES(header_settings),footer_settings=VALUES(footer_settings)`,
     values,
   );
   const [rows] = await pool.query("SELECT * FROM website_settings WHERE id=1");
@@ -293,14 +299,12 @@ function contentValues(body) {
   ];
 }
 const contentError = (error, res) =>
-  res
-    .status(error.code === "ER_DUP_ENTRY" ? 409 : 400)
-    .json({
-      error:
-        error.code === "ER_DUP_ENTRY"
-          ? "That slug already exists."
-          : error.message,
-    });
+  res.status(error.code === "ER_DUP_ENTRY" ? 409 : 400).json({
+    error:
+      error.code === "ER_DUP_ENTRY"
+        ? "That slug already exists."
+        : error.message,
+  });
 app.post("/api/admin/content", requireAdmin, async (req, res) => {
   try {
     const [result] = await pool.execute(
@@ -366,7 +370,7 @@ app.get("/api/pages/:key", async (req, res) => {
 });
 app.get("/api/website-settings", async (_req, res) => {
   const [rows] = await pool.query(
-    "SELECT header_logo,footer_logo,email,phones,address,social_links,updated_at FROM website_settings WHERE id=1",
+    "SELECT header_logo,footer_logo,email,phones,address,social_links,header_settings,footer_settings,updated_at FROM website_settings WHERE id=1",
   );
   res.json(rows[0] || {});
 });
@@ -386,14 +390,12 @@ app.get(/.*/, (_req, res) =>
   res.set("Cache-Control", "no-cache").sendFile(path.join(dist, "index.html")),
 );
 app.use((error, _req, res, _next) =>
-  res
-    .status(error.code === "LIMIT_FILE_SIZE" ? 413 : 500)
-    .json({
-      error:
-        error.code === "LIMIT_FILE_SIZE"
-          ? "Image must be under 5 MB."
-          : "Server error.",
-    }),
+  res.status(error.code === "LIMIT_FILE_SIZE" ? 413 : 500).json({
+    error:
+      error.code === "LIMIT_FILE_SIZE"
+        ? "Image must be under 5 MB."
+        : "Server error.",
+  }),
 );
 
 await ensureSchema();

@@ -130,13 +130,85 @@ function GeneralSettings() {
     phones: ["+91 3800 8060", "+91 9555 0114"],
     address: "Healthcare Solutions\nIndia",
     social_links: [{ icon: "fab fa-facebook-f", link: "" }],
+    header_settings: {
+      navigation: [
+        { label: "Home", link: "/", icon: "fas fa-home" },
+        {
+          label: "Why HosmedAI",
+          link: "/why-hosmedai",
+          icon: "fas fa-shield-alt",
+        },
+        { label: "About", link: "/about", icon: "fas fa-hospital-user" },
+        {
+          label: "Hospital Planning",
+          link: "/hospital-planning",
+          icon: "fas fa-drafting-compass",
+        },
+        { label: "NABH / NABL", link: "/nabh-nabl", icon: "fas fa-award" },
+        {
+          label: "Hospital Software",
+          link: "/hospital-software",
+          icon: "fas fa-laptop-medical",
+        },
+        {
+          label: "AI Healthcare",
+          link: "/ai-healthcare",
+          icon: "fas fa-brain",
+        },
+        { label: "Solutions", link: "/services", icon: "fas fa-th-large" },
+        {
+          label: "Projects",
+          link: "/projects",
+          icon: "fas fa-briefcase-medical",
+        },
+        { label: "Contact", link: "/contact", icon: "fas fa-envelope" },
+      ],
+      button_text: "Book a Consultation",
+      button_link: "/contact",
+    },
+    footer_settings: {
+      description:
+        "We partner with healthcare organisations to design, build and operate smarter hospitals through integrated solutions.",
+      links_title: "Links",
+      links: [
+        { label: "Home", link: "/" },
+        { label: "Why HosmedAI", link: "/why-hosmedai" },
+        { label: "About Us", link: "/about" },
+        { label: "Hospital Planning", link: "/hospital-planning" },
+        { label: "NABH / NABL", link: "/nabh-nabl" },
+        { label: "Hospital Software", link: "/hospital-software" },
+        { label: "AI Healthcare", link: "/ai-healthcare" },
+        { label: "Solutions", link: "/services" },
+        { label: "Projects", link: "/projects" },
+        { label: "Contact", link: "/contact" },
+      ],
+      explore_title: "Explore",
+      explore_links: [
+        { label: "Planning & Design", link: "/hospital-planning" },
+        { label: "Quality & Accreditation", link: "/nabh-nabl" },
+        { label: "Hospital Technology", link: "/hospital-software" },
+        { label: "Healthcare AI", link: "/ai-healthcare" },
+        { label: "Our Projects", link: "/projects" },
+        { label: "Book a Consultation", link: "/contact" },
+      ],
+      website_link: "https://hosmedai.com",
+      newsletter_title: "Subscribe to Get Our Important Updates",
+      newsletter_description:
+        "Stay updated with our latest news, insights and healthcare solutions.",
+      copyright: "© 2026 HosmedAI. All Rights Reserved.",
+      policy_links: [
+        { label: "Privacy Policy", link: "#" },
+        { label: "Terms of Use", link: "#" },
+        { label: "Cookie Policy", link: "#" },
+      ],
+    },
   };
   const [settings, setSettings] = useState(blank);
   const [message, setMessage] = useState("");
   useEffect(() => {
     api("/api/admin/website-settings")
       .then((data) => {
-        if (data) setSettings(fillMissing(blank, data));
+        if (data) setSettings(fillMissingDeep(blank, data));
       })
       .catch((error) => setMessage(error.message));
   }, []);
@@ -170,6 +242,113 @@ function GeneralSettings() {
     } catch (error) {
       setMessage(error.message);
     }
+  };
+  const updateGroup = (group, values) =>
+    setSettings((current) => ({
+      ...current,
+      [group]: { ...(current[group] || {}), ...values },
+    }));
+  const updateLinks = (group, field, links) =>
+    updateGroup(group, { [field]: links });
+  const linksEditor = (title, group, field, includeIcon = false) => {
+    const links = settings[group]?.[field] || [];
+    return (
+      <fieldset className="admin-section admin-repeater">
+        <legend>{title}</legend>
+        {links.map((item, index) => (
+          <article key={index}>
+            <div className="admin-repeat-heading">
+              <strong>
+                {title} {index + 1}
+              </strong>
+              <button
+                type="button"
+                onClick={() =>
+                  updateLinks(
+                    group,
+                    field,
+                    links.filter((_, itemIndex) => itemIndex !== index),
+                  )
+                }
+              >
+                <i className="fas fa-trash" /> Remove
+              </button>
+            </div>
+            <div className="admin-card-fields">
+              <label>
+                Label
+                <input
+                  value={item.label || ""}
+                  onChange={(event) =>
+                    updateLinks(
+                      group,
+                      field,
+                      links.map((link, itemIndex) =>
+                        itemIndex === index
+                          ? { ...link, label: event.target.value }
+                          : link,
+                      ),
+                    )
+                  }
+                />
+              </label>
+              <label>
+                Link
+                <input
+                  value={item.link || ""}
+                  onChange={(event) =>
+                    updateLinks(
+                      group,
+                      field,
+                      links.map((link, itemIndex) =>
+                        itemIndex === index
+                          ? { ...link, link: event.target.value }
+                          : link,
+                      ),
+                    )
+                  }
+                />
+              </label>
+              {includeIcon && (
+                <label>
+                  Icon class
+                  <input
+                    value={item.icon || ""}
+                    onChange={(event) =>
+                      updateLinks(
+                        group,
+                        field,
+                        links.map((link, itemIndex) =>
+                          itemIndex === index
+                            ? { ...link, icon: event.target.value }
+                            : link,
+                        ),
+                      )
+                    }
+                  />
+                </label>
+              )}
+            </div>
+          </article>
+        ))}
+        <button
+          type="button"
+          className="admin-add admin-add-section"
+          onClick={() =>
+            updateLinks(group, field, [
+              ...links,
+              {
+                label: "",
+                link: "",
+                ...(includeIcon ? { icon: "fas fa-link" } : {}),
+              },
+            ])
+          }
+        >
+          <i className="fas fa-plus" /> Add link
+        </button>
+      </fieldset>
+    );
   };
   return (
     <form className="admin-page-editor" onSubmit={save}>
@@ -352,6 +531,122 @@ function GeneralSettings() {
           >
             <i className="fas fa-plus" /> Add social link
           </button>
+        </fieldset>
+        <fieldset className="admin-section">
+          <legend>Header settings</legend>
+          {linksEditor(
+            "Navigation links",
+            "header_settings",
+            "navigation",
+            true,
+          )}
+          <label>
+            Action button text
+            <input
+              value={settings.header_settings?.button_text || ""}
+              onChange={(event) =>
+                updateGroup("header_settings", {
+                  button_text: event.target.value,
+                })
+              }
+            />
+          </label>
+          <label>
+            Action button link
+            <input
+              value={settings.header_settings?.button_link || ""}
+              onChange={(event) =>
+                updateGroup("header_settings", {
+                  button_link: event.target.value,
+                })
+              }
+            />
+          </label>
+        </fieldset>
+        <fieldset className="admin-section">
+          <legend>Footer settings</legend>
+          <label>
+            Footer description
+            <textarea
+              rows="4"
+              value={settings.footer_settings?.description || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  description: event.target.value,
+                })
+              }
+            />
+          </label>
+          <label>
+            First column title
+            <input
+              value={settings.footer_settings?.links_title || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  links_title: event.target.value,
+                })
+              }
+            />
+          </label>
+          {linksEditor("Footer links", "footer_settings", "links")}
+          <label>
+            Second column title
+            <input
+              value={settings.footer_settings?.explore_title || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  explore_title: event.target.value,
+                })
+              }
+            />
+          </label>
+          {linksEditor("Explore links", "footer_settings", "explore_links")}
+          <label>
+            Website link
+            <input
+              value={settings.footer_settings?.website_link || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  website_link: event.target.value,
+                })
+              }
+            />
+          </label>
+          <label>
+            Newsletter title
+            <input
+              value={settings.footer_settings?.newsletter_title || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  newsletter_title: event.target.value,
+                })
+              }
+            />
+          </label>
+          <label>
+            Newsletter description
+            <textarea
+              rows="3"
+              value={settings.footer_settings?.newsletter_description || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  newsletter_description: event.target.value,
+                })
+              }
+            />
+          </label>
+          <label>
+            Copyright text
+            <input
+              value={settings.footer_settings?.copyright || ""}
+              onChange={(event) =>
+                updateGroup("footer_settings", {
+                  copyright: event.target.value,
+                })
+              }
+            />
+          </label>
+          {linksEditor("Policy links", "footer_settings", "policy_links")}
         </fieldset>
         {message && (
           <p

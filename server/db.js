@@ -59,8 +59,19 @@ export async function ensureSchema() {
     phones JSON NULL,
     address TEXT NULL,
     social_links JSON NULL,
+    header_settings JSON NULL,
+    footer_settings JSON NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  for (const column of ["header_settings", "footer_settings"]) {
+    const [columns] = await pool.query(
+      `SHOW COLUMNS FROM website_settings LIKE '${column}'`,
+    );
+    if (!columns.length)
+      await pool.query(
+        `ALTER TABLE website_settings ADD COLUMN ${column} JSON NULL AFTER social_links`,
+      );
+  }
   await pool.query(`CREATE TABLE IF NOT EXISTS gallery_images (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     image_url VARCHAR(500) NOT NULL,
