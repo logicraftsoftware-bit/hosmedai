@@ -1,4 +1,65 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import {
+  Alignment,
+  Autoformat,
+  AutoImage,
+  AutoLink,
+  BlockQuote,
+  Bold,
+  ClassicEditor,
+  Code,
+  CodeBlock,
+  Essentials,
+  FindAndReplace,
+  FontBackgroundColor,
+  FontColor,
+  FontFamily,
+  FontSize,
+  GeneralHtmlSupport,
+  Heading,
+  HorizontalLine,
+  ImageBlock,
+  ImageCaption,
+  ImageInline,
+  ImageInsert,
+  ImageInsertViaUrl,
+  ImageResize,
+  ImageStyle,
+  ImageTextAlternative,
+  ImageToolbar,
+  Indent,
+  IndentBlock,
+  Italic,
+  Link,
+  LinkImage,
+  List,
+  ListProperties,
+  MediaEmbed,
+  Paragraph,
+  PasteFromOffice,
+  RemoveFormat,
+  SelectAll,
+  ShowBlocks,
+  SourceEditing,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  Strikethrough,
+  Style,
+  Subscript,
+  Superscript,
+  Table,
+  TableCaption,
+  TableCellProperties,
+  TableColumnResize,
+  TableProperties,
+  TableToolbar,
+  TextTransformation,
+  TodoList,
+  Underline,
+  Undo,
+} from "ckeditor5";
+import "ckeditor5/ckeditor5.css";
 
 const empty = {
   title: "",
@@ -43,155 +104,151 @@ async function api(url, options = {}) {
   return response.status === 204 ? null : response.json();
 }
 
+const editorPlugins = [
+  Essentials,
+  Paragraph,
+  Heading,
+  Style,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  Code,
+  Alignment,
+  FontColor,
+  FontBackgroundColor,
+  FontFamily,
+  FontSize,
+  Link,
+  AutoLink,
+  List,
+  ListProperties,
+  TodoList,
+  Indent,
+  IndentBlock,
+  BlockQuote,
+  HorizontalLine,
+  CodeBlock,
+  Table,
+  TableToolbar,
+  TableProperties,
+  TableCellProperties,
+  TableCaption,
+  TableColumnResize,
+  ImageBlock,
+  ImageInline,
+  ImageCaption,
+  ImageResize,
+  ImageStyle,
+  ImageToolbar,
+  ImageTextAlternative,
+  ImageInsert,
+  ImageInsertViaUrl,
+  LinkImage,
+  AutoImage,
+  MediaEmbed,
+  FindAndReplace,
+  SelectAll,
+  RemoveFormat,
+  SourceEditing,
+  ShowBlocks,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  Autoformat,
+  PasteFromOffice,
+  TextTransformation,
+  GeneralHtmlSupport,
+  Undo,
+];
+const editorConfig = {
+  licenseKey: "GPL",
+  plugins: editorPlugins,
+  toolbar: {
+    items: [
+      "sourceEditing",
+      "undo",
+      "redo",
+      "|",
+      "heading",
+      "style",
+      "|",
+      "fontFamily",
+      "fontSize",
+      "fontColor",
+      "fontBackgroundColor",
+      "|",
+      "bold",
+      "italic",
+      "underline",
+      "strikethrough",
+      "subscript",
+      "superscript",
+      "code",
+      "removeFormat",
+      "|",
+      "alignment",
+      "|",
+      "bulletedList",
+      "numberedList",
+      "todoList",
+      "outdent",
+      "indent",
+      "|",
+      "link",
+      "insertImage",
+      "insertTable",
+      "mediaEmbed",
+      "blockQuote",
+      "horizontalLine",
+      "codeBlock",
+      "specialCharacters",
+      "|",
+      "findAndReplace",
+      "showBlocks",
+    ],
+    shouldNotGroupWhenFull: true,
+  },
+  image: {
+    toolbar: [
+      "imageTextAlternative",
+      "toggleImageCaption",
+      "imageStyle:inline",
+      "imageStyle:block",
+      "imageStyle:side",
+      "resizeImage",
+    ],
+  },
+  table: {
+    contentToolbar: [
+      "tableColumn",
+      "tableRow",
+      "mergeTableCells",
+      "tableProperties",
+      "tableCellProperties",
+      "toggleTableCaption",
+    ],
+  },
+  link: { addTargetToExternalLinks: true, defaultProtocol: "https://" },
+  htmlSupport: {
+    allow: [{ name: /.*/, attributes: true, classes: true, styles: true }],
+  },
+};
+
 function RichTextEditor({
   value = "",
   onChange,
   placeholder = "Write content here…",
 }) {
-  const editorRef = useRef(null);
-  const [sourceMode, setSourceMode] = useState(false);
-  const [fullscreen, setFullscreen] = useState(false);
-  useEffect(() => {
-    if (
-      !sourceMode &&
-      editorRef.current &&
-      editorRef.current.innerHTML !== value
-    )
-      editorRef.current.innerHTML = value || "";
-  }, [value, sourceMode]);
-  const run = (command, commandValue = null) => {
-    editorRef.current?.focus();
-    document.execCommand(command, false, commandValue);
-    onChange(editorRef.current?.innerHTML || "");
-  };
-  const ask = (command, label, fallback = "") => {
-    const result = window.prompt(label, fallback);
-    if (result) run(command, result);
-  };
-  const tools = [
-    ["undo", "fa-undo", "Undo"],
-    ["redo", "fa-redo", "Redo"],
-    ["bold", "fa-bold", "Bold"],
-    ["italic", "fa-italic", "Italic"],
-    ["underline", "fa-underline", "Underline"],
-    ["strikeThrough", "fa-strikethrough", "Strike through"],
-    ["justifyLeft", "fa-align-left", "Align left"],
-    ["justifyCenter", "fa-align-center", "Align center"],
-    ["justifyRight", "fa-align-right", "Align right"],
-    ["justifyFull", "fa-align-justify", "Justify"],
-    ["insertUnorderedList", "fa-list-ul", "Bulleted list"],
-    ["insertOrderedList", "fa-list-ol", "Numbered list"],
-    ["outdent", "fa-outdent", "Outdent"],
-    ["indent", "fa-indent", "Indent"],
-    ["removeFormat", "fa-eraser", "Remove formatting"],
-  ];
   return (
-    <div
-      className={`admin-rich-editor${fullscreen ? " admin-rich-editor--fullscreen" : ""}`}
-    >
-      <div className="admin-rich-toolbar">
-        <button
-          type="button"
-          className={sourceMode ? "active" : ""}
-          title="HTML source"
-          onClick={() => setSourceMode((current) => !current)}
-        >
-          <i className="fas fa-code" /> Source
-        </button>
-        {!sourceMode && (
-          <>
-            <select
-              title="Text style"
-              defaultValue="p"
-              onChange={(e) => run("formatBlock", e.target.value)}
-            >
-              <option value="p">Paragraph</option>
-              <option value="h2">Heading 2</option>
-              <option value="h3">Heading 3</option>
-              <option value="h4">Heading 4</option>
-              <option value="blockquote">Quote</option>
-            </select>
-            <select
-              title="Font size"
-              defaultValue="3"
-              onChange={(e) => run("fontSize", e.target.value)}
-            >
-              <option value="2">Small</option>
-              <option value="3">Normal</option>
-              <option value="4">Large</option>
-              <option value="5">Extra large</option>
-            </select>
-            {tools.map(([command, icon, title]) => (
-              <button
-                type="button"
-                key={command}
-                title={title}
-                onClick={() => run(command)}
-              >
-                <i className={`fas ${icon}`} />
-              </button>
-            ))}
-            <label className="admin-rich-color" title="Text colour">
-              <i className="fas fa-palette" />
-              <input
-                type="color"
-                onChange={(e) => run("foreColor", e.target.value)}
-              />
-            </label>
-            <button
-              type="button"
-              title="Add link"
-              onClick={() => ask("createLink", "Enter link URL", "https://")}
-            >
-              <i className="fas fa-link" />
-            </button>
-            <button
-              type="button"
-              title="Remove link"
-              onClick={() => run("unlink")}
-            >
-              <i className="fas fa-unlink" />
-            </button>
-            <button
-              type="button"
-              title="Add image"
-              onClick={() => ask("insertImage", "Enter image URL", "/uploads/")}
-            >
-              <i className="fas fa-image" />
-            </button>
-            <button
-              type="button"
-              title="Insert horizontal line"
-              onClick={() => run("insertHorizontalRule")}
-            >
-              <i className="fas fa-minus" />
-            </button>
-          </>
-        )}
-        <button
-          type="button"
-          title="Fullscreen"
-          onClick={() => setFullscreen((current) => !current)}
-        >
-          <i className={`fas ${fullscreen ? "fa-compress" : "fa-expand"}`} />
-        </button>
-      </div>
-      {sourceMode ? (
-        <textarea
-          className="admin-rich-source"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      ) : (
-        <div
-          ref={editorRef}
-          className="admin-rich-content"
-          contentEditable
-          suppressContentEditableWarning
-          data-placeholder={placeholder}
-          onInput={(e) => onChange(e.currentTarget.innerHTML)}
-        />
-      )}
+    <div className="admin-ckeditor">
+      <CKEditor
+        editor={ClassicEditor}
+        config={{ ...editorConfig, placeholder }}
+        data={value}
+        onChange={(_event, editor) => onChange(editor.getData())}
+      />
     </div>
   );
 }

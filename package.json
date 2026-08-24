@@ -15,8 +15,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^11.2.0",
     "@vitejs/plugin-react": "4.3.4",
     "bcryptjs": "^3.0.3",
+    "ckeditor5": "^48.4.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
