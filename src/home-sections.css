@@ -836,6 +836,13 @@
   font-size: 14px;
   font-weight: 600;
 }
+.donate-now {
+  padding-top: 24px !important;
+  padding-bottom: 24px;
+}
+.donate-now + .blog-one.section-space {
+  padding-top: 48px !important;
+}
 @media (max-width: 1199px) {
   .hospital-journey__inner {
     grid-template-columns: 280px 1fr;
@@ -868,5 +875,12 @@
   }
   .funfact-one {
     padding: 18px 0 40px;
+  }
+  .donate-now {
+    padding-top: 16px !important;
+    padding-bottom: 16px;
+  }
+  .donate-now + .blog-one.section-space {
+    padding-top: 36px !important;
   }
 }
