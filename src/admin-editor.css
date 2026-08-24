@@ -113,6 +113,13 @@
 .admin-ckeditor .ck.ck-dropdown .ck-dropdown__panel {
   max-width: min(720px, 90vw);
 }
+.ck.ck-balloon-panel.ck-powered-by-balloon,
+.ck-powered-by,
+.ck-evaluation-badge-balloon {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
 @media (max-width: 600px) {
   .admin-ckeditor .ck.ck-editor__main > .ck-editor__editable {
     min-height: 280px;
