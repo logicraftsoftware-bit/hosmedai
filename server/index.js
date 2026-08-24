@@ -468,9 +468,21 @@ app.get("/api/policies/:key", async (req, res) => {
     },
   );
 });
+app.get("/api/gallery", async (_req, res) => {
+  const [rows] = await pool.query(
+    "SELECT id,image_url,original_name,created_at FROM gallery_images ORDER BY created_at ASC, id ASC",
+  );
+  res.json(rows);
+});
+app.get("/api/testimonials", async (_req, res) => {
+  const [rows] = await pool.query(
+    "SELECT id,project_name,client_name,star_rating,review,updated_at FROM testimonials WHERE status='published' ORDER BY updated_at DESC, id DESC",
+  );
+  res.json(rows);
+});
 app.get("/api/content", async (_req, res) => {
   const [rows] = await pool.query(
-    "SELECT id,title,slug,excerpt,body,image_url,updated_at FROM content_items WHERE status='published' ORDER BY updated_at DESC",
+    "SELECT id,title,slug,excerpt,body,image_url,category,author,published_at,updated_at FROM content_items WHERE status='published' ORDER BY COALESCE(published_at, updated_at) DESC",
   );
   res.json(rows);
 });

@@ -25,7 +25,12 @@ function loadScript(src) {
   });
 }
 
-function applyStructuredSections(html, routeName, rawSections) {
+function applyStructuredSections(
+  html,
+  routeName,
+  rawSections,
+  managedHomeContent = {},
+) {
   let sections = rawSections;
   if (typeof sections === "string") {
     try {
@@ -34,12 +39,11 @@ function applyStructuredSections(html, routeName, rawSections) {
       sections = {};
     }
   }
-  if (
-    !sections ||
-    typeof sections !== "object" ||
-    !Object.keys(sections).length
-  )
-    return html;
+  const hasManagedHomeContent = Object.values(managedHomeContent).some(
+    (items) => Array.isArray(items) && items.length,
+  );
+  if (!sections || typeof sections !== "object") sections = {};
+  if (!Object.keys(sections).length && !hasManagedHomeContent) return html;
   const documentNode = new DOMParser().parseFromString(
     `<body>${html}</body>`,
     "text/html",
@@ -136,6 +140,24 @@ function applyStructuredSections(html, routeName, rawSections) {
   };
 
   if (routeName === "index") {
+    const galleryItems = Array.isArray(managedHomeContent.gallery)
+      ? managedHomeContent.gallery.filter((item) => item.image_url)
+      : [];
+    const galleryCarousel = documentNode.querySelector(
+      ".donation-one__carousel",
+    );
+    if (galleryCarousel && galleryItems.length) {
+      const template = galleryCarousel.querySelector(".item");
+      if (template)
+        galleryCarousel.replaceChildren(
+          ...galleryItems.map((item) => {
+            const slide = template.cloneNode(true);
+            const image = slide.querySelector(".donation-one__item__image");
+            if (image) image.style.backgroundImage = `url('${item.image_url}')`;
+            return slide;
+          }),
+        );
+    }
     const banners = Array.isArray(sections.banners)
       ? sections.banners.filter((item) => item.title || item.image)
       : [];
@@ -224,6 +246,49 @@ function applyStructuredSections(html, routeName, rawSections) {
     });
     const insightsCarousel = documentNode.querySelector(".blog-one__carousel");
     if (insightsCarousel) {
+      const managedBlogs = Array.isArray(managedHomeContent.blogs)
+        ? managedHomeContent.blogs.filter((item) => item.title)
+        : [];
+      const template = insightsCarousel.querySelector(".item");
+      if (template && managedBlogs.length)
+        insightsCarousel.replaceChildren(
+          ...managedBlogs.slice(0, 4).map((item) => {
+            const card = template.cloneNode(true);
+            const image = card.querySelector(".blog-card__image img");
+            const title = card.querySelector(".blog-card__title a");
+            const links = card.querySelectorAll("a");
+            const category = card.querySelector(
+              ".blog-card__content__category, .blog-card__meta li:first-child a",
+            );
+            const date = new Date(item.published_at || item.updated_at);
+            const dateBox = card.querySelector(".blog-card__content__month");
+            const dateMonth = dateBox?.querySelector("span");
+            const author = card.querySelector(
+              ".blog-card__content__name-title",
+            );
+            const href = `/blog/${item.slug}`;
+            if (image) {
+              image.src = item.image_url || "/assets/images/blog/blog-1-1.jpg";
+              image.alt = item.title;
+            }
+            if (title) title.textContent = item.title;
+            links.forEach((link) => {
+              if (!link.href?.startsWith("mailto:")) link.href = href;
+            });
+            if (category) category.textContent = item.category || "Healthcare";
+            if (!Number.isNaN(date.getTime())) {
+              if (dateBox?.childNodes[0])
+                dateBox.childNodes[0].textContent = `${String(date.getDate()).padStart(2, "0")} `;
+              if (dateMonth)
+                dateMonth.textContent = date.toLocaleString("en", {
+                  month: "long",
+                });
+            }
+            if (author)
+              author.textContent = item.author || "HosmedAI Editorial Team";
+            return card;
+          }),
+        );
       const insightItems = Array.from(
         insightsCarousel.querySelectorAll(".item"),
       );
@@ -375,9 +440,21 @@ function applyStructuredSections(html, routeName, rawSections) {
       ".hosmed-testimonials .hosmed-section-heading h2",
       sections.testimonials?.title,
     );
-    const testimonialItems = Array.isArray(sections.testimonials?.items)
-      ? sections.testimonials.items
+    const managedTestimonials = Array.isArray(managedHomeContent.testimonials)
+      ? managedHomeContent.testimonials
+          .filter((item) => item.review && item.client_name)
+          .map((item) => ({
+            quote: item.review,
+            name: item.client_name,
+            role: item.project_name,
+            rating: item.star_rating,
+          }))
       : [];
+    const testimonialItems = managedTestimonials.length
+      ? managedTestimonials
+      : Array.isArray(sections.testimonials?.items)
+        ? sections.testimonials.items
+        : [];
     const testimonialFallbacks = [
       {
         quote:
@@ -458,9 +535,14 @@ function applyStructuredSections(html, routeName, rawSections) {
             const role = slide.querySelector(
               ".testimonials-card__author-position",
             );
+            const stars = slide.querySelectorAll(".testimonials-card__star i");
             if (quote) quote.textContent = item.quote || "";
             if (name) name.textContent = item.name || "";
             if (role) role.textContent = item.role || "";
+            stars.forEach((star, index) => {
+              star.style.display =
+                index < Number(item.rating || 5) ? "" : "none";
+            });
             return slide;
           }),
         );
@@ -770,6 +852,11 @@ export default function SiteApp() {
   const [pageSettings, setPageSettings] = useState(null);
   const [websiteSettings, setWebsiteSettings] = useState(null);
   const [policyPage, setPolicyPage] = useState(null);
+  const [managedHomeContent, setManagedHomeContent] = useState({
+    gallery: [],
+    testimonials: [],
+    blogs: [],
+  });
   const routeName = useMemo(() => {
     const route = location.pathname.split("/").filter(Boolean).pop() || "index";
     return route.replace(/\.html$/i, "");
@@ -844,6 +931,29 @@ export default function SiteApp() {
       .then(setWebsiteSettings)
       .catch(() => setWebsiteSettings(null));
   }, []);
+
+  useEffect(() => {
+    if (routeName !== "index") return;
+    let active = true;
+    Promise.all([
+      fetch("/api/gallery").then((response) =>
+        response.ok ? response.json() : [],
+      ),
+      fetch("/api/testimonials").then((response) =>
+        response.ok ? response.json() : [],
+      ),
+      fetch("/api/content").then((response) =>
+        response.ok ? response.json() : [],
+      ),
+    ])
+      .then(([gallery, testimonials, blogs]) => {
+        if (active) setManagedHomeContent({ gallery, testimonials, blogs });
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [routeName]);
 
   const markup = useMemo(() => {
     // The legacy template preloader is removed here because its hide handler is
@@ -2040,8 +2150,13 @@ export default function SiteApp() {
         );
     }
 
-    if (pageSettings?.sections)
-      html = applyStructuredSections(html, routeName, pageSettings.sections);
+    if (pageSettings?.sections || routeName === "index")
+      html = applyStructuredSections(
+        html,
+        routeName,
+        pageSettings?.sections || {},
+        managedHomeContent,
+      );
 
     if (
       pageSettings &&
@@ -2189,7 +2304,15 @@ export default function SiteApp() {
         return `href=${quote}${path}${hash}${quote}`;
       },
     );
-  }, [page, routeName, pageSettings, websiteSettings, policyKey, policyPage]);
+  }, [
+    page,
+    routeName,
+    pageSettings,
+    websiteSettings,
+    policyKey,
+    policyPage,
+    managedHomeContent,
+  ]);
 
   useEffect(() => {
     // Defensive cleanup for cached or newly imported template markup.
