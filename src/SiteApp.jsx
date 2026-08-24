@@ -757,6 +757,10 @@ function applyStructuredSections(html, routeName, rawSections) {
 
   if (routeName === "contact") {
     setText(".page-header__title, .hosmed-contact h1", sections.hero?.title);
+    setText(
+      ".hosmed-contact__hero-copy > p:last-of-type",
+      sections.hero?.description,
+    );
     applyPageContent(".page-header, .hosmed-contact__hero");
   }
   return documentNode.body.innerHTML;
@@ -2039,6 +2043,37 @@ export default function SiteApp() {
     if (pageSettings?.sections)
       html = applyStructuredSections(html, routeName, pageSettings.sections);
 
+    if (
+      pageSettings &&
+      (routeName === "projects" || routeName === "portfolio")
+    ) {
+      const projectDocument = new DOMParser().parseFromString(
+        `<body>${html}</body>`,
+        "text/html",
+      );
+      const projectHero = projectDocument.querySelector(
+        ".hosmed-projects__hero",
+      );
+      const projectEyebrow = projectDocument.querySelector(
+        ".hosmed-projects__eyebrow",
+      );
+      const projectTitle = projectDocument.querySelector(
+        ".hosmed-projects__hero-copy h1",
+      );
+      const projectDescription = projectDocument.querySelector(
+        ".hosmed-projects__hero-copy > p:last-of-type",
+      );
+      if (projectHero && pageSettings.image_url)
+        projectHero.style.backgroundImage = `url('${pageSettings.image_url}')`;
+      if (projectEyebrow && pageSettings.hero_subtitle)
+        projectEyebrow.textContent = pageSettings.hero_subtitle;
+      if (projectTitle && pageSettings.hero_title)
+        projectTitle.textContent = pageSettings.hero_title;
+      if (projectDescription && pageSettings.body)
+        projectDescription.textContent = pageSettings.body;
+      html = projectDocument.body.innerHTML;
+    }
+
     if (policyKey) {
       const title = escapeValue(policyPage?.title || "Loading…");
       const source = String(policyPage?.body || "");
@@ -2107,8 +2142,21 @@ export default function SiteApp() {
       '$1$2fetchpriority="high"',
     );
 
+    const savedSections = (() => {
+      if (!pageSettings?.sections) return {};
+      if (typeof pageSettings.sections === "object")
+        return pageSettings.sections;
+      try {
+        return JSON.parse(pageSettings.sections);
+      } catch {
+        return {};
+      }
+    })();
     if (
       pageSettings &&
+      !Object.keys(savedSections || {}).length &&
+      routeName !== "projects" &&
+      routeName !== "portfolio" &&
       !["index", "about", "why-hosmedai", "hospital-planning"].includes(
         routeName,
       )
