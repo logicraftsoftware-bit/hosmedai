@@ -678,8 +678,8 @@
 
 /* Modern, compact treatment for the hospital journey, CTA and statistics. */
 .hospital-journey {
-  width: min(1440px, calc(100% - 48px));
-  margin: 32px auto 24px;
+  width: 100%;
+  margin: 0;
 }
 .hospital-journey__inner {
   min-height: 0;
@@ -687,7 +687,7 @@
   gap: 32px;
   padding: 52px 48px 26px;
   border: 0;
-  border-radius: 24px;
+  border-radius: 0;
   box-shadow: 0 24px 70px rgba(8, 42, 69, 0.2);
 }
 .hospital-journey__intro h2 {
@@ -731,7 +731,10 @@
 }
 .cta-one .container,
 .funfact-one .container {
-  max-width: 1240px;
+  width: 100%;
+  max-width: none;
+  padding-right: clamp(24px, 5vw, 96px);
+  padding-left: clamp(24px, 5vw, 96px);
 }
 .cta-one .row {
   align-items: stretch;
@@ -840,6 +843,15 @@
   padding-top: 24px !important;
   padding-bottom: 24px;
 }
+.donate-now .container {
+  width: 100%;
+  max-width: none;
+  padding-right: 0;
+  padding-left: 0;
+}
+.donate-now__inner {
+  border-radius: 0;
+}
 .donate-now + .blog-one.section-space {
   padding-top: 48px !important;
 }
@@ -851,12 +863,12 @@
 }
 @media (max-width: 767px) {
   .hospital-journey {
-    width: calc(100% - 24px);
-    margin: 20px auto;
+    width: 100%;
+    margin: 0;
   }
   .hospital-journey__inner {
     padding: 32px 20px 20px;
-    border-radius: 18px;
+    border-radius: 0;
   }
   .hospital-journey__intro h2 br {
     display: none !important;
