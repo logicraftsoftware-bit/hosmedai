@@ -187,6 +187,18 @@ function applyStructuredSections(html, routeName, rawSections) {
         link.innerHTML = '<i class="fas fa-search-plus"></i>';
         galleryImage.prepend(link);
       });
+    const ctaPoints = [
+      "Clinical planning aligned with real hospital workflows",
+      "Compliance, infrastructure and equipment coordinated together",
+      "Expert support from concept through commissioning",
+    ];
+    documentNode.querySelectorAll(".cta-one__content").forEach((card) => {
+      card.querySelectorAll(".cta-one__list__item").forEach((item, index) => {
+        const icon = item.querySelector(".cta-one__list__icon");
+        item.textContent = ` ${ctaPoints[index] || "Integrated healthcare delivery"}`;
+        if (icon) item.prepend(icon);
+      });
+    });
     const aboutCards = Array.isArray(sections.about?.cards)
       ? sections.about.cards
       : [];
@@ -816,7 +828,11 @@ export default function SiteApp() {
         )
         .replace(
           "Send a Gift for <br> Children's",
-          "Send a Gift for <br> Doctor's",
+          "Transform Your Hospital <br> Digitally",
+        )
+        .replace(
+          "Join us & Become <br> a Healthcare Solutions",
+          "Build Your Hospital <br> With Confidence",
         )
         .replace("Our Core Solutions", "Our Gallery")
         .replace(
@@ -904,7 +920,7 @@ export default function SiteApp() {
             <div class="hospital-journey__inner">
               <div class="hospital-journey__intro">
                 <p class="hospital-journey__eyebrow"><i class="fas fa-shield-alt"></i> One Partner. Every Hospital Need.</p>
-                <h2>From an Idea<br>on Paper to a<br>Fully<br>Operational<br>Hospital<span>.</span></h2>
+                <h2>From an Idea on Paper to a Fully Operational Hospital<span>.</span></h2>
                 <span class="hospital-journey__accent"></span>
               </div>
               <div class="hospital-journey__process">

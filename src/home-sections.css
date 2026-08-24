@@ -675,3 +675,198 @@
     padding: 18px 22px;
   }
 }
+
+/* Modern, compact treatment for the hospital journey, CTA and statistics. */
+.hospital-journey {
+  width: min(1440px, calc(100% - 48px));
+  margin: 32px auto 24px;
+}
+.hospital-journey__inner {
+  min-height: 0;
+  grid-template-columns: 320px minmax(0, 1fr) 220px;
+  gap: 32px;
+  padding: 52px 48px 26px;
+  border: 0;
+  border-radius: 24px;
+  box-shadow: 0 24px 70px rgba(8, 42, 69, 0.2);
+}
+.hospital-journey__intro h2 {
+  font-size: clamp(36px, 3vw, 48px);
+  line-height: 1.12;
+}
+.hospital-journey__intro h2 br {
+  display: none;
+}
+.hospital-journey__steps {
+  row-gap: 38px;
+  padding-top: 8px;
+}
+.hospital-journey__step span {
+  width: 68px;
+  height: 68px;
+  font-size: 26px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+.hospital-journey__step:not(:nth-child(4n))::after {
+  top: 20px;
+}
+.hospital-journey__promise {
+  margin-top: 28px;
+}
+.hospital-journey__progress {
+  padding: 34px 70px 25px;
+  border-radius: 18px;
+  backdrop-filter: blur(8px);
+}
+.hospital-journey__inner::after {
+  width: 360px;
+  height: 360px;
+  left: -150px;
+  bottom: -230px;
+  opacity: 0.75;
+}
+.cta-one.section-space {
+  padding: 48px 0 28px !important;
+  background: #f5f8fa;
+}
+.cta-one .container,
+.funfact-one .container {
+  max-width: 1240px;
+}
+.cta-one .row {
+  align-items: stretch;
+}
+.cta-one .row > div {
+  display: flex;
+}
+.cta-one__content {
+  width: 100%;
+  min-height: 390px;
+  padding: 38px 42px;
+  border: 1px solid rgba(40, 128, 141, 0.18);
+  border-radius: 22px;
+  background: linear-gradient(135deg, #0b2f4bfa, #075b62f0);
+  box-shadow: 0 18px 50px rgba(10, 48, 74, 0.12);
+  transition: 0.3s ease;
+}
+.cta-one__content:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 65px rgba(10, 48, 74, 0.2);
+}
+.cta-one__top {
+  gap: 18px;
+  margin: 0 0 24px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  background: transparent;
+}
+.cta-one__top::after,
+.cta-one__shape {
+  display: none;
+}
+.cta-one__top__icon {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  flex: 0 0 62px;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(243, 179, 61, 0.16);
+  color: #f3b33d;
+  font-size: 31px;
+}
+.cta-one__top__title {
+  font-size: 25px;
+  line-height: 1.2;
+}
+.cta-one__text {
+  font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+.cta-one__list__item {
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.cta-one__list__icon {
+  flex: 0 0 18px;
+  margin-top: 2px;
+}
+.funfact-one {
+  margin: 0;
+  padding: 28px 0 60px;
+  background: #f5f8fa;
+  z-index: 1;
+}
+.funfact-one__single {
+  height: 100%;
+  padding: 28px 22px 24px;
+  border: 1px solid #e1e9ed;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(13, 52, 79, 0.07);
+}
+.funfact-one__single::after,
+.funfact-one__icon::before,
+.funfact-one__icon::after {
+  display: none;
+}
+.funfact-one__icon__inner {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #0d344f, #087f8c);
+  color: #fff;
+  font-size: 32px;
+}
+.funfact-one__count {
+  margin: 0;
+  color: #0d344f;
+  font-size: 38px;
+  line-height: 1.2;
+}
+.funfact-one__text {
+  margin-top: 5px;
+  font-family: var(--heartox-font, "Plus Jakarta Sans", sans-serif);
+  color: #647985;
+  font-size: 14px;
+  font-weight: 600;
+}
+@media (max-width: 1199px) {
+  .hospital-journey__inner {
+    grid-template-columns: 280px 1fr;
+    padding: 44px 34px 24px;
+  }
+}
+@media (max-width: 767px) {
+  .hospital-journey {
+    width: calc(100% - 24px);
+    margin: 20px auto;
+  }
+  .hospital-journey__inner {
+    padding: 32px 20px 20px;
+    border-radius: 18px;
+  }
+  .hospital-journey__intro h2 br {
+    display: none !important;
+  }
+  .cta-one.section-space {
+    padding: 28px 0 18px !important;
+  }
+  .cta-one__content {
+    min-height: 0;
+    padding: 30px 24px;
+  }
+  .cta-one__top {
+    flex-direction: row;
+    align-items: center;
+    padding: 0 0 18px;
+  }
+  .funfact-one {
+    padding: 18px 0 40px;
+  }
+}
