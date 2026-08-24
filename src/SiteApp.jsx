@@ -1931,7 +1931,9 @@ export default function SiteApp() {
       }
       if (window.jQuery) {
         window
-          .jQuery(".main-slider-one__carousel, .banner-one__inner")
+          .jQuery(
+            ".heartox-owl__carousel, .main-slider-one__carousel, .banner-one__inner",
+          )
           .each(function () {
             const slider = window.jQuery(this);
             if (!slider.hasClass("owl-loaded") && slider.owlCarousel) {
