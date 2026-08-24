@@ -966,6 +966,86 @@
     padding-left: 15px;
   }
   .hosmed-service-showcase__grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 16px;
+    padding: 4px 2px 18px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .hosmed-service-showcase__grid::-webkit-scrollbar {
+    display: none;
+  }
+  .hosmed-service-showcase__grid article {
+    min-width: 0;
+    flex: 0 0 86%;
+    scroll-snap-align: center;
+  }
+  .hosmed-service-showcase {
+    overflow: hidden;
+  }
+  .hosmed-service-showcase .hosmed-section-heading {
+    margin-bottom: 28px;
+  }
+  .hosmed-service-showcase .hosmed-section-heading h2 {
+    font-size: 31px;
+    line-height: 1.18;
+  }
+  .hosmed-home-about__cards {
+    display: grid;
+    gap: 14px;
+    border: 0;
+    border-radius: 0;
+  }
+  .hosmed-home-about__cards article {
+    min-height: 0;
+    padding: 24px 22px;
+    border: 1px solid #dce3e7;
+    border-radius: 14px;
+  }
+  .hosmed-home-about__cards article + article {
+    border: 1px solid #dce3e7;
+  }
+  .hosmed-home-about__cards article > span,
+  .hosmed-home-about__cards article + article > span {
+    position: static;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 15px;
+  }
+  .hosmed-home-about__cards h3 {
+    margin-top: 0;
+  }
+  .funfact-one .row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+  }
+  .funfact-one .row > div {
+    width: auto !important;
+    max-width: none !important;
+    padding: 0;
+  }
+  .funfact-one__single {
+    min-width: 0;
+    padding: 20px 10px 18px;
+  }
+  .funfact-one__icon__inner {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 13px;
+    border-radius: 16px;
+    font-size: 26px;
+  }
+  .funfact-one__count {
+    font-size: 30px;
+  }
+  .funfact-one__text {
+    min-height: 38px;
+    font-size: 12px;
+    line-height: 1.35;
   }
 }
