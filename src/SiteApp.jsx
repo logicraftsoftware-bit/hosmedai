@@ -150,7 +150,7 @@ function applyStructuredSections(
     );
     if (galleryCarousel && galleryItems.length) {
       const template = galleryCarousel.querySelector(".item");
-      if (template)
+      if (template) {
         galleryCarousel.replaceChildren(
           ...galleryItems.map((item) => {
             const slide = template.cloneNode(true);
@@ -159,6 +159,17 @@ function applyStructuredSections(
             return slide;
           }),
         );
+        // Managed gallery content must not be handed back to Owl Carousel.
+        // Owl clones the original template slides and can restore their stale
+        // background images after React has inserted the database records.
+        galleryCarousel.classList.remove(
+          "heartox-owl__carousel",
+          "owl-carousel",
+          "owl-theme",
+        );
+        galleryCarousel.classList.add("hosmed-managed-gallery");
+        galleryCarousel.removeAttribute("data-owl-options");
+      }
     }
     const banners = Array.isArray(sections.banners)
       ? sections.banners.filter((item) => item.title || item.image)

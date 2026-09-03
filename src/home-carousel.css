@@ -8,3 +8,24 @@
 .hosmed-visual-solutions__controls button:focus-visible { background: #07939b; }
 @media (max-width: 1100px) { .hosmed-visual-solutions__grid > a { flex-basis: calc((100% - 20px) / 2); } }
 @media (max-width: 767px) { .hosmed-visual-solutions__grid { display: flex; } .hosmed-visual-solutions__grid > a { flex-basis: 88%; } }
+.hosmed-managed-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.hosmed-managed-gallery > .item {
+  min-width: 0;
+}
+
+@media (max-width: 1199px) {
+  .hosmed-managed-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .hosmed-managed-gallery {
+    grid-template-columns: 1fr;
+  }
+}
