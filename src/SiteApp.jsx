@@ -2239,6 +2239,26 @@ export default function SiteApp() {
       );
 
     if (routeName === "index") {
+      // These curated service-card images are repository assets. Apply them
+      // after structured admin content so older saved image URLs cannot
+      // overwrite the current artwork.
+      const serviceImages = [
+        "/assets/images/services/hospital-planning.webp",
+        "/assets/images/services/quality-accreditation.webp",
+        "/assets/images/services/hospital-technology.webp",
+        "/assets/images/services/healthcare-ai.webp",
+      ];
+      const homeDocument = new DOMParser().parseFromString(
+        `<body>${html}</body>`,
+        "text/html",
+      );
+      homeDocument
+        .querySelectorAll(".hosmed-service-showcase__grid article img")
+        .forEach((image, index) => {
+          if (serviceImages[index]) image.src = serviceImages[index];
+        });
+      html = homeDocument.body.innerHTML;
+
       const homeGalleryItems = Array.isArray(managedHomeContent.gallery)
         ? managedHomeContent.gallery.filter((item) => item.image_url)
         : [];
