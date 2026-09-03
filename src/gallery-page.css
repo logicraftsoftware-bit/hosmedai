@@ -4,24 +4,18 @@
 
 .hosmed-home-gallery {
   padding: 85px 0 95px;
-  background: #f7fafb url("/assets/images/backgrounds/charity-bg-1-1.png")
-    center / cover no-repeat;
+  background: #f7fafb;
 }
 
-.hosmed-home-gallery .sec-title {
+.hosmed-home-gallery .hosmed-section-heading {
   margin-bottom: 35px;
+  text-align: center;
 }
 
 .hosmed-home-gallery__grid {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 20px;
-  overflow-x: auto;
-  padding: 0 0 14px;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  scrollbar-color: #008d96 #dce7ea;
-  scrollbar-width: thin;
 }
 
 .hosmed-home-gallery__card {
@@ -29,10 +23,8 @@
   display: block;
   overflow: hidden;
   aspect-ratio: 1 / 1.05;
-  flex: 0 0 calc((100% - 80px) / 5);
   border-radius: 14px;
   background: #dce7ea;
-  scroll-snap-align: start;
 }
 
 .hosmed-home-gallery__card img {
@@ -61,6 +53,11 @@
 .hosmed-home-gallery__card:hover span,
 .hosmed-home-gallery__card:focus-visible span {
   opacity: 1;
+}
+
+.hosmed-home-gallery__action {
+  margin-top: 35px;
+  text-align: center;
 }
 
 .hosmed-gallery-page__hero {
@@ -169,11 +166,7 @@
 
 @media (max-width: 991px) {
   .hosmed-home-gallery__grid {
-    gap: 16px;
-  }
-
-  .hosmed-home-gallery__card {
-    flex-basis: calc((100% - 32px) / 3);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .hosmed-gallery-page__grid {
@@ -187,11 +180,7 @@
   }
 
   .hosmed-home-gallery__grid {
-    gap: 14px;
-  }
-
-  .hosmed-home-gallery__card {
-    flex-basis: 84%;
+    grid-template-columns: 1fr;
   }
 
   .hosmed-gallery-page__hero {
