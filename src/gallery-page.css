@@ -13,9 +13,17 @@
 }
 
 .hosmed-home-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: block;
+}
+
+.hosmed-home-gallery__grid:not(.owl-loaded) {
+  display: flex;
   gap: 20px;
+  overflow: hidden;
+}
+
+.hosmed-home-gallery__grid:not(.owl-loaded) .hosmed-home-gallery__card {
+  flex: 0 0 calc((100% - 40px) / 3);
 }
 
 .hosmed-home-gallery__card {
@@ -165,8 +173,8 @@
 }
 
 @media (max-width: 991px) {
-  .hosmed-home-gallery__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .hosmed-home-gallery__grid:not(.owl-loaded) .hosmed-home-gallery__card {
+    flex-basis: calc((100% - 20px) / 2);
   }
 
   .hosmed-gallery-page__grid {
@@ -179,8 +187,8 @@
     padding: 60px 0 70px;
   }
 
-  .hosmed-home-gallery__grid {
-    grid-template-columns: 1fr;
+  .hosmed-home-gallery__grid:not(.owl-loaded) .hosmed-home-gallery__card {
+    flex-basis: 100%;
   }
 
   .hosmed-gallery-page__hero {
