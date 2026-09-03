@@ -3150,7 +3150,9 @@ export default function AdminApp() {
           Blog Content (Editor)
           <RichTextEditor
             value={form.body}
-            onChange={(value) => setForm({ ...form, body: value })}
+            onChange={(value) =>
+              setForm((current) => ({ ...current, body: value }))
+            }
           />
         </label>
         <div className="admin-upload">
