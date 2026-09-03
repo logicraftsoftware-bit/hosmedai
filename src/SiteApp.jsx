@@ -863,6 +863,7 @@ export default function SiteApp() {
     testimonials: [],
     blogs: [],
   });
+  const [managedHomeContentReady, setManagedHomeContentReady] = useState(false);
   const [blogEntries, setBlogEntries] = useState([]);
   const blogSlug = useMemo(() => {
     const parts = location.pathname.split("/").filter(Boolean);
@@ -979,9 +980,16 @@ export default function SiteApp() {
       ),
     ])
       .then(([gallery, testimonials, blogs]) => {
-        if (active) setManagedHomeContent({ gallery, testimonials, blogs });
+        if (active) {
+          setManagedHomeContent({ gallery, testimonials, blogs });
+          setManagedHomeContentReady(true);
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        // Keep the static template content as a graceful fallback when the
+        // managed-content API is temporarily unavailable.
+        if (active) setManagedHomeContentReady(true);
+      });
     return () => {
       active = false;
     };
@@ -2540,5 +2548,9 @@ export default function SiteApp() {
       forms.forEach((form) => form.removeEventListener("submit", submitEnquiry));
   }, [markup]);
 
+  // Do not let the legacy carousel initialise from its static placeholder
+  // images while the managed home content is still in flight. Once Owl has
+  // cloned those nodes, replacing them reliably is no longer possible.
+  if (routeName === "index" && !managedHomeContentReady) return null;
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }
