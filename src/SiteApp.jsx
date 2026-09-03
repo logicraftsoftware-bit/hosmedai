@@ -6,6 +6,7 @@ import "./home-carousel.css";
 import "./policy-page.css";
 import "./blog-pages.css";
 import "./form-feedback.css";
+import "./gallery-page.css";
 
 const scripts = [
   "/assets/vendors/jquery/jquery-3.7.1.min.js",
@@ -908,6 +909,7 @@ export default function SiteApp() {
     if (routeName === "hospital-planning") return pages["about.html"];
     if (routeName === "blog" || routeName === "blog-detail")
       return pages["about.html"];
+    if (routeName === "gallery") return pages["about.html"];
     if (policyKey) return pages["about.html"];
     return pages[requested] || pages["404.html"] || pages["index.html"];
   }, [routeName, policyKey]);
@@ -977,7 +979,7 @@ export default function SiteApp() {
   }, []);
 
   useEffect(() => {
-    if (routeName !== "index") return;
+    if (routeName !== "index" && routeName !== "gallery") return;
     let active = true;
     Promise.all([
       fetch("/api/gallery", { cache: "no-store" }).then((response) =>
@@ -2040,6 +2042,23 @@ export default function SiteApp() {
       sharedFooter,
     );
 
+    if (routeName === "gallery") {
+      const galleryItems = Array.isArray(managedHomeContent.gallery)
+        ? managedHomeContent.gallery.filter((item) => item.image_url)
+        : [];
+      const cards = galleryItems
+        .map(
+          (item, index) =>
+            `<a class="hosmed-gallery-page__card img-popup" href="${escapeValue(item.image_url)}" data-group="gallery" aria-label="Open ${escapeValue(item.original_name || `gallery image ${index + 1}`)}"><img src="${escapeValue(item.image_url)}" alt="${escapeValue(item.original_name || `HosmedAI gallery image ${index + 1}`)}" loading="lazy" decoding="async"><span><i class="fas fa-search-plus"></i></span></a>`,
+        )
+        .join("");
+      const galleryPage = `<main class="hosmed-gallery-page"><section class="hosmed-gallery-page__hero"><div class="container"><p><i class="fas fa-images"></i> HosmedAI Gallery</p><h1>Healthcare Spaces,<br>People and Progress.</h1><span>Explore images from our healthcare work and hospital environments.</span></div></section><section class="hosmed-gallery-page__content"><div class="container"><div class="hosmed-gallery-page__heading"><div><p>Our Gallery</p><h2>All Gallery Images</h2></div><span>${galleryItems.length} image${galleryItems.length === 1 ? "" : "s"}</span></div>${cards ? `<div class="hosmed-gallery-page__grid">${cards}</div>` : '<p class="hosmed-gallery-page__empty">No gallery images are available yet.</p>'}</div></section></main>`;
+      html = html.replace(
+        /<section class="page-header[\s\S]*?(?=<footer class=)/,
+        galleryPage,
+      );
+    }
+
     if (websiteSettings) {
       const safe = (value) =>
         String(value || "").replace(
@@ -2200,6 +2219,16 @@ export default function SiteApp() {
             .join("")}$2`,
         );
     }
+
+    // Always expose the gallery page, including when custom admin footer links
+    // were saved before the gallery destination existed.
+    html = html.replace(
+      /(<nav class="hosmed-footer__column" aria-label="Footer links">[\s\S]*?<ul>)([\s\S]*?)(<\/ul>)/,
+      (match, opening, links, closing) =>
+        /href=["']\/gallery["']/.test(links)
+          ? match
+          : `${opening}${links}<li><a href="/gallery">Gallery</a></li>${closing}`,
+    );
 
     if (pageSettings?.sections || routeName === "index")
       html = applyStructuredSections(
@@ -2562,6 +2591,10 @@ export default function SiteApp() {
   // Do not let the legacy carousel initialise from its static placeholder
   // images while the managed home content is still in flight. Once Owl has
   // cloned those nodes, replacing them reliably is no longer possible.
-  if (routeName === "index" && !managedHomeContentReady) return null;
+  if (
+    (routeName === "index" || routeName === "gallery") &&
+    !managedHomeContentReady
+  )
+    return null;
   return <div dangerouslySetInnerHTML={{ __html: markup }} />;
 }

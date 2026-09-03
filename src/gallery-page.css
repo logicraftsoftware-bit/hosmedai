@@ -1,0 +1,132 @@
+.hosmed-gallery-page {
+  background: #f7fafb;
+}
+
+.hosmed-gallery-page__hero {
+  padding: 105px 0 95px;
+  background: linear-gradient(135deg, #0d3049, #075c68);
+  color: #fff;
+}
+
+.hosmed-gallery-page__hero p,
+.hosmed-gallery-page__heading p {
+  margin: 0 0 14px;
+  color: #efad37;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.hosmed-gallery-page__hero h1 {
+  margin: 0 0 20px;
+  color: #fff;
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 1.08;
+}
+
+.hosmed-gallery-page__hero span {
+  display: block;
+  max-width: 680px;
+  color: #d6e7ea;
+  font-size: 19px;
+}
+
+.hosmed-gallery-page__content {
+  padding: 85px 0 100px;
+}
+
+.hosmed-gallery-page__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.hosmed-gallery-page__heading h2 {
+  margin: 0;
+  color: #0d3049;
+  font-size: clamp(32px, 4vw, 48px);
+}
+
+.hosmed-gallery-page__heading > span {
+  color: #607783;
+  font-weight: 700;
+}
+
+.hosmed-gallery-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.hosmed-gallery-page__card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  background: #dce7ea;
+  box-shadow: 0 12px 32px rgba(13, 48, 73, 0.1);
+}
+
+.hosmed-gallery-page__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.hosmed-gallery-page__card span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 26px;
+  background: rgba(5, 49, 67, 0.55);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.hosmed-gallery-page__card:hover img {
+  transform: scale(1.04);
+}
+
+.hosmed-gallery-page__card:hover span,
+.hosmed-gallery-page__card:focus-visible span {
+  opacity: 1;
+}
+
+.hosmed-gallery-page__empty {
+  padding: 50px;
+  border-radius: 16px;
+  background: #fff;
+  color: #607783;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .hosmed-gallery-page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .hosmed-gallery-page__hero {
+    padding: 75px 0 65px;
+  }
+
+  .hosmed-gallery-page__content {
+    padding: 60px 0 75px;
+  }
+
+  .hosmed-gallery-page__heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .hosmed-gallery-page__grid {
+    grid-template-columns: 1fr;
+  }
+}
