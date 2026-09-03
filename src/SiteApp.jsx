@@ -2249,10 +2249,14 @@ export default function SiteApp() {
               `<a class="hosmed-home-gallery__card img-popup" href="${escapeValue(item.image_url)}" data-group="home-gallery" aria-label="Open ${escapeValue(item.original_name || `gallery image ${index + 1}`)}"><img src="${escapeValue(item.image_url)}" alt="${escapeValue(item.original_name || `HosmedAI gallery image ${index + 1}`)}" loading="lazy" decoding="async"><span><i class="fas fa-search-plus"></i></span></a>`,
           )
           .join("");
-        const homeGallery = `<section class="hosmed-home-gallery"><div class="container-fluid"><div class="hosmed-section-heading"><p><i class="fas fa-shield-alt"></i> Our Gallery</p><h2>Healthcare Spaces and People</h2></div><div class="hosmed-home-gallery__grid heartox-owl__carousel owl-carousel owl-theme" data-owl-options='{"items":1,"margin":20,"loop":true,"smartSpeed":700,"nav":false,"dots":false,"autoplay":true,"autoplayTimeout":3000,"autoplayHoverPause":true,"responsive":{"0":{"items":1},"768":{"items":2},"1200":{"items":3}}}'>${homeGalleryCards}</div><div class="hosmed-home-gallery__action"><a class="heartox-btn" href="/gallery">View All Gallery Images <i class="fas fa-arrow-right"></i></a></div></div></section>`;
+        const homeGallery = `<section class="hosmed-home-gallery"><div class="container-fluid"><div class="hosmed-section-heading"><p><i class="fas fa-shield-alt"></i> Our Gallery</p><h2>Healthcare Spaces and People</h2></div><div class="hosmed-home-gallery__grid heartox-owl__carousel owl-carousel owl-theme" data-owl-options='{"items":2,"margin":20,"loop":true,"smartSpeed":700,"nav":false,"dots":false,"autoplay":true,"autoplayTimeout":3000,"autoplayHoverPause":true,"responsive":{"0":{"items":2},"768":{"items":4},"1200":{"items":5}}}'>${homeGalleryCards}</div><div class="hosmed-home-gallery__action"><a class="heartox-btn" href="/gallery">View All Gallery Images <i class="fas fa-arrow-right"></i></a></div></div></section>`;
         html = html.replace(
           /<section class="donation-one[\s\S]*?<\/section><!-- \/\.donation-one -->/,
           homeGallery,
+        );
+        html = html.replace(
+          /<section class="gallery-one[\s\S]*?<\/section><!-- \/\.gallery-one -->/,
+          "",
         );
       }
     }
