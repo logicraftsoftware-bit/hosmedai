@@ -37,7 +37,10 @@ if (!jwtSecret || jwtSecret.length < 32)
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(compression());
-app.use(express.json({ limit: "1mb" }));
+// A structured page can contain several rich-text sections. Keep this above
+// the application-level section limit so Express does not reject a valid page
+// before the route can return its useful validation message.
+app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 app.use("/uploads", express.static(uploadDir, { maxAge: "1d", index: false }));
 
@@ -656,14 +659,19 @@ app.use(
 app.get(/.*/, (_req, res) =>
   res.set("Cache-Control", "no-cache").sendFile(path.join(dist, "index.html")),
 );
-app.use((error, _req, res, _next) =>
-  res.status(error.code === "LIMIT_FILE_SIZE" ? 413 : 500).json({
+app.use((error, req, res, _next) => {
+  console.error(`${req.method} ${req.originalUrl} failed:`, error);
+  const requestTooLarge =
+    error.code === "LIMIT_FILE_SIZE" || error.type === "entity.too.large";
+  res.status(requestTooLarge ? 413 : 500).json({
     error:
       error.code === "LIMIT_FILE_SIZE"
         ? "Image must be under 5 MB."
-        : "Server error.",
-  }),
-);
+        : error.type === "entity.too.large"
+          ? "Page content is too large to save. Remove embedded images and upload them as files instead."
+          : "The server could not save your changes. Please try again.",
+  });
+});
 
 await ensureSchema();
 app.listen(Number(process.env.PORT || 3000), () =>

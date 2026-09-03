@@ -98,8 +98,20 @@ async function api(url, options = {}) {
     },
   });
   if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    throw new Error(data.error || "Something went wrong.");
+    const contentType = response.headers.get("content-type") || "";
+    let message = "";
+    if (contentType.includes("application/json")) {
+      const data = await response.json().catch(() => ({}));
+      message = data.error || "";
+    } else {
+      const body = await response.text().catch(() => "");
+      // Reverse proxies commonly return a short HTML error page. Do not show
+      // that markup in the admin, but retain plain-text API errors.
+      if (body && !/<[a-z][\s\S]*>/i.test(body)) message = body.trim();
+    }
+    throw new Error(
+      message || `The server could not complete this request (${response.status}).`,
+    );
   }
   return response.status === 204 ? null : response.json();
 }
