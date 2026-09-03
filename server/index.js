@@ -515,6 +515,7 @@ app.get("/api/gallery", async (_req, res) => {
   const [rows] = await pool.query(
     "SELECT id,image_url,original_name,created_at FROM gallery_images ORDER BY created_at ASC, id ASC",
   );
+  res.set("Cache-Control", "no-store");
   res.json(rows);
 });
 app.get("/api/testimonials", async (_req, res) => {

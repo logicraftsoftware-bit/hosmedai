@@ -968,7 +968,7 @@ export default function SiteApp() {
     if (routeName !== "index") return;
     let active = true;
     Promise.all([
-      fetch("/api/gallery").then((response) =>
+      fetch("/api/gallery", { cache: "no-store" }).then((response) =>
         response.ok ? response.json() : [],
       ),
       fetch("/api/testimonials").then((response) =>
@@ -2484,6 +2484,7 @@ export default function SiteApp() {
     page,
     routeName,
     pageSettings,
+    managedHomeContent,
     policyKey,
     policyPage,
     blogEntries,
