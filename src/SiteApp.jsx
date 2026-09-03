@@ -2255,7 +2255,7 @@ export default function SiteApp() {
           homeGallery,
         );
         html = html.replace(
-          /<section class="gallery-one[\s\S]*?<\/section><!-- \/\.gallery-one -->/,
+          /<section class="gallery-one[\s\S]*?<\/section>(?:<!-- \/\.gallery-one[^>]*-->)?/,
           "",
         );
       }
